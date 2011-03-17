@@ -7,9 +7,7 @@ DEPENDS += "libX11-dev fontconfig-dev"
 #libxft libxext libxrender libxrandr libxcursor"/*!\cbstodo*/
 DEFAULT_PREFERENCE = "-1"
 
-INC_PR = "r0"
-
-S = "${WORKDIR}/qt-x11-opensource-src-${PV}"
+S = "${SRCDIR}/qt-x11-opensource-src-${PV}"
 
 QT_GLFLAGS ?= "-no-opengl"
 QT_CONFIG_FLAGS += "-no-xinerama -no-xkb ${QT_GLFLAGS}"
@@ -22,8 +20,6 @@ require qt4.inc
 
 inherit qt4x11
 
-
-PR = "${INC_PR}.0"
 
 QT_CONFIG_FLAGS_append_armv6 = " -no-neon "
 

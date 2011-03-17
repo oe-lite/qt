@@ -1,23 +1,20 @@
 DESCRIPTION = "Native tools for Qt/[X11|Mac|Embedded] version 4.x"
-DEPENDS = "zlib-native dbus-native" 
-SECTION = "libs"
+DEPENDS = "libz-native dbus-native-lib dbus-native-dev" 
 HOMEPAGE = "http://www.trolltech.com"
 PRIORITY = "optional"
 LICENSE = "GPL"
 
-INC_PR = "r10"
-
 inherit native
 
 SRC_URI = "ftp://ftp.trolltech.com/qt/source/qt-everywhere-opensource-src-${PV}.tar.gz \
-           file://qt-config.patch;patch=1 \
+           file://qt-config.patch\
            file://g++.conf \
            file://linux.conf"
-S = "${WORKDIR}/qt-everywhere-opensource-src-${PV}"
+S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
 
 EXTRA_OECONF = "-prefix ${prefix} \
-                -L${STAGE_DIR}/native/bin \
-                -I${STAGE_DIR}/native${includedir} \
+                -L${STAGE_DIR}/native/lib \
+                -I${STAGE_DIR}/native/include \
                 -qt-libjpeg -qt-gif -system-zlib \
                 -no-libjpeg -no-libpng -no-libmng -no-libtiff \
                 -no-accessibility \
@@ -72,7 +69,7 @@ do_install() {
     install -d ${D}${datadir}/qt4/
     cp -PfR mkspecs ${D}${datadir}/qt4/
     ln -sf linux-g++ ${D}${datadir}/qt4/mkspecs/${BUILD_CXX}
-    cp -f ${WORKDIR}/g++.conf ${WORKDIR}/linux.conf ${D}${datadir}/qt4/mkspecs/common/
+    cp -f ${SRCDIR}/g++.conf ${SRCDIR}/linux.conf ${D}${datadir}/qt4/mkspecs/common/
 
     install -m 0644 tools/porting/src/q3porting.xml ${D}${datadir}/qt4/
 }
