@@ -12,7 +12,7 @@ SRC_URI = "ftp://ftp.trolltech.com/qt/source/qt-everywhere-opensource-src-${PV}.
            file://linux.conf"
 S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
 
-EXTRA_OECONF = "-prefix ${prefix} \
+EXTRA_OECONF = "-prefix '${prefix}' \
                 -L${STAGE_DIR}/native/lib \
                 -I${STAGE_DIR}/native/include \
                 -qt-libjpeg -qt-gif -system-zlib \
