@@ -5,7 +5,7 @@
 DEPENDS += "\
     qt4-tools-native-dev \
     freetype-dev \
-    jpeg-dev libpng-dev \
+    jpeg-dev libpng \
     libz \
     dbus-dev \
     openssl-dev \
