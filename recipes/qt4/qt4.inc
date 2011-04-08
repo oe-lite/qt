@@ -9,6 +9,7 @@ DEPENDS += "\
     libz \
     dbus-dev \
     openssl-dev \
+    gstreamer \
     glib-dev glib-libglib-dev glib-libgthread-dev glib-native-dev \
     ${HOST_ARCH}/sysroot-libm ${HOST_ARCH}/sysroot-libpthread ${HOST_ARCH}/sysroot-libdl \
     ${HOST_ARCH}/sysroot-librt ${HOST_ARCH}/sysroot-libgcc ${HOST_ARCH}/sysroot-libc ${HOST_ARCH}/sysroot-libstdc++"
@@ -25,8 +26,7 @@ QT_CONFIG_FLAGS += "-release -reduce-relocations -shared -qt-gif \
                     -qt-libjpeg -qt-libpng -system-zlib -qdbus -stl -glib"
 
 #Features DISABLED!
-QT_CONFIG_FLAGS += " -no-phonon -no-phonon-backend \
-                    -no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sql-sqlite -no-sql-sqlite2 \
+QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sql-sqlite -no-sql-sqlite2 \
                     -no-pch \
                     -no-nas-sound \
                     -no-sm \
@@ -38,9 +38,6 @@ QT_CONFIG_FLAGS += " -no-phonon -no-phonon-backend \
                     -no-javascript-jit \
                     -no-qt3support \
                     -no-audio-backend \
-                    -no-webkit \
-                    -no-multimedia \
-                    -no-xmlpatterns \
                     -no-largefile \
                     -no-opengl"
 
@@ -49,9 +46,10 @@ QT_CONFIG_FLAGS += " -nomake examples -nomake demos -nomake docs -nomake transla
 
 EXTRA_OEMAKE = "-e"
 
+CFLAGS += "-fPIC"
 EXTRA_ENV = 'QMAKE="${STAGE_DIR}/native/bin/qmake2 -after \
-             INCPATH+=${STAGE_DIR}/sysroot/usr/include/freetype2 LIBS+=-L${STAGE_DIR}/sysroot/usr/lib" \
-             QMAKESPEC="${QMAKESPEC}" LINK="${CXX} -Wl,-rpath-link,${STAGE_DIR}/sysroot/usr/lib -ldl" \
+             INCPATH+=${STAGE_DIR}/sysroot/usr/include/freetype2" \
+             QMAKESPEC="${QMAKESPEC}" LINK="${CXX} -ldl" \
              AR="${TARGET_PREFIX}ar cqs" \
              MOC="${STAGE_DIR}/native/bin/moc4" UIC="${STAGE_DIR}/native/bin/uic4" MAKE="make -e"'
 
@@ -110,7 +108,6 @@ do_configure() {
             -embedded ${HOST_CPU} -arch ${HOST_CPU} \
             -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
             ${QT_CONFIG_FLAGS} -fast \
-            -L${STAGE_DIR}/sysroot/usr/lib -I${STAGE_DIR}/sysroot/usr/include \
             -I${STAGE_DIR}/sysroot/usr/include/freetype2 
 }
 
@@ -152,3 +149,4 @@ do_install() {
 }
 
 FILES_${PN} += "${libdir}/fonts/*"
+FILES_${PN} += "${libdir}/qtopia"
