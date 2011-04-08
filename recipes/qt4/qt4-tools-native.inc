@@ -73,3 +73,5 @@ do_install() {
 
     install -m 0644 tools/porting/src/q3porting.xml ${D}${datadir}/qt4/
 }
+
+FILES_${PN} += "share"

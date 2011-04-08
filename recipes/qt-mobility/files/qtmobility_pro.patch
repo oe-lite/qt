@@ -1,0 +1,18 @@
+--- qt-mobility-opensource-src-1.1.0-tp/qtmobility.pro.orig        2010-05-21 14:20:19.547363661 +0200
++++ qt-mobility-opensource-src-1.1.0-tp/qtmobility.pro     2010-05-21 14:22:01.967353682 +0200
+@@ -53,15 +53,6 @@ win32:!contains(CONFIG_WIN32,build_all) 
+    }
+ }
+
+-lessThan(QT_MAJOR_VERSION, 4) {
+-    error(Qt Mobility requires Qt 4.6 or higher. Qt $${QT_VERSION} was found.);
+-}
+-
+-contains(QT_MAJOR_VERSION, 4):lessThan(QT_MINOR_VERSION, 6) {
+-    error(Qt Mobility requires Qt 4.6 or higher. Qt $${QT_VERSION} was found.);
+-}
+-
+-
+ # MCL builds for Symbian do not run configure and require some manual setup steps.
+ # This test permits SD builds to skip installation of mobility.prf from within qmake.
+ # It is installed in a separate step. MCL builds for SD must set the

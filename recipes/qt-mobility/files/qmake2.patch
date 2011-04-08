@@ -1,0 +1,54 @@
+--- qt-mobility-opensource-src-1.1.0-tp/configure.orig	2011-04-08 11:16:01.871930496 +0200
++++ qt-mobility-opensource-src-1.1.0-tp/configure	2011-04-08 11:16:55.142824961 +0200
+@@ -275,7 +275,7 @@
+ # if so, install in the correct place.
+ # and fix rpath
+     echo "contains(QT_CONFIG,qt_framework):message(1)" > 1.pro
+-    SOMETHING=`qmake -spec macx-g++ 1.pro 2>&1`
++    SOMETHING=`qmake2 -spec macx-g++ 1.pro 2>&1`
+         if [ "$SOMETHING" = "Project MESSAGE: 1" ]; then
+             LIB_PATH="Library/Frameworks"
+             BIN_PATH="Applications"
+@@ -293,7 +293,7 @@
+     echo "contains(QT_CONFIG,ppc): system(echo CONFIG+=ppc >> mac.inc)" >> 2.pro
+     echo "contains(QT_CONFIG,ppc64): system(echo CONFIG+=ppc64 >> mac.inc)" >> 2.pro
+     echo "contains(QT_CONFIG,x86_64): system(echo CONFIG+=x86_64 >> mac.inc)" >> 2.pro
+-    SOMETIME=`qmake -spec macx-g++ 2.pro 2>&1`
++    SOMETIME=`qmake2 -spec macx-g++ 2.pro 2>&1`
+     rm 2.pro
+     if [ -e "mac.inc" ]; then
+          echo "exists(mac.inc): include(mac.inc)" >> "$CONFIG_IN"
+@@ -447,13 +447,13 @@
+ WHICH="$relpath/config.tests/tools/which.test"
+ 
+ printf "Checking available Qt"
+-if ! "$WHICH" qmake 2>/dev/null 1>&2; then
++if ! "$WHICH" qmake2 2>/dev/null 1>&2; then
+     printf " ... Not found\n\n" >&2
+     echo >&2 "Cannot find 'qmake' in your PATH.";
+     echo >&2 "Aborting." 
+ else
+     printf " ... "
+-    qmake -query QT_VERSION
++    qmake2 -query QT_VERSION
+ fi
+ 
+ # find out which make we want to use
+@@ -485,7 +485,7 @@
+         cd config.tests/$2
+     fi
+ 
+-    qmake $QMKSPEC "$relpath/config.tests/$2/$2.pro" 2>> "$CONFIG_LOG" >> "$CONFIG_LOG"
++    qmake2 $QMKSPEC "$relpath/config.tests/$2/$2.pro" 2>> "$CONFIG_LOG" >> "$CONFIG_LOG"
+     printf  " ."
+     "$MAKE" clean >> "$CONFIG_LOG"
+     printf "."
+@@ -599,7 +599,7 @@
+ fi
+ 
+ echo "Running qmake..."
+-if qmake -makefile $QMKSPEC -recursive "$relpath/qtmobility.pro"; then
++if qmake2 -makefile $QMKSPEC -recursive "$relpath/qtmobility.pro"; then
+     echo ""
+     echo "configure has finished. You may run make or gmake to build the project now."
+ else
