@@ -12,10 +12,8 @@ inherit qt4e
 QT_BASE_NAME ?= "qt4-embedded"
 QT_BASE_LIB  ?= "libqt-embedded"
 QT_DIR_NAME = "qtopia"
-QT_LIBINFIX = "E"
 
 QT_CONFIG_FLAGS += " \
-    -qtlibinfix ${QT_LIBINFIX} \
     -qt-gfx-transformed -plugin-gfx-qvfb -plugin-gfx-vnc -plugin-gfx-directfb \
     -qt-mouse-tslib -qt-mouse-pc -qt-mouse-qvfb -qt-mouse-linuxinput \
     -qt-kbd-tty \

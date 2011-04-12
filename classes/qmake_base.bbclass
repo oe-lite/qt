@@ -32,7 +32,7 @@ export OE_QMAKE_CXX="${CXX}"
 export OE_QMAKE_LDFLAGS="${LDFLAGS}"
 export OE_QMAKE_AR="${AR}"
 export OE_QMAKE_STRIP="echo"
-export OE_QMAKE_RPATH="-Wl,-rpath-link,"
+#export OE_QMAKE_RPATH="-Wl,-rpath-link,"
 
 # do not export STRIP to the environment
 STRIP[unexport] = "1"

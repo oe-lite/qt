@@ -1,11 +1,10 @@
-DEPENDS_prepend = "${@["qt4-embedded ", ""][(bb.data.getVar('PN', d, 1)[:12] == 'qt4-embedded')]}"
 inherit qmake_base
 
 QT_DIR_NAME = "qtopia"
-QT_LIBINFIX = "E"
+#QT_LIBINFIX = "E"
 # override variables set by qmake-base to compile Qt/Embedded apps
 #
-export QMAKESPEC = "${STAGE_DIR}/sysroot/usr/share/${QT_DIR_NAME}/mkspecs/${CXX}"
+export QMAKESPEC = "${STAGE_DIR}/native/share/qt4/mkspecs/g++"
 export OE_QMAKE_INCDIR_QT = "${STAGE_DIR}/sysroot/usr/include/${QT_DIR_NAME}"
 export OE_QMAKE_LIBDIR_QT = "${STAGE_DIR}/sysroot/usr/lib"
 export OE_QMAKE_LIBS_QT = "qt"
