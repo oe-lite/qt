@@ -1,0 +1,92 @@
+DESCRIPTION = "Native tools for Qt/[X11|Mac|Embedded] version 4.x"
+DEPENDS = "native:libz native:dbus-libdbus native:libdbus" 
+HOMEPAGE = "http://www.trolltech.com"
+LICENSE = "GPL"
+LICENSE = "LGPLv2.1 GPLv3"
+#todo: checkup on licences
+
+RECIPE_TYPES = "native sdk"
+
+inherit c++ make
+
+SRC_URI = "ftp://ftp.trolltech.com/qt/source/qt-everywhere-opensource-src-${PV}.tar.gz \
+           file://qt-config.patch\
+           file://g++.conf \
+           file://linux.conf"
+S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
+
+
+EXTRA_OECONF = "-prefix '${prefix}' \
+                -L${STAGE_DIR}/native/lib \
+                -I${STAGE_DIR}/native/include \
+                -qt-libjpeg -qt-gif -system-zlib \
+                -no-libjpeg -no-libpng -no-libmng -no-libtiff \
+                -no-accessibility \
+                -no-cups \
+                -no-exceptions  \
+                -no-nas-sound \
+                -no-nis -no-openssl \
+                -verbose -release -static \
+                -embedded -no-freetype -no-glib -no-iconv \
+                -qt3support"
+
+do_configure() {
+   (echo o; echo yes) | ./configure ${EXTRA_OECONF} || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
+}
+
+# yank default -e, otherwise we get the following error:
+# moc_qbuffer.cpp: No such file or directory
+EXTRA_OEMAKE = " "
+
+# Find the g++.conf/linux.conf in the right directory.
+FILESPATHPKG =. "qt-${PV}:"
+
+EXTRA_OECONF += " -fast -silent -no-rpath"
+
+TOBUILD = "\
+  src/tools/bootstrap \
+  src/tools/moc \
+  src/corelib \
+  src/sql \
+  src/dbus \
+  src/qt3support \
+  src/xml \
+  src/tools/uic \
+  src/tools/rcc \
+  src/network \
+  src/gui \
+  src/tools/uic3 \
+  tools/linguist/lrelease \
+  tools/linguist/lupdate \
+  tools/qdbus \
+"
+
+do_compile() {
+    for i in ${TOBUILD}; do
+        cd ${S}/$i && oe_runmake CC=${CC} CXX=${CXX}
+    done
+}
+
+NATIVE_INSTALL_WORKS = "1"
+
+do_install() {
+    install -d ${D}${bindir}/
+    install -m 0755 bin/qmake ${D}${bindir}/qmake2
+    install -m 0755 bin/moc ${D}${bindir}/moc4
+    install -m 0755 bin/uic ${D}${bindir}/uic4
+    install -m 0755 bin/uic3 ${D}${bindir}/uic34
+    install -m 0755 bin/rcc ${D}${bindir}/rcc4
+    install -m 0755 bin/lrelease ${D}${bindir}/lrelease4
+    install -m 0755 bin/lupdate ${D}${bindir}/lupdate4
+    install -m 0755 bin/qdbuscpp2xml ${D}${bindir}/dbuscpp2xml4
+    install -m 0755 bin/qdbusxml2cpp ${D}${bindir}/dbusxml2cpp4
+    
+    install -d ${D}${datadir}/qt4/
+    cp -PfR mkspecs ${D}${datadir}/qt4/
+    ln -sf linux-g++ ${D}${datadir}/qt4/mkspecs/${BUILD_CXX}
+    cp -f ${SRCDIR}/g++.conf ${SRCDIR}/linux.conf ${D}${datadir}/qt4/mkspecs/common/
+
+    install -m 0644 tools/porting/src/q3porting.xml ${D}${datadir}/qt4/
+}
+
+FILES_${PN} += "/share"

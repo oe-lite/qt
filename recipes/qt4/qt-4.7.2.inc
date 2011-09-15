@@ -12,7 +12,8 @@ SRC_URI = "\
     file://qte.sh"
 S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
 
-do_configure_prepend() {
+do_configure[prefuncs] += "do_configure_smallfix"
+do_configure_smallfix() {
     for pro in $(find ${S} -name "*.pro") ; do
         sed -i 's:$$QT_BUILD_TREE/bin/lrelease:${OE_QMAKE_LRELEASE}:g' $pro
     done
@@ -40,7 +41,8 @@ do_compile() {
     oe_runmake ${EXTRA_ENV}
 }
 
-do_install_append() {
+do_install[postfuncs] += "do_install_smallfix"
+do_install_smallfix() {
 	install -d ${D}${bindir}
 	for i in rcc uic moc ; do
 		install -m 0755 ${S}/bin/$i ${D}${bindir}/

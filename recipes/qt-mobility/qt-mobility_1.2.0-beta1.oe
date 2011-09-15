@@ -1,0 +1,6 @@
+require ${PN}.inc
+
+SRC_URI = "http://get.qt.nokia.com/qt/add-ons/qt-mobility-opensource-src-${PV}.tar.gz \
+           file://qtmobility_pro.patch \
+           file://force_embedded_withoutx.patch"
+S = "${SRCDIR}/qt-mobility-opensource-src-${PV}"

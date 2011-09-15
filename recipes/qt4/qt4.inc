@@ -2,24 +2,19 @@
 # At the moment, as much as possible is removed while 
 # qt quick still functions on target
 
+RECIPE_TYPES = "machine sdk"
+
+inherit c++ make pkgconfig
+
 DEPENDS += "\
-    qt4-tools-native-dev \
-    freetype-dev \
-    jpeg-dev libpng \
-    libz \
-    dbus-dev \
-    openssl-dev \
-    gstreamer \
-    glib-dev glib-libglib-dev glib-libgthread-dev glib-native-dev \
-    ${HOST_ARCH}/sysroot-libm ${HOST_ARCH}/sysroot-libpthread ${HOST_ARCH}/sysroot-libdl \
-    ${HOST_ARCH}/sysroot-librt ${HOST_ARCH}/sysroot-libgcc ${HOST_ARCH}/sysroot-libc ${HOST_ARCH}/sysroot-libstdc++"
+    native:qt4-tools native:glib \
+    freetype jpeg libpng_1.2.44 libz dbus-dev dbus-libdbus-dev openssl gstreamer \
+    glib-dev glib-libglib glib-libgthread \
+    libm libpthread libdl librt libgcc libc libstdc++"
 
 RDEPENDS_${PN} += "\
-    ${HOST_ARCH}/sysroot-libm ${HOST_ARCH}/sysroot-libpthread ${HOST_ARCH}/sysroot-libdl \
-    ${HOST_ARCH}/sysroot-librt ${HOST_ARCH}/sysroot-libgcc ${HOST_ARCH}/sysroot-libc ${HOST_ARCH}/sysroot-libstdc++ \
-    libz \
-    glib-libgthread glib-libglib \
-    freetype"
+    libm libpthread libdl librt libgcc libc libstdc++ \
+    libz glib-libgthread glib-libglib freetype"
 
 #The base:
 QT_CONFIG_FLAGS += "-release -reduce-relocations -shared -qt-gif \
@@ -39,19 +34,16 @@ QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sq
                     -no-qt3support \
                     -no-audio-backend \
                     -no-largefile \
-                    -no-opengl"
-
-#No need to make these.
-QT_CONFIG_FLAGS += " -nomake examples -nomake demos -nomake docs -nomake translations"
-
-EXTRA_OEMAKE = "-e"
+                    -no-opengl \
+                    -no-webkit \
+                    -nomake examples -nomake demos -nomake docs -nomake translations"
 
 CFLAGS += "-fPIC"
 EXTRA_ENV = 'QMAKE="${STAGE_DIR}/native/bin/qmake2 -after \
              INCPATH+=${STAGE_DIR}/sysroot/usr/include/freetype2" \
              QMAKESPEC="${QMAKESPEC}" LINK="${CXX} -ldl" \
              AR="${TARGET_PREFIX}ar cqs" \
-             MOC="${STAGE_DIR}/native/bin/moc4" UIC="${STAGE_DIR}/native/bin/uic4" MAKE="make -e"'
+             MOC="${STAGE_DIR}/native/bin/moc4" UIC="${STAGE_DIR}/native/bin/uic4" MAKE="make"'
 
 export QT_CONF_PATH="${SRCDIR}/qt.conf"
 
@@ -61,7 +53,7 @@ do_mangle () {
     sed -i -e 's#\$\((OE_QMAKE_CXX)\)#${OE_QMAKE_CXX}#' \
         -i -e 's#\$\((OE_QMAKE_CC)\)#${OE_QMAKE_CC}#' \
         -i -e 's#\$\((OE_QMAKE_LINK)\)#${OE_QMAKE_LINK}#' \
-        -i -e 's#\$\((OE_QMAKE_QT_CONFIG)\)#${OE_QMAKE_QT_CONFIG}#' \
+        -i -e 's#\$\((OE_QMAKE_QT_CONFIG)\)#\$\{OE_QMAKE_QT_CONFIG\}#' \
         -i -e 's#\$\((OE_QMAKE_LDFLAGS)\)#${OE_QMAKE_LDFLAGS}#' \
         -i -e 's#\$\((OE_QMAKE_CFLAGS)\)#${OE_QMAKE_CFLAGS}#' \
         -i -e 's#\$\((OE_QMAKE_CXXFLAGS)\)#${OE_QMAKE_CXXFLAGS}#' \
@@ -69,13 +61,12 @@ do_mangle () {
 }
 
 do_configure() {
-
     if [ ! -e bin/qmake ]; then
         ln -sf ${STAGE_DIR}/native/bin/qmake2 bin/qmake
     else
         die "Rebuilding is NOT supported"
     fi
-    pwd
+    
     if [ ! -e mkspecs/${TARGET_OS}-g++ ]; then
         ln -sf linux-g++ mkspecs/${TARGET_OS}-g++
     fi
@@ -95,7 +86,6 @@ do_configure() {
     echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
     echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
 
-    ${EXTRA_QMAKE_MUNGE}|| true
     (echo o; echo yes) | ./configure -v \
             -prefix ${prefix}/ \
             -bindir ${bindir} \
@@ -114,39 +104,17 @@ do_configure() {
 do_install() {
     oe_runmake install INSTALL_ROOT=${D}
 	
-    # These are host binaries, we should only use them in staging
-    rm -rf ${D}/${bindir}/qmake
-
-    # fix pkgconfig, libtool and prl files
-    sed -i -e s#-L${S}/lib##g \
-           -e s#-L${STAGE_DIR}/sysroot/usr/lib##g \
-           -e 's#STAGE_DIR}/sysroot/usr/lib#libdir}'#g \ 
-           -e s#-L${libdir}##g \
-           -e s#'$(OE_QMAKE_LIBS_X11)'#"${OE_QMAKE_LIBS_X11}"#g \
-           -e s#" -Wl,-rpath-link,${S}/lib"##g \
-           -e s#" -Wl,-rpath-link,${libdir}"##g \
-           -e 's#I/usr/include#Iincludedir}#g' \ 
-           -e 's#Iin#I${in#g' \
-           ${D}${libdir}/*.la ${D}${libdir}/*.prl ${D}${libdir}/pkgconfig/*.pc
-
-    sed -i -e s#" -Wl,-rpath-link,${S}/lib"##g \
-            ${D}${datadir}/${QT_DIR_NAME}/mkspecs/common/linux.conf
-
-    # fix pkgconfig files
-    sed -i -e s#"moc_location=.*$"#"moc_location=${bindir}/moc4"# \
-           -e s#"uic_location=.*$"#"uic_location=${bindir}/uic4"# \
-           ${D}${libdir}/pkgconfig/*.pc
-
-	# QT abuses $includedir to point to its headers, which breaks pkgconfig sysroot, so manually fix it up here:
-	for pc in ${D}${libdir}/pkgconfig/*.pc ; do
-		sed -i -e "s:prefix}include/${QT_BASE_NAME}/$(basename $pc .pc):prefix}/include:" \
-		       -e "s,Cflags: ,Cflags: -IP{includedir}/${QT_BASE_NAME}/$(basename $pc .pc) ," \
-		       -e 's:IP{:I${:g' $pc
-	done
-
     install -d ${D}/${libdir}/fonts
     touch ${D}/${libdir}/fonts/fontdir
+	mkdir ${D}${libdir}/qt4
+	mv ${D}/usr/imports/ ${D}${libdir}/qt4/imports
 }
 
 FILES_${PN} += "${libdir}/fonts/*"
 FILES_${PN} += "${libdir}/qtopia"
+FILES_${PN} += "${libdir}/qt4"
+PACKAGES += "${PN}-mkspecs"
+FILES_${PN}-mkspecs = "${datadir}/qtopia/"
+PACKAGES += "${PN}-prl"
+FILES_${PN}-prl = "${libdir}/*.prl"
+

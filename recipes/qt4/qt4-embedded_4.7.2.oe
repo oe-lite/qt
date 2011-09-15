@@ -1,0 +1,38 @@
+SUMMARY = "Qt is a versatile cross-platform application framework -- this is the embedded version."
+LICENSE = "GPL QPL"
+HOMEPAGE = "http://www.trolltech.com"
+DEPENDS += "tslib directfb"
+RDEPENDS_${PN} += "tslib-calibrate directfb"
+
+require qt4.inc 
+require qt-${PV}.inc
+
+inherit qt4e
+
+QT_BASE_NAME ?= "qt4-embedded"
+QT_BASE_LIB  ?= "libqt-embedded"
+QT_DIR_NAME = "qtopia"
+
+QT_CONFIG_FLAGS += " \
+    -qt-gfx-transformed -plugin-gfx-qvfb -plugin-gfx-vnc -plugin-gfx-directfb \
+    -qt-mouse-tslib -qt-mouse-pc -qt-mouse-qvfb -qt-mouse-linuxinput \
+    -qt-kbd-tty \
+    -qt-kbd-linuxinput \
+    -DQT_KEYPAD_NAVIGATION \
+    "
+
+QT_CONFIG_NEON = "-no-neon"
+QT_CONFIG_NEON:USE_qt_neon = ""
+QT_CONFIG_FLAGS += "${QT_CONFIG_NEON}"
+
+QT_CONFIG_FLAGS += " \
+ -exceptions \
+"
+
+do_install[postfuncs] += "do_install_fixsysconfdir"
+do_install_fixsysconfdir() {
+	install -d ${D}${sysconfdir}/profile.d/
+	install -m 0755 ${SRCDIR}/qte.sh ${D}${sysconfdir}/profile.d/
+}
+
+FILES_${PN} += " ${sysconfdir}/profile.d/qte.sh"
