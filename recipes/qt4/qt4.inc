@@ -40,7 +40,7 @@ QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sq
 
 CFLAGS += "-fPIC"
 EXTRA_ENV = 'QMAKE="${STAGE_DIR}/native/bin/qmake2 -after \
-             INCPATH+=${STAGE_DIR}/sysroot/usr/include/freetype2" \
+             INCPATH+=${STAGE_DIR}/machine/usr/include/freetype2" \
              QMAKESPEC="${QMAKESPEC}" LINK="${CXX} -ldl" \
              AR="${TARGET_PREFIX}ar cqs" \
              MOC="${STAGE_DIR}/native/bin/moc4" UIC="${STAGE_DIR}/native/bin/uic4" MAKE="make"'
