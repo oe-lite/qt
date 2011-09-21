@@ -8,7 +8,8 @@ inherit c++ make pkgconfig
 
 DEPENDS += "\
     native:qt4-tools native:glib \
-    freetype jpeg libpng_1.2.44 libz dbus-dev dbus-libdbus-dev openssl gstreamer \
+    freetype jpeg libpng12 libz dbus-dev dbus-libdbus-dev openssl gstreamer \
+ gst-plugins-base \
     glib-dev glib-libglib glib-libgthread \
     libm libpthread libdl librt libgcc libc libstdc++"
 
