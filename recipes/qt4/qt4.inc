@@ -8,14 +8,14 @@ inherit c++ make pkgconfig
 
 DEPENDS += "\
     native:qt4-tools native:glib \
-    freetype jpeg libpng12 libz dbus-dev dbus-libdbus-dev openssl gstreamer \
- gst-plugins-base \
-    glib-dev glib-libglib glib-libgthread \
-    libm libpthread libdl librt libgcc libc libstdc++"
+    libfreetype libjpeg libpng12 libz libdbus dbus libssl \
+    libgstbase \
+    libgio libglib libgthread \
+    libm libpthread libdl librt libgcc libstdc++"
 
 RDEPENDS_${PN} += "\
     libm libpthread libdl librt libgcc libc libstdc++ \
-    libz glib-libgthread glib-libglib freetype"
+    libz libgthread libglib libfreetype"
 
 #The base:
 QT_CONFIG_FLAGS += "-release -reduce-relocations -shared -qt-gif \
