@@ -21,10 +21,6 @@ QT_CONFIG_FLAGS += " \
     -DQT_KEYPAD_NAVIGATION \
     "
 
-QT_CONFIG_NEON = "-no-neon"
-QT_CONFIG_NEON:USE_qt_neon = ""
-QT_CONFIG_FLAGS += "${QT_CONFIG_NEON}"
-
 QT_CONFIG_FLAGS += " \
  -exceptions \
 "
