@@ -61,6 +61,10 @@ do_mangle () {
         g++.conf
 }
 
+# Supported archs in src/corelib/arch/*
+RECIPE_FLAGS += "qt_arch"
+DEFAULT_USE_qt_arch = "${HOST_CPU}"
+
 do_configure() {
     if [ ! -e bin/qmake ]; then
         ln -sf ${STAGE_DIR}/native/bin/qmake2 bin/qmake
@@ -97,7 +101,7 @@ do_configure() {
             -docdir ${docdir}/${QT_DIR_NAME} \
             -headerdir ${includedir}/${QT_DIR_NAME} \
             -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
-            -embedded ${HOST_CPU} -arch ${HOST_CPU} \
+            -embedded ${USE_qt_arch} -arch ${USE_qt_arch} \
             -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
             ${QT_CONFIG_FLAGS} -fast \
             -I${STAGE_DIR}/sysroot/usr/include/freetype2 
