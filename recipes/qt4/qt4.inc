@@ -10,11 +10,13 @@ DEPENDS += "\
     native:qt4-tools native:glib \
     libfreetype libjpeg libpng12 libz libdbus dbus libssl \
     libgstbase \
+    libasound \
     libgio libglib libgthread \
     libm libpthread libdl librt libgcc libstdc++"
 
 RDEPENDS_${PN} += "\
     libm libpthread libdl librt libgcc libc libstdc++ \
+    libasound \
     libz libgthread libglib libfreetype"
 
 #The base:
