@@ -1,5 +1,5 @@
 DESCRIPTION = "Native tools for Qt/[X11|Mac|Embedded] version 4.x"
-DEPENDS = "native:libz native:dbus-libdbus native:libdbus" 
+DEPENDS = "libz libgcc libm" 
 HOMEPAGE = "http://www.trolltech.com"
 LICENSE = "GPL"
 LICENSE = "LGPLv2.1 GPLv3"
@@ -17,8 +17,10 @@ S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
 
 
 EXTRA_OECONF = "-prefix '${prefix}' \
-                -L${STAGE_DIR}/native/lib \
-                -I${STAGE_DIR}/native/include \
+                -L${TARGET_SYSROOT}/${base_libdir} \
+                -I${TARGET_SYSROOT}/${base_includedir} \
+                -L${TARGET_SYSROOT}/${libdir} \
+                -I${TARGET_SYSROOT}/${includedir} \
                 -qt-libjpeg -qt-gif -system-zlib \
                 -no-libjpeg -no-libpng -no-libmng -no-libtiff \
                 -no-accessibility \
@@ -89,4 +91,5 @@ do_install() {
     install -m 0644 tools/porting/src/q3porting.xml ${D}${datadir}/qt4/
 }
 
-FILES_${PN} += "/share"
+FILES_${PN} += "${datadir}"
+RDEPENDS_${PN} += "libm libgcc libstdc++ libz"

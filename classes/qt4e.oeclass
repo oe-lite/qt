@@ -5,8 +5,8 @@ QT_LIBINFIX = ""
 # override variables set by qmake-base to compile Qt/Embedded apps
 #
 export QMAKESPEC = "${STAGE_DIR}/native/share/qt4/mkspecs/g++"
-export OE_QMAKE_INCDIR_QT = "${STAGE_DIR}/machine/usr/include/${QT_DIR_NAME}"
-export OE_QMAKE_LIBDIR_QT = "${STAGE_DIR}/machine/usr/lib"
+export OE_QMAKE_INCDIR_QT = "${STAGE_DIR}/${HOST_TYPE}/usr/include/${QT_DIR_NAME}"
+export OE_QMAKE_LIBDIR_QT = "${STAGE_DIR}/${HOST_TYPE}/usr/lib"
 export OE_QMAKE_LIBS_QT = "qt"
 export OE_QMAKE_LIBS_X11 = ""
 export OE_QMAKE_EXTRA_MODULES = "network"
