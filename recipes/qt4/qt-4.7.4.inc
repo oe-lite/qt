@@ -32,7 +32,7 @@ QT_CONFIG_FLAGS += "-no-rpath -reduce-relocations -silent ${QT_GLFLAGS}"
 
 do_compile() {
     # Fixup missing wsegl header in some SGX SDKs
-    if ! [ -e ${STAGE_DIR}/sysroot/usr/include/wsegl.h ] ; then
+    if ! [ -e ${STAGE_DIR}/${HOST_TYPE}${includedir}/wsegl.h ] ; then
         cp src/3rdparty/powervr/wsegl.h src/plugins/gfxdrivers/powervr/QWSWSEGL/
     fi
     install -m 0755 ${STAGE_DIR}/native/bin/rcc4 ${S}/bin/rcc
