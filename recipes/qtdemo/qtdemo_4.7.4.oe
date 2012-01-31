@@ -1,0 +1,57 @@
+DESCRIPTION = "Qt demo"
+HOMEPAGE = "http://www.trolltech.com"
+LICENSE = "GPL"
+LICENSE = "LGPLv2.1 GPLv3"
+
+DEPENDS += "\
+    native:qt4-tools native:glib \
+    freetype jpeg libpng12 libz libdbus \
+    libglib libgthread \
+    libm libpthread libdl librt libgcc libc libstdc++ \
+    qt4-embedded-dev \
+    tslib \
+"
+
+RDEPENDS_${PN} += "\
+    freetype jpeg libpng12 libz libdbus \
+    libglib libgthread \
+    libm libpthread libdl librt libgcc libc libstdc++ \
+    qt4-embedded \
+    tslib \
+    dbus \
+"
+
+inherit qt4e c++ make
+
+SRC_URI = " \
+  ftp://ftp.trolltech.com/qt/source/qt-everywhere-opensource-src-${PV}.tar.gz \
+  file://calculator.pro \
+  file://main.cpp \
+"
+
+S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
+
+INGREDIENTS_SUBDIR = "qt4"
+
+do_configure() {
+  cd ${S}/demos/declarative/calculator
+  cp ${SRCDIR}/main.cpp .
+  cp ${SRCDIR}/calculator.pro .
+  rm -f Makefile
+  qmake2 calculator.pro -spec ${QMAKESPEC}
+}
+
+do_compile() {
+  cd ${S}/demos/declarative/calculator
+  make
+}
+
+do_install() {
+  mkdir ${D}/qt_demo
+  mkdir ${D}/qt_demo/calculator
+  cp -R ${S}/demos/declarative/calculator/* ${D}/qt_demo/calculator/
+  mkdir ${D}/qt_demo/flickr
+  cp -R ${S}/demos/declarative/flickr/* ${D}/qt_demo/flickr/
+}
+
+FILES_${PN} += "/qt_demo"
