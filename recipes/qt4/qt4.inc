@@ -109,6 +109,13 @@ do_configure() {
             -I${STAGE_DIR}/sysroot/usr/include/freetype2 
 }
 
+do_install[prefuncs] += "do_clean_install"
+
+# Revert install done in do_configure
+do_clean_install () {
+    rm bin/qmake
+}
+
 do_install() {
     oe_runmake install INSTALL_ROOT=${D}
 	
@@ -118,6 +125,29 @@ do_install() {
 	mv ${D}/usr/imports/ ${D}${libdir}/qt4/imports
 }
 
+inherit auto-package-libs
+AUTO_PACKAGE_LIBS = "QtNetwork \
+QtCLucene \
+QtDeclarative \
+QtScript \
+QtScriptTools \
+phonon \
+QtSql \
+QtGui \
+QtDesignerComponents \
+QtXml \
+QtDesigner \
+QtXmlPatterns \
+QtCore \
+QtDBus \
+QtMultimedia \
+QtTest \
+QtHelp \
+"
+
+RDEPENDS_${PN} += "${LIBS_AUTO_RPACKAGES}"
+DEPENDS_${PN} += "${LIBS_AUTO_PACKAGES}"
+
 FILES_${PN} += "${libdir}/fonts/*"
 FILES_${PN} += "${libdir}/qtopia"
 FILES_${PN} += "${libdir}/qt4"
@@ -125,4 +155,3 @@ PACKAGES += "${PN}-mkspecs"
 FILES_${PN}-mkspecs = "${datadir}/qtopia/"
 PACKAGES += "${PN}-prl"
 FILES_${PN}-prl = "${libdir}/*.prl"
-
