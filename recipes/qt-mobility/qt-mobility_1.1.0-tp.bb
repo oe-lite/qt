@@ -8,8 +8,7 @@ DEPENDS += "\
     gstreamer-dev gstreamer-libgstreamer-0.10-dev \
     qt4-embedded qt4-embedded-dev \
     glib-dev glib-libglib-dev glib-libgthread-dev glib-native-dev \
-    ${HOST_ARCH}/sysroot-libm ${HOST_ARCH}/sysroot-libpthread ${HOST_ARCH}/sysroot-libdl \
-    ${HOST_ARCH}/sysroot-librt ${HOST_ARCH}/sysroot-libgcc ${HOST_ARCH}/sysroot-libc ${HOST_ARCH}/sysroot-libstdc++"
+    libm libpthread libdl librt libgcc libc libstdc++"
 
 #gst-plugins-base-dev \
 SRC_URI = "ftp://ftp.trolltech.com/qt/solutions/qt-mobility-opensource-src-${PV}.tar.gz \
