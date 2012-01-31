@@ -1,5 +1,5 @@
 DESCRIPTION = "Native tools for Qt/[X11|Mac|Embedded] version 4.x"
-DEPENDS = "libz libgcc libm" 
+DEPENDS = "libz libgcc libm libdbus"
 HOMEPAGE = "http://www.trolltech.com"
 LICENSE = "GPL"
 LICENSE = "LGPLv2.1 GPLv3"
@@ -94,4 +94,4 @@ do_install() {
 }
 
 FILES_${PN} += "${datadir}"
-RDEPENDS_${PN} += "libm libgcc libstdc++ libz"
+RDEPENDS_${PN} += "libm libgcc libstdc++ libz libdbus"
