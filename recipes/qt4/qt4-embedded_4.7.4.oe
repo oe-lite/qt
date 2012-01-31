@@ -1,8 +1,8 @@
 SUMMARY = "Qt is a versatile cross-platform application framework -- this is the embedded version."
 LICENSE = "GPL QPL"
 HOMEPAGE = "http://www.trolltech.com"
-DEPENDS += "tslib directfb"
-RDEPENDS_${PN} += "tslib-calibrate directfb"
+DEPENDS += "libts libdirectfb"
+RDEPENDS_${PN} += "tslib-calibrate libdirectfb"
 
 require qt4.inc 
 require qt-${PV}.inc
