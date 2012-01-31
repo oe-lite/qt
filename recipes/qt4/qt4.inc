@@ -93,7 +93,6 @@ do_configure() {
     echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
     echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
 
-    export PKG_CONFIG="pkg-config"
     (echo o; echo yes) | ./configure -v \
             -prefix ${prefix}/ \
             -bindir ${bindir} \
@@ -106,7 +105,8 @@ do_configure() {
             -embedded ${USE_qt_arch} -arch ${USE_qt_arch} \
             -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
             ${QT_CONFIG_FLAGS} -fast \
-            -I${STAGE_DIR}/sysroot/usr/include/freetype2 
+            -I${STAGE_DIR}/sysroot/usr/include/freetype2 \
+	    -force-pkg-config
 }
 
 do_install[prefuncs] += "do_clean_install"
