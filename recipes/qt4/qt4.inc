@@ -105,7 +105,7 @@ do_configure() {
             -embedded ${USE_qt_arch} -arch ${USE_qt_arch} \
             -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
             ${QT_CONFIG_FLAGS} -fast \
-            -I${STAGE_DIR}/sysroot/usr/include/freetype2 \
+            -I${STAGE_DIR}/${HOST_TYPE}${includedir}/freetype2 \
 	    -force-pkg-config
 }
 
