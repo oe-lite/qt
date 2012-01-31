@@ -7,7 +7,7 @@ LICENSE = "LGPLv2.1 GPLv3"
 
 RECIPE_TYPES = "native sdk"
 
-inherit c++ make
+inherit c++ make pkgconfig
 
 SRC_URI = "ftp://ftp.trolltech.com/qt/source/qt-everywhere-opensource-src-${PV}.tar.gz \
            file://qt-config.patch\
@@ -30,7 +30,9 @@ EXTRA_OECONF = "-prefix '${prefix}' \
                 -no-nis -no-openssl \
                 -verbose -release -static \
                 -embedded -no-freetype -no-glib -no-iconv \
-                -qt3support"
+                -qt3support \
+                -force-pkg-config \
+"
 
 do_configure() {
    (echo o; echo yes) | ./configure ${EXTRA_OECONF} || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
