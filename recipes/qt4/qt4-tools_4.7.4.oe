@@ -47,10 +47,7 @@ QT_CONFIG_FLAGS += " \
 
 
 
-# Find the g++.conf/linux.conf in the right directory.
-FILESPATHPKG =. "qt-${PV}:"
 
-EXTRA_OECONF += " -fast -silent -no-rpath"
 
 TOBUILD = "\
   src/tools/bootstrap \
@@ -76,23 +73,17 @@ do_compile() {
 
 
 do_install() {
-    install -d ${D}${bindir}/
-    install -m 0755 bin/qmake ${D}${bindir}/qmake2
-    install -m 0755 bin/moc ${D}${bindir}/moc4
-    install -m 0755 bin/uic ${D}${bindir}/uic4
-    install -m 0755 bin/uic3 ${D}${bindir}/uic34
-    install -m 0755 bin/rcc ${D}${bindir}/rcc4
-    install -m 0755 bin/lrelease ${D}${bindir}/lrelease4
-    install -m 0755 bin/lupdate ${D}${bindir}/lupdate4
-    install -m 0755 bin/qdbuscpp2xml ${D}${bindir}/dbuscpp2xml4
-    install -m 0755 bin/qdbusxml2cpp ${D}${bindir}/dbusxml2cpp4
-    
+    for i in ${TOBUILD}; do
+        cd ${S}/$i && oe_runmake install INSTALL_ROOT="${D}"
+    done
+    cd ${S}
+
+    rm ${S}/bin/qmake
     install -d ${D}${datadir}/qt4/
     cp -PfR mkspecs ${D}${datadir}/qt4/
     ln -sf linux-g++ ${D}${datadir}/qt4/mkspecs/${BUILD_CXX}
     cp -f ${SRCDIR}/g++.conf ${SRCDIR}/linux.conf ${D}${datadir}/qt4/mkspecs/common/
 
-    install -m 0644 tools/porting/src/q3porting.xml ${D}${datadir}/qt4/
 }
 
 FILES_${PN} += "${datadir}"
