@@ -1,7 +1,7 @@
 #
 # QMake variables for Qt4
 #
-DEPENDS_prepend = "qt4-tools-native "
+CLASS_DEPENDS += "native:qmake"
 
 export QMAKESPEC = "${STAGE_DIR}/${HOST_TYPE}/usr/share/qt4/mkspecs/${CXX}"
 export OE_QMAKE_UIC = "${STAGE_DIR}/native/bin/uic4"
