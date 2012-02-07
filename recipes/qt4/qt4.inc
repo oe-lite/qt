@@ -13,19 +13,25 @@ DEPENDS += "\
     libgstbase \
     libasound \
     libgio libglib libgthread \
-    libm libpthread libdl librt libgcc libstdc++"
+    libm libpthread libdl librt libgcc \
+"
 
 RDEPENDS_${PN} += "\
     libm libpthread libdl librt libgcc libc libstdc++ \
     libasound \
-    libz libgthread libglib libfreetype"
+    libz libgthread libglib libfreetype \
+"
 
 #The base:
 QT_CONFIG_FLAGS += "-release -reduce-relocations -shared -qt-gif \
-                    -qt-libjpeg -qt-libpng -system-zlib -qdbus -stl -glib"
+                    -qt-libjpeg -qt-libpng -system-zlib -qdbus -stl -glib \
+                    -force-pkg-config \
+                    -verbose -verbose \
+"
 
 #Features DISABLED!
-QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sql-sqlite -no-sql-sqlite2 \
+QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc \
+                    -no-sql-psql -no-sql-sqlite -no-sql-sqlite2 \
                     -no-pch \
                     -no-nas-sound \
                     -no-sm \
