@@ -14,10 +14,6 @@ SRC_URI += "\
 
 do_configure[prefuncs] += "do_configure_smallfix"
 do_configure_smallfix() {
-    for pro in $(find ${S} -name "*.pro") ; do
-        sed -i 's:$$QT_BUILD_TREE/bin/lrelease:${OE_QMAKE_LRELEASE}:g' $pro
-    done
-    sed -i s:SEDME:${S}: ${SRCDIR}/linux.conf
     sed -i \
     -e /QMAKE_MOC\ /d \
     -e /QMAKE_UIC\ /d \
@@ -29,17 +25,6 @@ do_configure_smallfix() {
 QT_GLFLAGS ?= ""
 QT_CONFIG_FLAGS += "-no-rpath -reduce-relocations -silent ${QT_GLFLAGS}"
 
-do_compile() {
-    # Fixup missing wsegl header in some SGX SDKs
-    if ! [ -e ${STAGE_DIR}/sysroot/usr/include/wsegl.h ] ; then
-        cp src/3rdparty/powervr/wsegl.h src/plugins/gfxdrivers/powervr/QWSWSEGL/
-    fi
-    install -m 0755 ${STAGE_DIR}/native/bin/rcc4 ${S}/bin/rcc
-    install -m 0755 ${STAGE_DIR}/native/bin/moc4 ${S}/bin/moc
-    install -m 0755 ${STAGE_DIR}/native/bin/uic4 ${S}/bin/uic
-    install -m 0755 ${STAGE_DIR}/native/bin/lrelease4 ${S}/bin/lrelease
-    oe_runmake ${EXTRA_ENV}
-}
 
 do_install[postfuncs] += "do_install_smallfix"
 do_install_smallfix() {
@@ -49,5 +34,4 @@ do_install_smallfix() {
 	done
 }
 
-FILES_${QT_BASE_NAME}-tools                += "${bindir}/qml"
-
+FILES_${PN}-tools                += "${bindir}/qml"
