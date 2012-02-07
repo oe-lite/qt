@@ -1,12 +1,11 @@
-DESCRIPTION = "Native tools for Qt/[X11|Mac|Embedded] version 4.x"
-DEPENDS = "libz libgcc libm" 
-HOMEPAGE = "http://www.trolltech.com"
-LICENSE = "GPL"
-LICENSE = "LGPLv2.1 GPLv3"
-#todo: checkup on licences
+DESCRIPTION = "Native and sdk  tools for Qt/[X11|Mac|Embedded] version 4.x"
+HOMEPAGE = "http://qt.nokia.com"
+LICENSE = "LGPLv2.1 | GPLv3"
 
 RECIPE_TYPES = "native sdk"
 
+DEPENDS += "libz libgcc libm libpthread libdl librt libdbus" 
+DEPENDS:>sdk = " native:qt4-tools"
 inherit c++ make
 
 SRC_URI = "ftp://ftp.trolltech.com/qt/source/qt-everywhere-opensource-src-${PV}.tar.gz \
