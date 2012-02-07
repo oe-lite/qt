@@ -5,6 +5,7 @@
 RECIPE_TYPES = "machine sdk"
 
 inherit c++ make pkgconfig
+require qt4-common.inc
 
 DEPENDS += "\
     native:qt4-tools native:glib \
@@ -39,76 +40,17 @@ QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc -no-sql-psql -no-sq
                     -no-largefile \
                     -no-opengl \
                     -no-webkit \
-                    -nomake examples -nomake demos -nomake docs -nomake translations"
+                    -nomake examples -nomake demos \
+                    -nomake docs -nomake translations \
+                    -prefix '${prefix}/' \
+                    -embedded ${QT_ARCH} -arch ${QT_ARCH} \
+                    -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
+                    -fast \
+                    -I${STAGE_DIR}/sysroot/usr/include/freetype2 \
+"
 
 CFLAGS += "-fPIC"
-EXTRA_ENV = 'QMAKE="${STAGE_DIR}/native${stage_bindir}/qmake2 -after \
-             INCPATH+=${HOST_SYSROOT}/usr/include/freetype2" \
-             QMAKESPEC="${QMAKESPEC}" LINK="${CXX} -ldl" \
-             AR="${TARGET_PREFIX}ar cqs" \
-             MOC="${STAGE_DIR}/native/bin/moc4" UIC="${STAGE_DIR}/native/bin/uic4" MAKE="make"'
-
-export QT_CONF_PATH="${SRCDIR}/qt.conf"
-
-addtask mangle after do_patch before do_configure
-do_mangle[dirs] = "${SRCDIR}"
-do_mangle () {
-    sed -i -e 's#\$\((OE_QMAKE_CXX)\)#${OE_QMAKE_CXX}#' \
-        -i -e 's#\$\((OE_QMAKE_CC)\)#${OE_QMAKE_CC}#' \
-        -i -e 's#\$\((OE_QMAKE_LINK)\)#${OE_QMAKE_LINK}#' \
-        -i -e 's#\$\((OE_QMAKE_QT_CONFIG)\)#\$\{OE_QMAKE_QT_CONFIG\}#' \
-        -i -e 's#\$\((OE_QMAKE_LDFLAGS)\)#${OE_QMAKE_LDFLAGS}#' \
-        -i -e 's#\$\((OE_QMAKE_CFLAGS)\)#${OE_QMAKE_CFLAGS}#' \
-        -i -e 's#\$\((OE_QMAKE_CXXFLAGS)\)#${OE_QMAKE_CXXFLAGS}#' \
-        g++.conf
-}
-
-# Supported archs in src/corelib/arch/*
-RECIPE_FLAGS += "qt_arch"
-DEFAULT_USE_qt_arch = "${HOST_CPU}"
-
-do_configure() {
-    if [ ! -e bin/qmake ]; then
-        ln -sf ${STAGE_DIR}/native/bin/qmake2 bin/qmake
-    else
-        die "Rebuilding is NOT supported"
-    fi
     
-    if [ ! -e mkspecs/${TARGET_OS}-g++ ]; then
-        ln -sf linux-g++ mkspecs/${TARGET_OS}-g++
-    fi
-
-    cp -f ${SRCDIR}/g++.conf ${SRCDIR}/linux.conf mkspecs/common/
-
-    echo "[Paths]"                                 > $QT_CONF_PATH
-    echo "Prefix=${prefix}/"                      >> $QT_CONF_PATH
-    echo "Documentation=${docdir}/${QT_DIR_NAME}" >> $QT_CONF_PATH
-    echo "Headers=${includedir}/${QT_DIR_NAME}"   >> $QT_CONF_PATH
-    echo "Libraries=${libdir}"                    >> $QT_CONF_PATH
-    echo "Binaries=${bindir}"                     >> $QT_CONF_PATH
-    echo "Plugins=${libdir}/${QT_DIR_NAME}/plugins" >> $QT_CONF_PATH
-    echo "Data=${datadir}/${QT_DIR_NAME}"         >> $QT_CONF_PATH
-    echo "Translations=${datadir}/${QT_DIR_NAME}/translations" >> $QT_CONF_PATH
-    echo "Settings=${sysconfdir}/${QT_DIR_NAME}"  >> $QT_CONF_PATH
-    echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
-    echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
-
-    export PKG_CONFIG="pkg-config"
-    (echo o; echo yes) | ./configure -v \
-            -prefix ${prefix}/ \
-            -bindir ${bindir} \
-            -libdir ${libdir} \
-            -datadir ${datadir}/${QT_DIR_NAME} \
-            -sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
-            -docdir ${docdir}/${QT_DIR_NAME} \
-            -headerdir ${includedir}/${QT_DIR_NAME} \
-            -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
-            -embedded ${USE_qt_arch} -arch ${USE_qt_arch} \
-            -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
-            ${QT_CONFIG_FLAGS} -fast \
-            -I${STAGE_DIR}/sysroot/usr/include/freetype2 
-}
-
 
 do_install() {
     oe_runmake install INSTALL_ROOT=${D}
@@ -139,7 +81,6 @@ QtMultimedia \
 QtTest \
 QtHelp \
 "
-
 AUTO_PACKAGE_LIBS_RDEPENDS = "libdl libm libgcc libc libstdc++ libpthread"
 
 FILES_${PN}-libphonon += "${libdir}/${QT_DIR_NAME}/plugins/phonon_backend"
