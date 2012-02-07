@@ -2,16 +2,15 @@ LICENSE = "LGPLv2.1 GPLv3"
 
 FILESPATHPKG =. "qt-${PV}:"
 
-SRC_URI = "\
-    ftp://ftp.trolltech.com/qt/source/qt-everywhere-opensource-src-${PV}.tar.gz \
+SRC_URI += "\
     file://0004-no-qmake.patch \
     file://hack-out-pg2-4.7.0.patch \
     file://0006-freetype-host-includes.patch \
     file://Fix-compilation-with-thumb2.patch \
     file://g++.conf \
     file://linux.conf \
-    file://qte.sh"
-S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
+    file://qte.sh \
+"
 
 do_configure[prefuncs] += "do_configure_smallfix"
 do_configure_smallfix() {
