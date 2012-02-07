@@ -1,0 +1,12 @@
+Index: qt-everywhere-opensource-src-4.7.4/configure
+===================================================================
+--- qt-everywhere-opensource-src-4.7.4.orig/configure	2012-01-31 13:13:04.741790839 +0100
++++ qt-everywhere-opensource-src-4.7.4/configure	2012-01-31 13:13:18.622545309 +0100
+@@ -4726,6 +4726,7 @@
+     [ '!' -z "$QCONFIG_H" ] && mv -f "$QCONFIG_H" "$QMAKE_QCONFIG_H" #move qmake's qconfig.h to qconfig.h.qmake
+     [ '!' -z "$OLD_QCONFIG_H" ] && mv -f "${OLD_QCONFIG_H}.old" "$OLD_QCONFIG_H" #put back qconfig.h
+     [ "$QMAKE_BUILD_ERROR" = "yes" ] && exit 2
++    [ "$QMAKE_BUILD_ERROR" = "no" ] && [ "$NO_CONF" = "yes" ]  && exit 0
+ fi # Build qmake
+ 
+ #-------------------------------------------------------------------------------
