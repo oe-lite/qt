@@ -54,3 +54,18 @@ do_configure_conf() {
     echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
     echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
 }
+
+install_conf () {
+    if [ -z "${OE_QMAKE_CXX}" ]; then
+        echo "ERROR: cannot install $1 to $2, OE_QMAKE var not set"
+        exit 1
+    fi
+    cp -vf "$1" "$2"
+    sed -i -e 's#\$\((OE_QMAKE_CXX)\)#${OE_QMAKE_CXX}#' \
+        -i -e 's#\$\((OE_QMAKE_CC)\)#${OE_QMAKE_CC}#' \
+        -i -e 's#\$\((OE_QMAKE_LINK)\)#${OE_QMAKE_LINK}#' \
+        -i -e 's#\$\((OE_QMAKE_LDFLAGS)\)#${OE_QMAKE_LDFLAGS}#' \
+        -i -e 's#\$\((OE_QMAKE_CFLAGS)\)#${OE_QMAKE_CFLAGS}#' \
+        -i -e 's#\$\((OE_QMAKE_CXXFLAGS)\)#${OE_QMAKE_CXXFLAGS}#' \
+        "$2"
+}
