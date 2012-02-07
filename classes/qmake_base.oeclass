@@ -36,3 +36,21 @@ export OE_QMAKE_STRIP="echo"
 
 # do not export STRIP to the environment
 STRIP[unexport] = "1"
+QT_DIR_NAME = "qtopia"
+QT_CONF_PATH = "${SRCDIR}/qt.conf"
+export QT_CONF_PATH
+do_configure[prefuncs] += "do_configure_conf"
+do_configure_conf() {
+    echo "[Paths]"                                 > $QT_CONF_PATH
+    echo "Prefix=${prefix}/"                      >> $QT_CONF_PATH
+    echo "Documentation=${docdir}/${QT_DIR_NAME}" >> $QT_CONF_PATH
+    echo "Headers=${includedir}/${QT_DIR_NAME}"   >> $QT_CONF_PATH
+    echo "Libraries=${libdir}"                    >> $QT_CONF_PATH
+    echo "Binaries=${bindir}"                     >> $QT_CONF_PATH
+    echo "Plugins=${libdir}/${QT_DIR_NAME}/plugins" >> $QT_CONF_PATH
+    echo "Data=${datadir}/${QT_DIR_NAME}"         >> $QT_CONF_PATH
+    echo "Translations=${datadir}/${QT_DIR_NAME}/translations" >> $QT_CONF_PATH
+    echo "Settings=${sysconfdir}/${QT_DIR_NAME}"  >> $QT_CONF_PATH
+    echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
+    echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
+}
