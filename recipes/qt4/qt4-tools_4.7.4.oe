@@ -23,22 +23,27 @@ SRC_URI:>sdk = " \
            file://qt-dbus-const.patch \
 "
 
-
-EXTRA_OECONF = "-prefix '${prefix}' \
-                -L${TARGET_SYSROOT}/${base_libdir} \
-                -I${TARGET_SYSROOT}/${base_includedir} \
+QT_CONFIG_FLAGS = " -prefix '${prefix}/' \
                 -L${TARGET_SYSROOT}/${libdir} \
                 -I${TARGET_SYSROOT}/${includedir} \
-                -qt-libjpeg -qt-gif -system-zlib \
+                -qt-libjpeg -system-zlib \
                 -no-libjpeg -no-libpng -no-libmng -no-libtiff \
+                -no-gif -no-svg \
                 -no-accessibility \
                 -no-cups \
                 -no-exceptions  \
                 -no-nas-sound \
                 -no-nis -no-openssl \
-                -verbose -release -static \
+                -v -release \
                 -embedded -no-freetype -no-glib -no-iconv \
-                -qt3support"
+                -fast \
+                -no-qt3support \
+"
+
+QT_CONFIG_FLAGS += " \
+             -xplatform ${TARGET_OS}-g++ -static -platform ${TARGET_OS}-g++ \
+             -arch ${QT_ARCH} -no-rpath \
+"
 
 
 
@@ -51,15 +56,13 @@ TOBUILD = "\
   src/tools/bootstrap \
   src/tools/moc \
   src/corelib \
+  src/xml \
   src/sql \
   src/dbus \
-  src/qt3support \
-  src/xml \
   src/tools/uic \
   src/tools/rcc \
   src/network \
   src/gui \
-  src/tools/uic3 \
   tools/linguist/lrelease \
   tools/linguist/lupdate \
   tools/qdbus \
@@ -67,11 +70,10 @@ TOBUILD = "\
 
 do_compile() {
     for i in ${TOBUILD}; do
-        cd ${S}/$i && oe_runmake CC=${CC} CXX=${CXX}
+        cd ${S}/$i && oe_runmake
     done
 }
 
-NATIVE_INSTALL_WORKS = "1"
 
 do_install() {
     install -d ${D}${bindir}/
