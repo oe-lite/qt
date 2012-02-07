@@ -1,17 +1,13 @@
 SUMMARY = "Qt is a versatile cross-platform application framework -- this is the embedded version."
-LICENSE = "GPL QPL"
-HOMEPAGE = "http://www.trolltech.com"
+LICENSE = "LGPLv2.1 | GPLv3"
+HOMEPAGE = "http://qt.nokia.com"
 DEPENDS += "tslib directfb"
 RDEPENDS_${PN} += "tslib-calibrate directfb"
 
-require qt4.inc 
+require qt4.inc
 require qt-${PV}.inc
 
 inherit qt4e
-
-QT_BASE_NAME ?= "qt4-embedded"
-QT_BASE_LIB  ?= "libqt-embedded"
-QT_DIR_NAME = "qtopia"
 
 QT_CONFIG_FLAGS += " \
     -qt-gfx-transformed -plugin-gfx-qvfb -plugin-gfx-vnc -plugin-gfx-directfb \
