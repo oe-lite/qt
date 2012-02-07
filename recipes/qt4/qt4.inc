@@ -109,16 +109,11 @@ do_configure() {
             -I${STAGE_DIR}/sysroot/usr/include/freetype2 
 }
 
-do_install[prefuncs] += "do_clean_install"
-
-# Revert install done in do_configure
-do_clean_install () {
-    rm bin/qmake
-}
 
 do_install() {
     oe_runmake install INSTALL_ROOT=${D}
-	
+
+    rm ${D}/${bindir}/qmake
     install -d ${D}/${libdir}/fonts
     touch ${D}/${libdir}/fonts/fontdir
 	mkdir ${D}${libdir}/qt4
