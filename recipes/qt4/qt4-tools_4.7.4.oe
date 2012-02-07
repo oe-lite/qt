@@ -71,6 +71,12 @@ do_compile() {
     done
 }
 
+PACKAGES += "${PN}-fonts"
+FILES_${PN}-fonts = "${libdir}/fonts"
+
+PACKAGES += "${PN}-prl"
+FILES_${PN}-prl = "${libdir}/*.prl"
+
 
 do_install() {
     for i in ${TOBUILD}; do
@@ -87,4 +93,4 @@ do_install() {
 }
 
 FILES_${PN} += "${datadir}"
-RDEPENDS_${PN} += "libm libgcc libstdc++ libz"
+RDEPENDS_${PN} += "libm libgcc libstdc++ libz libdl librt libpthread libglib"
