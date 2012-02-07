@@ -6,13 +6,22 @@ RECIPE_TYPES = "native sdk"
 
 DEPENDS += "libz libgcc libm libpthread libdl librt libdbus" 
 DEPENDS:>sdk = " native:qt4-tools"
-inherit c++ make
 
-SRC_URI = "ftp://ftp.trolltech.com/qt/source/qt-everywhere-opensource-src-${PV}.tar.gz \
-           file://qt-config.patch\
+inherit c++ make qmake_base
+require qt4-common.inc
+
+SRC_URI += " \
            file://g++.conf \
-           file://linux.conf"
-S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
+           file://linux.conf \
+           file://0004-no-qmake.patch \
+"
+
+SRC_URI:>sdk = " \
+           file://configure-lflags.patch \
+           file://compile.test-lflags.patch \
+           file://configure-paths.patch \
+           file://qt-dbus-const.patch \
+"
 
 
 EXTRA_OECONF = "-prefix '${prefix}' \
@@ -31,13 +40,7 @@ EXTRA_OECONF = "-prefix '${prefix}' \
                 -embedded -no-freetype -no-glib -no-iconv \
                 -qt3support"
 
-do_configure() {
-   (echo o; echo yes) | ./configure ${EXTRA_OECONF} || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
-}
 
-# yank default -e, otherwise we get the following error:
-# moc_qbuffer.cpp: No such file or directory
-EXTRA_OEMAKE = " "
 
 # Find the g++.conf/linux.conf in the right directory.
 FILESPATHPKG =. "qt-${PV}:"
