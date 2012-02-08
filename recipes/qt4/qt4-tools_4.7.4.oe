@@ -37,6 +37,7 @@ QT_CONFIG_FLAGS = " -prefix '${prefix}/' \
                 -v -release \
                 -embedded -no-freetype -no-glib -no-iconv \
                 -fast \
+                -force-pkg-config \
                 -no-qt3support \
 "
 
@@ -93,4 +94,4 @@ do_install() {
 }
 
 FILES_${PN} += "${datadir}"
-RDEPENDS_${PN} += "libm libgcc libstdc++ libz libdl librt libpthread libglib"
+RDEPENDS_${PN} += "libm libgcc libstdc++ libz libdbus libdl librt libpthread libglib"

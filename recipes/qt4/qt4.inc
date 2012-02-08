@@ -56,7 +56,6 @@ QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc \
 "
 
 CFLAGS += "-fPIC"
-    
 
 do_install() {
     oe_runmake install INSTALL_ROOT=${D}

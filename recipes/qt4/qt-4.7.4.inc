@@ -25,7 +25,6 @@ do_configure_smallfix() {
 QT_GLFLAGS ?= ""
 QT_CONFIG_FLAGS += "-no-rpath -reduce-relocations -silent ${QT_GLFLAGS}"
 
-
 do_install[postfuncs] += "do_install_smallfix"
 do_install_smallfix() {
 	install -d ${D}${bindir}

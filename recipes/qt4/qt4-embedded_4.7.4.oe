@@ -2,7 +2,7 @@ SUMMARY = "Qt is a versatile cross-platform application framework -- this is the
 LICENSE = "LGPLv2.1 | GPLv3"
 HOMEPAGE = "http://qt.nokia.com"
 DEPENDS += "tslib directfb"
-RDEPENDS_${PN} += "tslib-calibrate directfb"
+RDEPENDS_${PN} += "libts libdirectfb"
 
 require qt4.inc
 require qt-${PV}.inc
