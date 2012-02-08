@@ -29,29 +29,23 @@ SRC_URI = " \
   file://main.cpp \
 "
 
-S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
+S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}/demos/declarative/calculator"
 
 INGREDIENTS_SUBDIR = "qt4"
 
 do_configure() {
-  cd ${S}/demos/declarative/calculator
   cp ${SRCDIR}/main.cpp .
   cp ${SRCDIR}/calculator.pro .
-  rm -f Makefile
-  qmake2 calculator.pro -spec ${QMAKESPEC}
-}
-
-do_compile() {
-  cd ${S}/demos/declarative/calculator
-  make
+  qmake calculator.pro -spec ${QMAKESPEC}
 }
 
 do_install() {
   mkdir ${D}/qt_demo
   mkdir ${D}/qt_demo/calculator
-  cp -R ${S}/demos/declarative/calculator/* ${D}/qt_demo/calculator/
+  cp -vR * ${D}/qt_demo/calculator/
   mkdir ${D}/qt_demo/flickr
-  cp -R ${S}/demos/declarative/flickr/* ${D}/qt_demo/flickr/
+  cp -vR * ${D}/qt_demo/flickr/
 }
 
 FILES_${PN} += "/qt_demo"
+FILES_${PN}-dbg += "/qt_demo/calculator/.debug /qt_demo/flickr/.debug"
