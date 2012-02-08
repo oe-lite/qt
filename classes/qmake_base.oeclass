@@ -25,6 +25,15 @@ export OE_QMAKE_CXXFLAGS = "${CXXFLAGS}"
 # do not export STRIP to the environment
 STRIP[unexport] = "1"
 QT_DIR_NAME = "qtopia"
+
+#
+# qt.conf overwrite paths hardcoded in the qmake binary.
+#
+# The qmake paths is used for fx the install targets.
+# 
+# The Paths comnpiled into the libs (fx pluginpath) must be set, when running
+# configure, use QT_PATH below to match the qmake paths.
+#
 QT_CONF_PATH = "${SRCDIR}/qt.conf"
 export QT_CONF_PATH
 do_configure[prefuncs] += "do_configure_conf"
@@ -42,6 +51,18 @@ do_configure_conf() {
     echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
     echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
 }
+
+
+QT_PATH = " \
+    -prefix ${prefix}/ \
+    -bindir ${bindir} \
+    -libdir ${libdir} \
+    -datadir ${datadir}/${QT_DIR_NAME} \
+    -sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
+    -docdir ${docdir}/${QT_DIR_NAME} \
+    -headerdir ${includedir}/${QT_DIR_NAME} \
+    -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
+"
 
 install_conf () {
     if [ -z "${OE_QMAKE_CXX}" ]; then

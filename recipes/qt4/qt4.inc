@@ -89,9 +89,9 @@ QtHelp \
 AUTO_PACKAGE_LIBS_RDEPENDS = "libdl libm libgcc libc libstdc++ libpthread"
 
 FILES_${PN}-libphonon += "${libdir}/${QT_DIR_NAME}/plugins/phonon_backend"
-FILES_${PN}-libphonon-dev += "${libdir}/${QT_DIR_NAME}/plugins/phonon_backend/.debug"
+FILES_${PN}-libphonon-dbg += "${libdir}/${QT_DIR_NAME}/plugins/phonon_backend/.debug"
 FILES_${PN}-libqtgui += "${libdir}/${QT_DIR_NAME}/plugins/imageformats"
-FILES_${PN}-libqtgui-dev += "${libdir}/${QT_DIR_NAME}/plugins/imageformats/.debug"
+FILES_${PN}-libqtgui-dbg += "${libdir}/${QT_DIR_NAME}/plugins/imageformats/.debug"
 
 RDEPENDS_${PN}-libqtclucene += "libqtcore"
 RDEPENDS_${PN}-libqtdeclarative += "libqtscript libqtsql libqtxmlpatterns libqtgui libqtnetwork libqtcore librt"

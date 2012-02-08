@@ -1,7 +1,7 @@
 SUMMARY = "Qt is a versatile cross-platform application framework -- this is the embedded version."
 LICENSE = "LGPLv2.1 | GPLv3"
 HOMEPAGE = "http://qt.nokia.com"
-DEPENDS += "tslib directfb"
+DEPENDS += "tslib libdirectfb"
 RDEPENDS_${PN} += "libts libdirectfb"
 
 require qt4.inc
@@ -19,6 +19,7 @@ QT_CONFIG_FLAGS += " \
 
 QT_CONFIG_FLAGS += " \
  -exceptions \
+ ${QT_PATH} \
 "
 
 do_install[postfuncs] += "do_install_fixsysconfdir"
