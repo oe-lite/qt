@@ -1,0 +1,35 @@
+RECIPE_TYPES = "canadian-cross"
+inherit sdk-image image-qa
+
+IMAGE_BASENAME = "oe-lite-qt-sdk-${HOST_ARCH}-${TARGET_ARCH}"
+ARCHIVE_IMAGE_DIRNAME = "sdk"
+
+require recipes/images/base-sdk.inc
+
+#gstreamer
+RDEPENDS += """
+target:gstreamer
+"""
+
+#Gstreamer plugins
+RDEPENDS += """
+target:gst-plugins-base
+"""
+
+#QT
+RDEPENDS += """
+target:qt4-embedded
+ target:tslib
+ target:freetype
+ target:jpeg
+ target:libpng12
+ target:libz
+ target:libdbus
+ target:openssl
+"""
+
+#Misc
+RDEPENDS += "target:libxml2-dev ${QT4_TOOLS}"
+
+QT4_TOOLS="host:qt4-tools host:glib host:qmake host:pkg-config"
+QT4_TOOLS:HOST_OS_mingw32 = ""
