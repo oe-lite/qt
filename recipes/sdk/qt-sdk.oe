@@ -1,10 +1,6 @@
-RECIPE_TYPES = "canadian-cross"
 inherit sdk-image image-qa
 
 IMAGE_BASENAME = "oe-lite-qt-sdk-${HOST_ARCH}-${TARGET_ARCH}"
-ARCHIVE_IMAGE_DIRNAME = "sdk"
-
-require recipes/images/base-sdk.inc
 
 #gstreamer
 RDEPENDS += """
