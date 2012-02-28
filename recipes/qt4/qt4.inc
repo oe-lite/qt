@@ -67,6 +67,14 @@ do_install() {
 	mv ${D}/usr/imports/ ${D}${libdir}/qt4/imports
 }
 
+inherit auto-package-utils
+
+AUTO_PACKAGE_UTILS = "assistant designer lconvert linguist lrelease \
+	lupdate makeqpf moc pixeltool qcollectiongenerator qdbus \
+	qdbuscpp2xml qdbusviewer qdbusxml2cpp qdoc3 qhelpconverter \
+	qhelpgenerator qmlviewer qt3to4 qttracereplay rcc uic \
+	xmlpatterns xmlpatternsvalidator"
+
 inherit auto-package-libs
 AUTO_PACKAGE_LIBS = "QtNetwork \
 QtCLucene \
