@@ -7,7 +7,7 @@ RECIPE_TYPES = "native sdk"
 DEPENDS += "libz libgcc libm libpthread libdl librt libdbus" 
 DEPENDS:>sdk = " native:qt4-tools"
 
-inherit c++ make qmake_base
+inherit c++ make qmake_base pkgconfig
 require qt4-common.inc
 
 SRC_URI += " \
