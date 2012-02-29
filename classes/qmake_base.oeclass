@@ -2,7 +2,7 @@
 # QMake variables for Qt4
 #
 CLASS_DEPENDS += "native:qmake"
-QMAKESPEC = "${BUILD_SYSROOT}${stage_datadir}/qt4/mkspecs/g++"
+export QMAKESPEC = "${BUILD_SYSROOT}${stage_datadir}/qt4/mkspecs/g++"
 QMAKESPEC:native = ""
 export OE_QMAKE_UIC = "uic"
 export OE_QMAKE_MOC = "moc"
