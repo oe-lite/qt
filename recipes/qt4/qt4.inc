@@ -6,6 +6,7 @@ RECIPE_TYPES = "machine sdk"
 
 inherit c++ make pkgconfig
 require qt4-common.inc
+RECIPE_FLAGS += "qt_webkit"
 
 DEPENDS += "\
     native:qt4-tools native:glib \
@@ -32,6 +33,10 @@ QT_CONFIG_FLAGS += "-release -reduce-relocations -shared -qt-gif \
                     -verbose -verbose -depths all \
 "
 
+DEFAULT_USE_qt_webkit = ""
+QT_CONFIG_DISABLE_WEBKIT = "-no-webkit"
+QT_CONFIG_DISABLE_WEBKIT:USE_qt_webkit = ""
+
 #Features DISABLED!
 QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc \
                     -no-sql-psql -no-sql-sqlite -no-sql-sqlite2 \
@@ -48,7 +53,6 @@ QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc \
                     -no-audio-backend \
                     -no-largefile \
                     -no-opengl \
-                    -no-webkit \
                     -nomake examples -nomake demos \
                     -nomake docs -nomake translations \
                     -prefix '${prefix}/' \
@@ -56,6 +60,7 @@ QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc \
                     -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
                     -fast \
                     -I${STAGE_DIR}/sysroot/usr/include/freetype2 \
+                    ${QT_CONFIG_DISABLE_WEBKIT} \
 "
 
 CFLAGS += "-fPIC"
@@ -97,6 +102,7 @@ QtMultimedia \
 QtTest \
 QtHelp \
 "
+AUTO_PACKAGE_LIBS:>USE_qt_webkit ="QtWebKit"
 AUTO_PACKAGE_LIBS_RDEPENDS = "libdl libm libgcc libc libstdc++ libpthread"
 
 FILES_${PN}-libphonon += "${libdir}/${QT_DIR_NAME}/plugins/phonon_backend"
@@ -120,6 +126,7 @@ RDEPENDS_${PN}-libqtdbus += "libqtxml libqtcore "
 RDEPENDS_${PN}-libqtmultimedia += "libqtgui libqtnetwork libqtcore "
 RDEPENDS_${PN}-libqttest += "libqtcore"
 RDEPENDS_${PN}-libqthelp += "libqtsql libqtxml libqtgui libqtnetwork libqtcore libqtclucene"
+RDEPENDS_${PN}-libqtwebkit += "libphonon libqtdbus libqtxml"
 
 RDEPENDS_${PN}-dev += "${LIBS_AUTO_PACKAGES}"
 DEPENDS_${PN}-dev += "${LIBS_AUTO_PACKAGES}"
