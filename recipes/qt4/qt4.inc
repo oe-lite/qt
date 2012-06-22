@@ -15,6 +15,9 @@ DEPENDS += "\
     libgio libglib libgthread \
     libm libpthread libdl librt libgcc \
 "
+DEPENDS_${PN} += "\
+    libpthread libz librt libglib libgthread libdl libts \
+"
 
 RDEPENDS_${PN} += "\
     libm libpthread libdl librt libgcc libc libstdc++ \
