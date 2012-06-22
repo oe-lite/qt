@@ -29,7 +29,7 @@ RDEPENDS_${PN} += "\
 QT_CONFIG_FLAGS += "-release -reduce-relocations -shared -qt-gif \
                     -qt-libjpeg -qt-libpng -system-zlib -qdbus -stl -glib \
                     -force-pkg-config \
-                    -verbose -verbose \
+                    -verbose -verbose -depths all \
 "
 
 #Features DISABLED!
