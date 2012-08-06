@@ -1,1 +1,8 @@
-This is the qt metadata.
+OE-lite/Qt metadata
+---------------------
+
+This is the Qt metadata of the OE-lite project, containing recipes for
+building the Qt framework and related software components.
+
+OE-lite is an embedded Linux build system,
+See http://oe-lite.org for more information.
