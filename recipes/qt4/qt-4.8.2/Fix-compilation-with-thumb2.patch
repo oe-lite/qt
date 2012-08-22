@@ -1,0 +1,34 @@
+From 6be1b235f7db38146f7080a4bfcfe3051ae54699 Mon Sep 17 00:00:00 2001
+From: Eike Ziller <eike.ziller@nokia.com>
+Date: Wed, 10 Aug 2011 09:38:37 +0200
+Subject: [PATCH] Fix compilation with thumb2.
+
+Task-number: QTBUG-16402
+Rubber-stamped-by: Thiago Macieira
+---
+ src/corelib/arch/qatomic_armv6.h |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/src/corelib/arch/qatomic_armv6.h b/src/corelib/arch/qatomic_armv6.h
+index 96b561e..dd465db 100644
+--- a/src/corelib/arch/qatomic_armv6.h
++++ b/src/corelib/arch/qatomic_armv6.h
+@@ -152,6 +152,7 @@ inline bool QBasicAtomicInt::testAndSetRelaxed(int expectedValue, int newValue)
+     asm volatile("0:\n"
+                  "ldrex %[result], [%[_q_value]]\n"
+                  "eors %[result], %[result], %[expectedValue]\n"
++                 "itt eq\n"
+                  "strexeq %[result], %[newValue], [%[_q_value]]\n"
+                  "teqeq %[result], #1\n"
+                  "beq 0b\n"
+@@ -210,6 +211,7 @@ Q_INLINE_TEMPLATE bool QBasicAtomicPointer<T>::testAndSetRelaxed(T *expectedValu
+     asm volatile("0:\n"
+                  "ldrex %[result], [%[_q_value]]\n"
+                  "eors %[result], %[result], %[expectedValue]\n"
++                 "itt eq\n"
+                  "strexeq %[result], %[newValue], [%[_q_value]]\n"
+                  "teqeq %[result], #1\n"
+                  "beq 0b\n"
+-- 
+1.7.6
+
