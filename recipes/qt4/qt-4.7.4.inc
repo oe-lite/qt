@@ -7,6 +7,9 @@ SRC_URI += "\
     file://hack-out-pg2-4.7.0.patch \
     file://0006-freetype-host-includes.patch \
     file://Fix-compilation-with-thumb2.patch \
+    file://compile.test-lflags.patch \
+    file://configure-lflags.patch \
+    file://g++-conf.patch \
     file://g++.conf \
     file://linux.conf \
     file://qte.sh \

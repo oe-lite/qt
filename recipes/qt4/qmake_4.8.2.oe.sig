@@ -1,1 +1,1 @@
-qt.sig
+qt-4.8.2.sig

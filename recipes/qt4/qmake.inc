@@ -1,10 +1,11 @@
 LICENSE = "LGPLv2.1 | GPLv3"
+inherit c++
+
 SRC_URI += " \
            file://qt-config.patch \
            file://only-qmake.patch \
 "
 
-inherit c++
 require qt4-common.inc
 
 RECIPE_TYPES = "native sdk machine"

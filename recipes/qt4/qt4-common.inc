@@ -1,8 +1,10 @@
 # Supported archs in src/corelib/arch/*
 
-SRC_URI =+ "http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${PV}.tar.gz"
+SRC_URI =+ "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${PV}.tar.gz"
 S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
 
+FILESPATHPKG =. "qt-${PV}:"
+LD[unexport]            = "1"
 
 CONFIGURE_PREFUNCS = "do_configure_mkspecs"
 do_configure[prefuncs] += "${CONFIGURE_PREFUNCS}"
@@ -13,14 +15,14 @@ do_configure_mkspecs() {
     fi
 
     if [ -f ${SRCDIR}/g++.conf ] && [ -f ${SRCDIR}/linux.conf ]; then
-        install_conf "${SRCDIR}/g++.conf" \
-            "mkspecs/common/g++.conf"
+        do_configure_install_conf "${SRCDIR}/g++.conf" \
+            "mkspecs/common/g++-unix.conf"
         cp -vf ${SRCDIR}/linux.conf mkspecs/common/
     fi
 }
 
 do_configure() {
-
+    oe_runmake confclean || echo "Ignoring clean erro"
     if [ ! -e bin/qmake ]; then
         ln -sf ${BUILD_SYSROOT}/${stage_bindir}/qmake bin/qmake
     fi
@@ -49,7 +51,9 @@ def map_qt_arch(d, arch):
     if re.match("i.86$", arch):
         return "i386"
     elif re.match("arm", arch):
-        if re.match("cortex|1136", march):
+        if re.match("cortex", march):
+            return "armv7"
+        elif re.match("1136", march):
             return "armv6"
         else:
             return "arm"

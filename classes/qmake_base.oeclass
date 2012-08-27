@@ -1,8 +1,8 @@
 #
 # QMake variables for Qt4
 #
-CLASS_DEPENDS += "native:qmake"
-export QMAKESPEC = "${BUILD_SYSROOT}${stage_datadir}/qt4/mkspecs/g++"
+CLASS_DEPENDS += "native:qmake_${PV}"
+export QMAKESPEC = "${TARGET_SYSROOT}${target_datadir}/${OE_QMAKE_LIBS_QT}/mkspecs/${BUILD_CXX}"
 QMAKESPEC:native = ""
 export OE_QMAKE_UIC = "uic"
 export OE_QMAKE_MOC = "moc"
@@ -20,11 +20,13 @@ export OE_QMAKE_LDFLAGS="${LDFLAGS}"
 export OE_QMAKE_AR="${AR}"
 export OE_QMAKE_STRIP="echo"
 export OE_QMAKE_CXXFLAGS = "${CXXFLAGS}"
-#export OE_QMAKE_RPATH="-Wl,-rpath-link,"
+export OE_QMAKE_LIBS_QT = "qt"
+export OE_QMAKE_INCDIR_QT = "${HOST_SYSROOT}${includedir}/${OE_QMAKE_LIBS_QT}"
+export OE_QMAKE_LIBDIR_QT = "${HOST_SYSROOT}${libdir}"
+export OE_QMAKE_LIBS_QT = "qt"
 
 # do not export STRIP to the environment
 STRIP[unexport] = "1"
-QT_DIR_NAME = "qtopia"
 
 #
 # qt.conf overwrite paths hardcoded in the qmake binary.
@@ -40,16 +42,16 @@ do_configure[prefuncs] += "do_configure_conf"
 do_configure_conf() {
     echo "[Paths]"                                 > $QT_CONF_PATH
     echo "Prefix=${prefix}/"                      >> $QT_CONF_PATH
-    echo "Documentation=${docdir}/${QT_DIR_NAME}" >> $QT_CONF_PATH
-    echo "Headers=${includedir}/${QT_DIR_NAME}"   >> $QT_CONF_PATH
+    echo "Documentation=${docdir}/${OE_QMAKE_LIBS_QT}" >> $QT_CONF_PATH
+    echo "Headers=${includedir}/${OE_QMAKE_LIBS_QT}"   >> $QT_CONF_PATH
     echo "Libraries=${libdir}"                    >> $QT_CONF_PATH
     echo "Binaries=${bindir}"                     >> $QT_CONF_PATH
-    echo "Plugins=${libdir}/${QT_DIR_NAME}/plugins" >> $QT_CONF_PATH
-    echo "Data=${datadir}/${QT_DIR_NAME}"         >> $QT_CONF_PATH
-    echo "Translations=${datadir}/${QT_DIR_NAME}/translations" >> $QT_CONF_PATH
-    echo "Settings=${sysconfdir}/${QT_DIR_NAME}"  >> $QT_CONF_PATH
-    echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
-    echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
+    echo "Plugins=${libdir}/${OE_QMAKE_LIBS_QT}/plugins" >> $QT_CONF_PATH
+    echo "Data=${datadir}/${OE_QMAKE_LIBS_QT}"         >> $QT_CONF_PATH
+    echo "Translations=${datadir}/${OE_QMAKE_LIBS_QT}/translations" >> $QT_CONF_PATH
+    echo "Settings=${sysconfdir}/${OE_QMAKE_LIBS_QT}"  >> $QT_CONF_PATH
+    echo "Examples=${bindir}/${OE_QMAKE_LIBS_QT}/examples" >> $QT_CONF_PATH
+    echo "Demos=${bindir}/${OE_QMAKE_LIBS_QT}/demos"   >> $QT_CONF_PATH
 }
 
 
@@ -57,14 +59,14 @@ QT_PATH = " \
     -prefix ${prefix}/ \
     -bindir ${bindir} \
     -libdir ${libdir} \
-    -datadir ${datadir}/${QT_DIR_NAME} \
-    -sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
-    -docdir ${docdir}/${QT_DIR_NAME} \
-    -headerdir ${includedir}/${QT_DIR_NAME} \
-    -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
+    -datadir ${datadir}/${OE_QMAKE_LIBS_QT} \
+    -sysconfdir ${sysconfdir}/${OE_QMAKE_LIBS_QT} \
+    -docdir ${docdir}/${OE_QMAKE_LIBS_QT} \
+    -headerdir ${includedir}/${OE_QMAKE_LIBS_QT} \
+    -plugindir ${libdir}/${OE_QMAKE_LIBS_QT}/plugins \
 "
 
-install_conf () {
+do_configure_install_conf () {
     if [ -z "${OE_QMAKE_CXX}" ]; then
         echo "ERROR: cannot install $1 to $2, OE_QMAKE var not set"
         exit 1
