@@ -1,0 +1,6 @@
+require qt4.inc
+require qt-${PV}.inc
+
+DEFAULT_USE_qt_embedded = "1"
+DEFAULT_PREFERENCE = "-1"
+DEFAULT_PREFERENCE:USE_qt_embedded = "1"

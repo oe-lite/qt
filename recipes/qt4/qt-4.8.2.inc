@@ -12,8 +12,8 @@ SRC_URI += "\
     file://qmake_pri_fixes.patch \
     file://g++.conf \
     file://linux.conf \
-    file://qte.sh \
 "
+SRC_URI:>USE_qt_embedded = "file://qte.sh"
 
 SRC_URI:>USE_qt_imx_codecs += "file://0001-Add-support-for-i.MX-codecs-to-phonon.patch"
 

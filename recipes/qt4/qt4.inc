@@ -7,6 +7,8 @@ inherit c++ make pkgconfig
 require qt4-common.inc
 RECIPE_TYPES = "machine sdk"
 
+PROVIDES_${PN} = "qt"
+
 export OE_QMAKE_INCDIR_QT = "${HOST_SYSROOT}${includedir}/${OE_QMAKE_LIBS_QT}"
 export OE_QMAKE_LIBDIR_QT = "${HOST_SYSROOT}${libdir}"
 export OE_QMAKE_LIBS_QT = "qt"
@@ -31,10 +33,6 @@ libxrender libxext \
 "
 QT_LIB_RDEPENDS:USE_qt_embedded = "libdirectfb libts"
 
-QT_SRC_URI = ""
-QT_SRC_URI:USE_qt_embedded = ""
-SRC_URI += "${QT_SRC_URI}"
-
 AUTO_PACKAGE_LIBS:>USE_opengl += " QtMeeGoGraphicsSystemHelper"
 RDEPENDS_${PN}-libqtmeegographicssystemhelper += " \
 libqtopengl libqtgui libqtcore libglesv2 \
@@ -58,22 +56,6 @@ AUTO_PACKAGE_LIBS:>USE_opengl += " QtOpenGL"
 RDEPENDS_${PN}-libqtopengl += "libqtgui libqtcore libegl libglesv1 libglesv2"
 RDEPENDS_${PN}-libqtgui:>USE_opengl += " libegl libglesv1 libglesv2"
 
-RECIPE_FLAGS += "qt_fontconfig"
-require conf/fonts.conf
-FONTCONFIG = "-no-fontconfig"
-FONTCONFIG:USE_qt_fontconfig = "-fontconfig"
-QT_CONFIG_FLAGS += "${FONTCONFIG}"
-
-DEPENDS:>USE_qt_fontconfig = " libfontconfig"
-DEPENDS_${PN}-libqtgui:>USE_qt_fontconfig = " libfontconfig"
-RDEPENDS_${PN}-libqtgui:>USE_qt_fontconfig += " libfontconfig"
-PACKAGES:>USE_qt_fontconfig = " ${PN}-fonts"
-FILES_${PN}-fonts = "${fontdir}"
-EXTRA_INSTALL:>USE_qt_fontconfig = " do_install_ttffonts"
-do_install_ttffonts() {
-    install -d -m 0755 ${D}/${fontdir}/ttf
-    install -m 0644 lib/fonts/*.ttf ${D}/${fontdir}/ttf/
-}
 
 RECIPE_FLAGS += "qt_demos"
 DEMOS = "-nomake examples -nomake demos"
@@ -121,6 +103,11 @@ QT_CONFIG_FLAGS += "-verbose -verbose -v -release -reduce-relocations -shared  \
                     -I${STAGE_DIR}/sysroot/usr/include/freetype2 \
 "
 
+RECIPE_FLAGS += "qt_webkit"
+WEBKIT_CONFIG = "-no-webkit"
+WEBKIT_CONFIG:USE_qt_webkit = ""
+QT_CONFIG_FLAGS += "${WEBKIT_CONFIG}"
+
 #Features DISABLED!
 QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc \
                     -no-sql-psql -no-sql-sqlite -no-sql-sqlite2 \
@@ -137,14 +124,13 @@ QT_CONFIG_FLAGS += "-no-sql-ibase -no-sql-mysql -no-sql-odbc \
                     -nomake docs -nomake translations \
 "
 
-#CFLAGS += "-fPIC"
-
 QTE_CONFIG = " \
 -no-xinerama -no-xkb \
 -no-embedded \
 -xrandr \
 -x11 \
 "
+
 QTE_CONFIG:USE_qt_embedded = "\
 -qt-gfx-transformed -plugin-gfx-qvfb -plugin-gfx-vnc -plugin-gfx-directfb \
 -qt-mouse-tslib -qt-mouse-pc -qt-mouse-qvfb -qt-mouse-linuxinput \
@@ -242,7 +228,7 @@ FILES_${PN}-prl = "${libdir}/*.prl"
 FILES_${PN} += "${libdir}/fonts/*" 
 
 QTE_INSTALL = ""
-QTE_INSTALL:USE_qt_embedded = ""
+QTE_INSTALL:USE_qt_embedded = "do_install_fixsysconfdir"
 
 do_install[postfuncs] += "${QTE_INSTALL} ${EXTRA_INSTALL}"
 do_install_fixsysconfdir() {

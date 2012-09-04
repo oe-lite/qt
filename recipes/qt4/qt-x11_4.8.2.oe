@@ -1,0 +1,19 @@
+require qt4.inc
+require qt-${PV}.inc
+include conf/fonts.conf
+
+RECIPE_FLAGS += "qt_fontconfig"
+FONTCONFIG = "-no-fontconfig"
+FONTCONFIG:USE_qt_fontconfig = "-fontconfig"
+QT_CONFIG_FLAGS += "${FONTCONFIG}"
+
+DEPENDS:>USE_qt_fontconfig = " libfontconfig"
+DEPENDS_${PN}-libqtgui:>USE_qt_fontconfig = " libfontconfig"
+RDEPENDS_${PN}-libqtgui:>USE_qt_fontconfig += " libfontconfig"
+PACKAGES:>USE_qt_fontconfig = " ${PN}-fonts"
+FILES_${PN}-fonts = "${fontdir}"
+EXTRA_INSTALL:>USE_qt_fontconfig = " do_install_ttffonts"
+do_install_ttffonts() {
+    install -d -m 0755 ${D}/${fontdir}/ttf
+    install -m 0644 lib/fonts/*.ttf ${D}/${fontdir}/ttf/
+}
