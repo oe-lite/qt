@@ -14,8 +14,8 @@ target:gst-plugins-base
 
 #QT
 RDEPENDS += """
-target:qt4-embedded
- target:tslib
+ target:qt
+ target:qt-dev
  target:freetype
  target:jpeg
  target:libpng12
