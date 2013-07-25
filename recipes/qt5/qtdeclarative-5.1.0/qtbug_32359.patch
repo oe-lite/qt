@@ -1,0 +1,9 @@
+--- qtdeclarative-opensource-src-5.1.0/examples/quick/dialogs/systemdialogs/systemdialogs.pro.old	2013-07-25 07:37:22.476176408 +0000
++++ qtdeclarative-opensource-src-5.1.0/examples/quick/dialogs/systemdialogs/systemdialogs.pro	2013-07-25 07:37:51.488518005 +0000
+@@ -13,5 +13,5 @@
+     FileDialogs.qml \
+     ColorDialogs.qml
+ 
+-target.path = $$[QT_INSTALL_EXAMPLES]/quick/dialogs
++target.path = $$[QT_INSTALL_EXAMPLES]/quick/dialogs/systemdialogs
+ INSTALLS += target
