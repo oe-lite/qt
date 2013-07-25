@@ -1,0 +1,3 @@
+inherit qt5module
+require qt5-${PV}.inc
+require qt5.inc
