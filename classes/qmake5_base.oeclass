@@ -1,0 +1,82 @@
+# This is useful for target recipes to reference native mkspecs
+QMAKE_MKSPEC_PATH_NATIVE = "${STAGE_DIR}/native/lib/${QT_DIR_NAME}"
+QMAKE_MKSPEC_PATH_TARGET = "${STAGE_DIR}/machine/usr/share/${QT_DIR_NAME}"
+
+QMAKE_MKSPEC_PATH = "${QMAKE_MKSPEC_PATH_TARGET}"
+
+# hardcode linux, because that's what 0001-Add-linux-oe-g-platform.patch adds
+OE_QMAKE_PLATFORM_NATIVE = "linux-oe-g++"
+OE_QMAKE_PLATFORM = "linux-oe-g++"
+
+# Add -d to show debug output from every qmake call, but it prints *a lot*, better to add it only to debugged recipe
+OE_QMAKE_DEBUG_OUTPUT ?= ""
+
+# Paths in .prl files contain SYSROOT value
+SSTATE_SCAN_FILES += "*.pri *.prl"
+
+# drop default -e and add needed OE_QMAKE vars explicitly
+# the problem is that when generated Makefile has:
+# CFLAGS = -pipe $(OE_QMAKE_CFLAGS) -O2 -pthread -D_REENTRANT -Wall -W -fPIC $(DEFINES)
+# then OE_QMAKE_CFLAGS are exported and used correctly, but then whole CFLAGS is overwritten from env (and -fPIC lost and build fails)
+EXTRA_OEMAKE = " \
+    MAKEFLAGS='${PARALLEL_MAKE}' \
+    OE_QMAKE_COMPILER='${OE_QMAKE_COMPILER}' \
+    OE_QMAKE_CC='${OE_QMAKE_CC}' \
+    OE_QMAKE_CXX='${OE_QMAKE_CXX}' \
+    OE_QMAKE_CFLAGS='${OE_QMAKE_CFLAGS}' \
+    OE_QMAKE_CXXFLAGS='${OE_QMAKE_CXXFLAGS}' \
+    OE_QMAKE_LINK='${OE_QMAKE_LINK}' \
+    OE_QMAKE_LDFLAGS='${OE_QMAKE_LDFLAGS}' \
+    OE_QMAKE_AR='${OE_QMAKE_AR}' \
+    OE_QMAKE_STRIP='${OE_QMAKE_STRIP}' \
+    OE_QMAKE_WAYLAND_SCANNER='${OE_QMAKE_WAYLAND_SCANNER}' \
+"
+
+OE_QMAKESPEC = "${QMAKE_MKSPEC_PATH_NATIVE}/mkspecs/${OE_QMAKE_PLATFORM_NATIVE}"
+OE_XQMAKESPEC = "${QMAKE_MKSPEC_PATH}/mkspecs/${OE_QMAKE_PLATFORM}"
+OE_QMAKE_QMAKE = "${STAGE_DIR}/native/bin/${QT_DIR_NAME}/qmake"
+OE_QMAKE_COMPILER = "${CC}"
+OE_QMAKE_CC = "${CC}"
+OE_QMAKE_CFLAGS = "${CFLAGS}"
+OE_QMAKE_CXX = "${CXX}"
+OE_QMAKE_CXXFLAGS = "${CXXFLAGS}"
+OE_QMAKE_LINK = "${CXX}"
+OE_QMAKE_LDFLAGS = "${LDFLAGS} -ldl"
+OE_QMAKE_AR = "${AR}"
+OE_QMAKE_STRIP = "echo"
+OE_QMAKE_WAYLAND_SCANNER = "${STAGE_DIR}/native/bin/wayland-scanner"
+QT_DIR_NAME ?= "qt5"
+
+# this one needs to be exported, because qmake reads it from shell env
+export QT_CONF_PATH = "${SRCDIR}/qt.conf"
+
+OE_QMAKE_PATH_PREFIX = "${prefix}"
+OE_QMAKE_PATH_HEADERS = "${includedir}"
+OE_QMAKE_PATH_LIBS = "${libdir}"
+OE_QMAKE_PATH_ARCHDATA = "${libdir}"
+OE_QMAKE_PATH_DATA = "${datadir}"
+OE_QMAKE_PATH_BINS = "${bindir}"
+OE_QMAKE_PATH_LIBEXECS = "${libdir}/${QT_DIR_NAME}/libexec"
+OE_QMAKE_PATH_PLUGINS = "${libdir}/${QT_DIR_NAME}/plugins"
+OE_QMAKE_PATH_IMPORTS = "${libdir}/${QT_DIR_NAME}/imports"
+OE_QMAKE_PATH_QML = "${libdir}/${QT_DIR_NAME}/qml"
+OE_QMAKE_PATH_TRANSLATIONS = "${datadir}/translations"
+OE_QMAKE_PATH_DOCS = "${docdir}"
+OE_QMAKE_PATH_SETTINGS = "${sysconfdir}"
+OE_QMAKE_PATH_EXAMPLES = "${datadir}/examples"
+OE_QMAKE_PATH_TESTS = "${datadir}/tests"
+OE_QMAKE_PATH_HOST_PREFIX = ""
+OE_QMAKE_PATH_HOST_BINS = "${bindir}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_HOST_DATA = "${QMAKE_MKSPEC_PATH_TARGET}"
+OE_QMAKE_PATH_EXTERNAL_HOST_BINS = "${STAGE_DIR}/native/bin/${QT_DIR_NAME}"
+
+OE_QMAKE_PATH_QT_HEADERS = "${includedir}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_QT_ARCHDATA = "${libdir}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_QT_DATA = "${datadir}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_QT_BINS = "${bindir}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_QT_TRANSLATIONS = "${datadir}/${QT_DIR_NAME}/translations"
+OE_QMAKE_PATH_QT_DOCS = "${docdir}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_QT_SETTINGS = "${sysconfdir}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_QT_EXAMPLES = "${datadir}/${QT_DIR_NAME}/examples"
+OE_QMAKE_PATH_QT_TESTS = "${datadir}/${QT_DIR_NAME}/tests"
+
