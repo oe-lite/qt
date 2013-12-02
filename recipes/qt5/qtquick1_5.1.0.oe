@@ -1,5 +1,0 @@
-inherit qt5module
-require qt5-${PV}.inc
-require qt5.inc
-
-DEPENDS += "qtscript-dev qtsvg-dev qtxmlpatterns-dev"
