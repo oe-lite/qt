@@ -1,3 +1,9 @@
+## Class for recipes needing qmake (qt4.x)
+##
+## Is used by recipes which needs qmake. it sets up the correct
+## paths, needed for generating makefiles using qmake, and aftwards
+## needed variables for compilation.
+
 #
 # QMake variables for Qt4
 #
