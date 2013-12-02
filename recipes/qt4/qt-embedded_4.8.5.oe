@@ -1,0 +1,10 @@
+## Recipe for building qt (qt 4.x) embedded version
+##
+## Overwrites for qt is set up in qt4.inc
+
+require qt4.inc
+require qt-${PV}.inc
+
+DEFAULT_USE_qt_embedded = "1"
+DEFAULT_PREFERENCE = "-1"
+DEFAULT_PREFERENCE:USE_qt_embedded = "1"
