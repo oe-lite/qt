@@ -1,7 +1,7 @@
 inherit c++ make pkgconfig
 
 RECIPE_FLAGS += "opengl qtx11 qtdirectfb qttslib \
-	qtwidgets qtxml qtwebkit qtphonon qtdbus qtexamples qtqmldebug"
+	qtwidgets qtwebkit qtphonon qtdbus qtexamples qtqmldebug"
 
 require qt5.inc
 
@@ -19,57 +19,28 @@ SRC_URI += " \
     file://0014-enables-tslib-device-to-be-read-from-env-variable.patch \
     file://allow_building_examples.patch \
     file://0018-QOpenGLPaintDevice-sub-area-support.patch \
-    file://0019-Fix-FBO-restoring-in-QOpenGLTextureGlyphCache.patch \
+    file://qtbug-32712.patch \
 "
 
+##################################
+### DEPENDS
+##################################
+
 DEPENDS += "native:qmake5 freetype jpeg libpng zlib openssl fontconfig \
-	glib libpthread libm libdl librt libgcc libgio libglib libgthread libstdc++ \
-	libgstbase gstreamer-dev"
+	glib libpthread libm libdl librt libgcc libgio libglib libgthread \
+	libstdc++"
+
+##################################
+### RDEPENDS
+##################################
+
 RDEPENDS_${PN} += "freetype libjpeg libpng libz openssl glib fontconfig-utils \
-		libpthread libm libdl librt libgcc libgio libglib libgthread libstdc++ \
-	libgstbase gstreamer"
+		libpthread libm libdl librt libgcc libgio libglib libgthread \
+		libstdc++"
 
-DEPENDS:>USE_qtdirectfb = " directfb-dev libdirectfb"
-RDEPENDS_${PN}:>USE_qtdirectfb = " libdirectfb libdirect directfb-internal"
-
-X11_EXTRA_DEPENDS = "libx11 libxft libxcb libxext libxrender libxrandr \
-	libxcursor freetype libxdamage libdl libgstbase libxi libdrm \
-	libxcb xcb-proto libpcre xinput libxi libstdc++ "
-DEPENDS:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
-DEPENDS_${PN}:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
-RDEPENDS_${PN}:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
-
-QT_XCB = " -no-xcb"
-QT_XCB:USE_qtx11 = " -qt-xcb"
-
-QT_GLFLAGS = " -no-opengl"
-QT_GLFLAGS:USE_opengl = " -opengl es2 -eglfs"
-
-DEPENDS:>USE_qttslib = " tslib"
-RDEPENDS:>USE_qttslib = " tslib tslib-calibrate tslib-tests"
-QT_TSLIB = ""
-QT_TSLIB:USE_qttslib = " -tslib"
-
-DEFAULT_USE_qtwidgets = "1"
-QT_WIDGETS = "-no-widgets"
-QT_WIDGETS:USE_qtwidgets = " -widgets"
-
-DEFAULT_USE_qtxml = "1"
-QT_XML = "-no-xmlpatterns"
-QT_XML:USE_qtxml = " "
-
-QT_PHONON = ""
-QT_PHONON:USE_qtphonon = " -phonon"
-
-QT_DBUS = "-no-dbus"
-QT_DBUS:USE_qtdbus = " -dbus"
-
-DEFAULT_USE_qtexamples = "1"
-QT_EXAMPLES = "-nomake examples"
-QT_EXAMPLES:USE_qtexamples = " -make examples"
-
-QT_QMLDEBUG = " -no-qml-debug"
-QT_QMLDEBUG:USE_qtqmldebug = " -qml-debug"
+##################################
+### CONFIGURE
+##################################
 
 QT_CONFIG_FLAGS += " \
     -release -reduce-relocations \
@@ -81,11 +52,9 @@ QT_CONFIG_FLAGS += " \
     -system-libjpeg -system-libpng -system-zlib \
     -linuxfb \
     ${QT_WIDGETS} \
-    ${QT_XML} \
     ${QT_PHONON} \
     ${QT_DBUS} \
     ${QT_XCB} \
-    ${QT_GLFLAGS} \
     ${QT_EXAMPLES} \
     ${QT_TSLIB} \
     ${QT_QMLDEBUG} \
@@ -105,11 +74,13 @@ ARM_INSTRUCTION_SET = "arm"
 # qtbase is exception, we need to use mkspecs from ${S}
 QMAKE_MKSPEC_PATH = "${S}/mkspecs/"
 
-# another exception is that we need to run bin/qmake, because EffectivePaths are relative to qmake location
+# another exception is that we need to run bin/qmake, because EffectivePaths
+# are relative to qmake location
 OE_QMAKE_QMAKE_ORIG = "${STAGE_DIR}/native/bin/${QT_DIR_NAME}/qmake"
 OE_QMAKE_QMAKE = "bin/qmake"
 
-# qtbase is exception, configure script is using our get(X)QEvalMakeConf and setBootstrapEvalVariable functions to read it from shell
+# qtbase is exception, configure script is using our get(X)QEvalMakeConf
+# and setBootstrapEvalVariable functions to read it from shell
 export OE_QMAKE_COMPILER
 export OE_QMAKE_CC
 export OE_QMAKE_CFLAGS
@@ -163,6 +134,125 @@ do_configure() {
 	echo "TARGET = \"realuic\"" >> ${S}/src/tools/uic/uic.pro
 }
 
+##################################
+### Enable-able features
+##################################
+
+RECIPE_FLAGS += "qt_opengl"
+DEFAULT_USE_qt_opengl = ""
+addhook parse_qt_opengl_config to post_recipe_parse first after set_useflags before auto_package_utils auto_package_libs
+def parse_qt_opengl_config(d):
+    qt_opengl = d.get("USE_qt_opengl")
+    if not qt_opengl or qt_opengl == "-no-opengl":
+        d.set("QT_OPENGL_CONFIG_OPTION","-no-opengl")
+        d.set("USE_qt_opengl","")
+    elif qt_opengl == "glesv1":
+        d.set("QT_OPENGL_DEPENDS","libglesv1 libegl")
+        d.set("QT_OPENGL_CONFIG_OPTION","-opengl es -egl")
+    elif qt_opengl == "glesv2":
+        d.set("QT_OPENGL_DEPENDS","libglesv2 libegl")
+        d.set("QT_OPENGL_CONFIG_OPTION","-opengl es2 -egl")
+    elif qt_opengl == "desktop":
+        d.set("QT_OPENGL_DEPENDS","libgl")
+        d.set("QT_OPENGL_CONFIG_OPTION","-opengl desktop")
+    else :
+        print "ERROR! Wrong qt opengl option"
+        return False
+    return True
+
+#Overwritten by above function
+QT_OPENGL_DEPENDS = ""
+QT_OPENGL_CONFIG_OPTION = ""
+
+RECIPE_FLAGS += " \
+    qt_opengl_egl_flags qt_opengl_flags \
+    qt_opengl_qt_flags qt_opengl_es1_flags \
+    qt_opengl_es2_flags qt_opengl_openvg_flags \
+    qt_opengl_egl_flags qt_opengl_hooks_file"
+DEPENDS += " ${QT_OPENGL_DEPENDS}"
+DEPENDS_${PN} += " ${QT_OPENGL_DEPENDS}"
+RDEPENDS_${PN} += " ${QT_OPENGL_DEPENDS}"
+QT_CONFIG_FLAGS += "${QT_OPENGL_CONFIG_OPTION}"
+DEFAULT_USE_qt_opengl_egl_flags = "-lEGL"
+DEFAULT_USE_qt_opengl_flags = "-lGLU -lGL"
+DEFAULT_USE_qt_opengl_qt_flags = "-lGL"
+DEFAULT_USE_qt_opengl_egl_flags = "-lEGL"
+DEFAULT_USE_qt_opengl_es1_flags = "-lGLES_CM -lEGL"
+DEFAULT_USE_qt_opengl_es2_flags = "-lGLESv2 -lEGL"
+DEFAULT_USE_qt_opengl_openvg_flags = "-lOpenVG"
+DEFAULT_USE_qt_opengl_hooks_file = "none"
+QT_OPENGL_FIXUP_FUNCS = ""
+QT_OPENGL_FIXUP_FUNCS:USE_qt_opengl = "do_configure_opengl_libs"
+do_compile[prefuncs] =+ "${QT_OPENGL_FIXUP_FUNCS}"
+do_compile_opengl_libs () {
+    sed -i 's!load(qt_config)!!' ${S}/mkspecs/linux-oe-g++/qmake.conf
+    cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
+EGLFS_PLATFORM_HOOKS_SOURCES = \$\$PWD/qeglfshooks.cpp
+IMX_CFLAGS             = -DLINUX=1
+QMAKE_LIBS_EGL         += ${USE_qt_opengl_egl_flags}
+QMAKE_LIBS_OPENGL_ES1  += ${USE_qt_opengl_es1_flags}
+QMAKE_LIBS_OPENGL_ES2  += ${USE_qt_opengl_es2_flags}
+QMAKE_LIBS_OPENVG      += ${USE_qt_opengl_openvg_flags}
+QMAKE_CFLAGS_RELEASE   += \$\$IMX_CFLAGS
+QMAKE_CXXFLAGS_RELEASE += \$\$IMX_CFLAGS
+QMAKE_CFLAGS_DEBUG   += \$\$IMX_CFLAGS
+QMAKE_CXXFLAGS_DEBUG += \$\$IMX_CFLAGS
+QMAKE_CFLAGS_EGL += \$\$IMX_CFLAGS
+load(qt_config)
+
+EOF
+
+    if [ "${USE_qt_opengl_hooks_file}" != "none" ]; then
+        cp ${USE_qt_opengl_hooks_file} ${S}/mkspecs/linux-oe-g++/qeglfshooks.cpp
+    fi
+}
+
+RECIPE_FLAGS += "qt_gstreamer"
+GSTREAMER_CONFIG = "-no-gstreamer"
+GSTREAMER_CONFIG:USE_qt_gstreamer = ""
+QT_CONFIG_FLAGS += "${GSTREAMER_CONFIG}"
+DEPENDS:>USE_qt_gstreamer += " gstreamer libgstbase"
+RDEPENDS_${PN}:>USE_qt_gstreamer += " gstreamer libgstbase"
+
+DEPENDS:>USE_qtdirectfb = " directfb-dev libdirectfb"
+RDEPENDS_${PN}:>USE_qtdirectfb = " libdirectfb libdirect directfb-internal"
+
+X11_EXTRA_DEPENDS = "libx11 libxft libxcb libxext libxrender libxrandr \
+	libxcursor freetype libxdamage libdl libxi \
+	libxcb xcb-proto libpcre xinput libxi libstdc++ "
+DEPENDS:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
+DEPENDS_${PN}:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
+RDEPENDS_${PN}:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
+
+QT_XCB = " -no-xcb"
+QT_XCB:USE_qtx11 = " -qt-xcb"
+
+DEPENDS:>USE_qttslib = " tslib"
+RDEPENDS:>USE_qttslib = " tslib tslib-calibrate tslib-tests"
+QT_TSLIB = ""
+QT_TSLIB:USE_qttslib = " -tslib"
+
+DEFAULT_USE_qtwidgets = "1"
+QT_WIDGETS = "-no-widgets"
+QT_WIDGETS:USE_qtwidgets = " -widgets"
+
+QT_PHONON = ""
+QT_PHONON:USE_qtphonon = " -phonon"
+
+QT_DBUS = "-no-dbus"
+QT_DBUS:USE_qtdbus = " -dbus"
+
+DEFAULT_USE_qtexamples = "1"
+QT_EXAMPLES = "-nomake examples"
+QT_EXAMPLES:USE_qtexamples = " -make examples"
+
+QT_QMLDEBUG = " -no-qml-debug"
+QT_QMLDEBUG:USE_qtqmldebug = " -qml-debug"
+
+##################################
+### Install
+##################################
+
 do_install[postfuncs] += "do_install_qtfonts"
 do_install_qtfonts() {
     # install fonts manually if they are missing
@@ -170,6 +260,8 @@ do_install_qtfonts() {
         cp -aR ${S}/lib/fonts ${D}/${datadir}/
     fi
 }
-
+##################################
+### Packaging
+##################################
 
 FILES_${PN} += "${datadir}/fonts/"

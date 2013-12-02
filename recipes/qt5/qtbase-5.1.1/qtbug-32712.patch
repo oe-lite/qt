@@ -1,0 +1,25 @@
+diff --git a/examples/widgets/widgets.pro b/examples/widgets/widgets.pro
+index 726494f..14acebc 100644
+--- a/examples/widgets/widgets.pro
++++ b/examples/widgets/widgets.pro
+@@ -12,15 +12,18 @@
+                 graphicsview \
+                 itemviews \
+                 layouts \
+                 mainwindows \
+                 painting \
+                 richtext \
+                 scroller \
+                 statemachine \
+                 tools \
+                 tutorials \
+-                widgets \
+-                windowcontainer
++                widgets
++
++contains(QT_CONFIG, opengl(es1|es2)?) {
++    SUBDIRS += windowcontainer
++}
+ 
+ contains(DEFINES, QT_NO_CURSOR): SUBDIRS -= mainwindows
+ contains(DEFINES, QT_NO_DRAGANDDROP): SUBDIRS -= draganddrop
