@@ -1,3 +1,7 @@
+## Class for recipes needing qmake (qt 5.x)
+##
+## Is used by recipes which compiles qmake
+
 # This is useful for target recipes to reference native mkspecs
 QMAKE_MKSPEC_PATH_NATIVE = "${STAGE_DIR}/native/lib/${QT_DIR_NAME}"
 QMAKE_MKSPEC_PATH_TARGET = "${STAGE_DIR}/machine/usr/share/${QT_DIR_NAME}"
