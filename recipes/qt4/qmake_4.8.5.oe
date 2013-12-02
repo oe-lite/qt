@@ -1,0 +1,4 @@
+## Recipe for building qmake (qt 4.x)
+##
+
+require ${PN}.inc
