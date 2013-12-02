@@ -1,8 +1,0 @@
-inherit qt5module
-
-DEPENDS += "qtdeclarative-dev"
-DEPENDS_${PN}-dev += "qtdeclarative-dev"
-RDEPENDS_${PN} += "qtdeclarative"
-
-require qt5-${PV}.inc
-require qt5.inc
