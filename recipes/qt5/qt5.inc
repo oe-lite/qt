@@ -3,9 +3,6 @@
 
 inherit qmake5
 
-# Qt5 is dependent on icu for localization
-ICU = "icu "
-
 QT_MODULE ?= "${PN}"
 
 # we don't want conflicts with qt4
