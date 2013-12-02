@@ -1,6 +1,6 @@
 # Supported archs in src/corelib/arch/*
 
-SRC_URI =+ "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${PV}.tar.gz"
+SRC_URI =+ "http://download.qt-project.org/official_releases/qt/4.8/${PV}/qt-everywhere-opensource-src-${PV}.tar.gz"
 S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
 
 FILESPATHPKG =. "qt-${PV}:"
@@ -31,7 +31,6 @@ do_configure() {
 
 }
 
-
 #Map Arch to QT Arch
 QT_ARCHS = "alpha arm armv6 avr32 bfin generic i386 ia64 mips parisc powerpc \
 s390 sh sh4a sparc x86_64 \
@@ -51,9 +50,7 @@ def map_qt_arch(d, arch):
     if re.match("i.86$", arch):
         return "i386"
     elif re.match("arm", arch):
-        if re.match("cortex", march):
-            return "armv7"
-        elif re.match("1136", march):
+        if re.match("1136", march):
             return "armv6"
         else:
             return "arm"
