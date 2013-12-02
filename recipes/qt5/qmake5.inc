@@ -6,7 +6,7 @@ QT_MODULE = "qtbase"
 
 inherit c++ make
 
-require qmake5-5.1.0.inc
+require qmake5-5.1.1.inc
 
 SRC_URI += " \
     file://0001-Add-linux-oe-g-platform.patch \
