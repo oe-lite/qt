@@ -1,6 +1,9 @@
-#
-# QMake variables for Qt
-#
+## Class for recipes needing qmake (qt5.x)
+##
+## Is used by recipes which needs qmake. it sets up the correct
+## paths, needed for generating makefiles using qmake, and aftwards
+## needed variables for compilation.
+
 inherit qmake5_base
 
 QT5TOOLSDEPENDS ?= "native:qmake5"
