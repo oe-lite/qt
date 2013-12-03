@@ -1,7 +1,45 @@
+## Common file for building qtbase
+##
+## All qt5 modules build, changes when qtbase changes, so this file contains
+## the relevant useflags for qt5.
+##
+## @useflag qtx11 Enable the x11 platform. Disabled by default.
+## @useflag qtdirectfb Enabled the directfb platform. Disabled by default.
+## @useflag qttslib Enable tslib as touch input. Disabled by default.
+## @useflag qtgstreamer Enable gstreamer. Disabled by default.
+## @useflag qtwidgets Enable qtwidgets. Enabled by default.
+## @useflag qtwebkit Enable webkit. Disabled by default.
+## @useflag qtphonon Enable phonon. Disabled by default.
+## @useflag qtdbus Enable dbus. Disabled by default.
+## @useflag qtexamples Build examples and demos. Disabled by default.
+## @useflag qtqmldebug Enable qtqmldebug. Disabled by default.
+## @useflag qtopengl Use qt opengl. The useflag is default set to -no-opengl,
+##          which disables opengl. Other options are _only_ glesv1, glesv2, or
+##          desktop.
+## @useflag qtopengl_egl_flags If @useflag qtopengl is set, use the flags
+##          specified in this useflag. Default set to -lEGL.
+## @useflag qtopengl_flags If @useflag qtopengl is set, use the flags
+##          specified in this useflag. Default set to -LGLU -lGL.
+## @useflag qtopengl_qt_flags If @useflag qtopengl is set, use the flags
+##          specified in this useflag. Default set to -lGL.
+## @useflag qtopengl_es1_flags If @useflag qtopengl is set, use the flags
+##          specified in this useflag. Default set to -lGLES_CM.
+## @useflag qtopengl_es2_flags If @useflag qtopengl is set, use the flags
+##          specified in this useflag. Default set to -lGLESv2.
+## @useflag qtopengl_openvg_flags If @useflag qtopengl is set, use the flags
+##          specified in this useflag. Default set to -lOpenVG.
+## @useflag qtopengl_hooks_file Set to a file to copy into the mkspecs dir.
+##          Is not set by default.
+
 inherit c++ make pkgconfig
 
-RECIPE_FLAGS += "opengl qtx11 qtdirectfb qttslib \
-	qtwidgets qtwebkit qtphonon qtdbus qtexamples qtqmldebug"
+RECIPE_FLAGS += "qtx11 qtdirectfb qttslib qtgstreamer \
+	qtwidgets qtwebkit qtphonon qtdbus qtexamples qtqmldebug \
+	qtopengl \
+	qtopengl_egl_flags qtopengl_flags \
+	qtopengl_qt_flags qtopengl_es1_flags \
+	qtopengl_es2_flags qtopengl_openvg_flags \
+	qtopengl_hooks_file"
 
 require qt5.inc
 
@@ -138,21 +176,20 @@ do_configure() {
 ### Enable-able features
 ##################################
 
-RECIPE_FLAGS += "qt_opengl"
-DEFAULT_USE_qt_opengl = ""
+DEFAULT_USE_qtopengl = ""
 addhook parse_qt_opengl_config to post_recipe_parse first after set_useflags before auto_package_utils auto_package_libs
 def parse_qt_opengl_config(d):
-    qt_opengl = d.get("USE_qt_opengl")
-    if not qt_opengl or qt_opengl == "-no-opengl":
+    qtopengl = d.get("USE_qtopengl")
+    if not qtopengl or qtopengl == "-no-opengl":
         d.set("QT_OPENGL_CONFIG_OPTION","-no-opengl")
-        d.set("USE_qt_opengl","")
-    elif qt_opengl == "glesv1":
+        d.set("USE_qtopengl","")
+    elif qtopengl == "glesv1":
         d.set("QT_OPENGL_DEPENDS","libglesv1 libegl")
         d.set("QT_OPENGL_CONFIG_OPTION","-opengl es -egl")
-    elif qt_opengl == "glesv2":
+    elif qtopengl == "glesv2":
         d.set("QT_OPENGL_DEPENDS","libglesv2 libegl")
         d.set("QT_OPENGL_CONFIG_OPTION","-opengl es2 -egl")
-    elif qt_opengl == "desktop":
+    elif qtopengl == "desktop":
         d.set("QT_OPENGL_DEPENDS","libgl")
         d.set("QT_OPENGL_CONFIG_OPTION","-opengl desktop")
     else :
@@ -164,35 +201,29 @@ def parse_qt_opengl_config(d):
 QT_OPENGL_DEPENDS = ""
 QT_OPENGL_CONFIG_OPTION = ""
 
-RECIPE_FLAGS += " \
-    qt_opengl_egl_flags qt_opengl_flags \
-    qt_opengl_qt_flags qt_opengl_es1_flags \
-    qt_opengl_es2_flags qt_opengl_openvg_flags \
-    qt_opengl_egl_flags qt_opengl_hooks_file"
 DEPENDS += " ${QT_OPENGL_DEPENDS}"
 DEPENDS_${PN} += " ${QT_OPENGL_DEPENDS}"
 RDEPENDS_${PN} += " ${QT_OPENGL_DEPENDS}"
 QT_CONFIG_FLAGS += "${QT_OPENGL_CONFIG_OPTION}"
-DEFAULT_USE_qt_opengl_egl_flags = "-lEGL"
-DEFAULT_USE_qt_opengl_flags = "-lGLU -lGL"
-DEFAULT_USE_qt_opengl_qt_flags = "-lGL"
-DEFAULT_USE_qt_opengl_egl_flags = "-lEGL"
-DEFAULT_USE_qt_opengl_es1_flags = "-lGLES_CM -lEGL"
-DEFAULT_USE_qt_opengl_es2_flags = "-lGLESv2 -lEGL"
-DEFAULT_USE_qt_opengl_openvg_flags = "-lOpenVG"
-DEFAULT_USE_qt_opengl_hooks_file = "none"
+DEFAULT_USE_qtopengl_egl_flags = "-lEGL"
+DEFAULT_USE_qtopengl_flags = "-lGLU -lGL"
+DEFAULT_USE_qtopengl_qt_flags = "-lGL"
+DEFAULT_USE_qtopengl_es1_flags = "-lGLES_CM -lEGL"
+DEFAULT_USE_qtopengl_es2_flags = "-lGLESv2 -lEGL"
+DEFAULT_USE_qtopengl_openvg_flags = "-lOpenVG"
+DEFAULT_USE_qtopengl_hooks_file = "none"
 QT_OPENGL_FIXUP_FUNCS = ""
-QT_OPENGL_FIXUP_FUNCS:USE_qt_opengl = "do_configure_opengl_libs"
+QT_OPENGL_FIXUP_FUNCS:USE_qtopengl = "do_configure_opengl_libs"
 do_compile[prefuncs] =+ "${QT_OPENGL_FIXUP_FUNCS}"
 do_compile_opengl_libs () {
     sed -i 's!load(qt_config)!!' ${S}/mkspecs/linux-oe-g++/qmake.conf
     cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
 EGLFS_PLATFORM_HOOKS_SOURCES = \$\$PWD/qeglfshooks.cpp
 IMX_CFLAGS             = -DLINUX=1
-QMAKE_LIBS_EGL         += ${USE_qt_opengl_egl_flags}
-QMAKE_LIBS_OPENGL_ES1  += ${USE_qt_opengl_es1_flags}
-QMAKE_LIBS_OPENGL_ES2  += ${USE_qt_opengl_es2_flags}
-QMAKE_LIBS_OPENVG      += ${USE_qt_opengl_openvg_flags}
+QMAKE_LIBS_EGL         += ${USE_qtopengl_egl_flags}
+QMAKE_LIBS_OPENGL_ES1  += ${USE_qtopengl_es1_flags}
+QMAKE_LIBS_OPENGL_ES2  += ${USE_qtopengl_es2_flags}
+QMAKE_LIBS_OPENVG      += ${USE_qtopengl_openvg_flags}
 QMAKE_CFLAGS_RELEASE   += \$\$IMX_CFLAGS
 QMAKE_CXXFLAGS_RELEASE += \$\$IMX_CFLAGS
 QMAKE_CFLAGS_DEBUG   += \$\$IMX_CFLAGS
@@ -202,17 +233,16 @@ load(qt_config)
 
 EOF
 
-    if [ "${USE_qt_opengl_hooks_file}" != "none" ]; then
-        cp ${USE_qt_opengl_hooks_file} ${S}/mkspecs/linux-oe-g++/qeglfshooks.cpp
+    if [ "${USE_qtopengl_hooks_file}" != "none" ]; then
+        cp ${USE_qtopengl_hooks_file} ${S}/mkspecs/linux-oe-g++/qeglfshooks.cpp
     fi
 }
 
-RECIPE_FLAGS += "qt_gstreamer"
 GSTREAMER_CONFIG = "-no-gstreamer"
-GSTREAMER_CONFIG:USE_qt_gstreamer = ""
+GSTREAMER_CONFIG:USE_qtgstreamer = ""
 QT_CONFIG_FLAGS += "${GSTREAMER_CONFIG}"
-DEPENDS:>USE_qt_gstreamer += " gstreamer libgstbase"
-RDEPENDS_${PN}:>USE_qt_gstreamer += " gstreamer libgstbase"
+DEPENDS:>USE_qtgstreamer += " gstreamer libgstbase"
+RDEPENDS_${PN}:>USE_qtgstreamer += " gstreamer libgstbase"
 
 DEPENDS:>USE_qtdirectfb = " directfb-dev libdirectfb"
 RDEPENDS_${PN}:>USE_qtdirectfb = " libdirectfb libdirect directfb-internal"
