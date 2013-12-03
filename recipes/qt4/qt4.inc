@@ -6,6 +6,18 @@
 ## @useflag qt_opengl Use qt opengl. The useflag is default set to -no-opengl,
 ##          which disables opengl. Other options are _only_ glesv1, glesv2, or
 ##          desktop.
+## @useflag qt_opengl_egl_flags If @useflag qt_opengl is set, use the flags
+##          specified in this useflag. Default set to -lEGL.
+## @useflag qt_opengl_flags If @useflag qt_opengl is set, use the flags
+##          specified in this useflag. Default set to -LGLU -lGL.
+## @useflag qt_opengl_qt_flags If @useflag qt_opengl is set, use the flags
+##          specified in this useflag. Default set to -lGL.
+## @useflag qt_opengl_es1_flags If @useflag qt_opengl is set, use the flags
+##          specified in this useflag. Default set to -lGLES_CM.
+## @useflag qt_opengl_es2_flags If @useflag qt_opengl is set, use the flags
+##          specified in this useflag. Default set to -lGLESv2.
+## @useflag qt_opengl_openvg_flags If @useflag qt_opengl is set, use the flags
+##          specified in this useflag. Default set to -lOpenVG.
 ## @useflag qt_dbus Enabled qt dbus. Disabled by default.
 ## @useflag qt_demos Enables qt examples and demos. Default disabled. Requires
 ##          @useflag qt_tools to be set to 1.
