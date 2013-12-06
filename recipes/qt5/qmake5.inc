@@ -1,5 +1,8 @@
 DESCRIPTION = "Native version of Qt/[X11|Mac|Embedded]"
-DEPENDS = "native:zlib native:dbus"
+DEPENDS = "zlib dbus"
+
+DEPENDS:>sdk = " libdl libpthread librt"
+RDEPENDS:>sdk = "libdl libphtread librt"
 HOMEPAGE = "http://qt-project.org"
 
 QT_MODULE = "qtbase"
