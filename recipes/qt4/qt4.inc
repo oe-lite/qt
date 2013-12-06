@@ -80,6 +80,8 @@ QT_LIB_RDEPENDS = "\
     libxrender libxext"
 QT_LIB_RDEPENDS:USE_qt_embedded = "libdirectfb libts tslib-calibrate"
 
+RDEPENDS_${PN} += "${QT_LIB_RDEPENDS}"
+
 ##################################
 ### CONFIGURE
 ##################################
@@ -296,8 +298,8 @@ RDEPENDS_${PN}-libqtscript += "libqtcore "
 RDEPENDS_${PN}-libqtscripttools += "libqtscript libqtgui libqtnetwork libqtcore "
 RDEPENDS_${PN}-libphonon += "libqtdbus libqtxml libqtgui libqtnetwork libqtcore"
 RDEPENDS_${PN}-libqtsql += "libqtcore"
-RDEPENDS_${PN}-libqtgui += "libfreetype libqtnetwork libqtcore libgthread libglib libz ${QT_LIB_RDEPENDS}"
-DEPENDS_${PN}-libqtgui += "libfreetype libqtnetwork libqtcore libgthread libglib libz ${QT_LIB_RDEPENDS}"
+RDEPENDS_${PN}-libqtgui += "libfreetype libqtnetwork libqtcore libgthread libglib libz"
+DEPENDS_${PN}-libqtgui += "libfreetype libqtnetwork libqtcore libgthread libglib libz"
 RDEPENDS_${PN}-libqtdesignercomponents += "libqtdesigner"
 RDEPENDS_${PN}-libqtxml += "libqtcore"
 RDEPENDS_${PN}-libqtdesigner += "libqtscript libqtxml libqtgui libqtnetwork libqtcore"
