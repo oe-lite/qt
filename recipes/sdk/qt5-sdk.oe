@@ -1,0 +1,25 @@
+inherit sdk-image image-qa
+
+IMAGE_BASENAME = "oe-lite-qt-sdk-${HOST_ARCH}-${TARGET_ARCH}"
+
+#gstreamer
+RDEPENDS += """
+target:gstreamer
+"""
+
+#Gstreamer plugins
+RDEPENDS += """
+target:gst-plugins-base
+"""
+
+#QT
+RDEPENDS += """
+ target:qtbase
+ target:qtbase-dev
+"""
+
+#Misc
+RDEPENDS += "target:libxml2-dev ${QT4_TOOLS}"
+
+QT5_TOOLS="host:qmake host:glib host:qmake host:pkg-config"
+QT5_TOOLS:HOST_OS_mingw32 = ""
