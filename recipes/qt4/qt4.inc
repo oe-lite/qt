@@ -40,6 +40,7 @@ require qt4-common.inc
 RECIPE_TYPES = "machine sdk"
 
 PROVIDES_${PN} = "qt"
+PROVIDES_${PN}-dev = "qt-dev"
 
 export OE_QMAKE_INCDIR_QT = "${HOST_SYSROOT}${includedir}/${OE_QMAKE_LIBS_QT}"
 export OE_QMAKE_LIBDIR_QT = "${HOST_SYSROOT}${libdir}"
