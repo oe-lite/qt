@@ -27,5 +27,5 @@ RDEPENDS += """
 #Misc
 RDEPENDS += "target:libxml2-dev ${QT4_TOOLS}"
 
-QT4_TOOLS="host:qt4-tools host:glib host:qmake host:pkg-config"
+QT4_TOOLS="host:qmake host:glib host:qmake host:pkg-config"
 QT4_TOOLS:HOST_OS_mingw32 = ""
