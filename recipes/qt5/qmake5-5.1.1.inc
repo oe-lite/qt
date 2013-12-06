@@ -1,6 +1,6 @@
 inherit qmake5_base
 
-RECIPE_TYPES = "native"
+RECIPE_TYPES = "native sdk"
 
 # we don't want conflicts with qt4
 OE_QMAKE_PATH_HEADERS = "${OE_QMAKE_PATH_QT_HEADERS}"
