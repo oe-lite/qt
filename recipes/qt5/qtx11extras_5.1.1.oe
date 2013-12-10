@@ -1,3 +1,7 @@
+## Recipe for building the Qt5 module QtX11extras
+##
+## X11 extentions for Qt5.
+
 inherit qt5module
 require qt5-${PV}.inc
 require qt5.inc
