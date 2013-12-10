@@ -1,3 +1,7 @@
+## Recipe for building the Qt5 module QtSensors
+##
+## Qt5 Module for building qtsensors.
+
 inherit qt5module
 require qt5-${PV}.inc
 require qt5.inc
