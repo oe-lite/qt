@@ -1,4 +1,5 @@
 DESCRIPTION = "Native version of Qt/[X11|Mac|Embedded]"
+LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
 DEPENDS = "zlib dbus"
 
 DEPENDS:>sdk = " libdl libpthread librt"
