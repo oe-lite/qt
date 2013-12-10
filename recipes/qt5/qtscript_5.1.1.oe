@@ -1,3 +1,12 @@
+## Recipe for building the Qt5 module QtScript
+##
+## The Qt Script Module provides APIs to make Qt applications scriptable.
+## This module is primarily provided for compatibility with Qt 4, and to
+## support applications that use the Qt Declarative Module. An alternative
+## API is provided by the essential Qt Qml Module. For more information,
+## see the list of QtScript APIs, or learn how to make your own extensions
+## to QtScript.
+
 inherit qt5module
 require qt5-${PV}.inc
 require qt5.inc
