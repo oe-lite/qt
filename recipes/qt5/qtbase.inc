@@ -290,6 +290,11 @@ do_install_qtfonts() {
         cp -aR ${S}/lib/fonts ${D}/${datadir}/
     fi
 }
+
+do_install[postfuncs] += "do_install_rm_qmake"
+do_install_rm_qmake() {
+	rm ${D}${bindir}/qmake
+}
 ##################################
 ### Packaging
 ##################################
