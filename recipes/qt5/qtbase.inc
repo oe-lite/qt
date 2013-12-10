@@ -31,6 +31,8 @@
 ## @useflag qtopengl_hooks_file Set to a file to copy into the mkspecs dir.
 ##          Is not set by default.
 
+LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
+
 inherit c++ make pkgconfig
 
 RECIPE_FLAGS += "qtx11 qtdirectfb qttslib qtgstreamer \
