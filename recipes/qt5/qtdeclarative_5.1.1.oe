@@ -1,3 +1,7 @@
+## Recipe for building the qt5 module QtDeclarative.
+##
+## The Qt Declarative Module provides APIs and tools to support code written
+## in Qt Quick 1.
 inherit qt5module
 
 DEPENDS += "qtjsbackend-dev qtsvg-dev qtxmlpatterns-dev libstdc++ glib-dev"
