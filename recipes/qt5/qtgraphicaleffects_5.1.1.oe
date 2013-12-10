@@ -4,6 +4,8 @@
 ## a ready-made set of shader effects to be used in QML. The module provides
 ## graphical effects such as blurring, colorization, drop shadows, and more.
 
+LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
+
 inherit qt5module
 
 DEPENDS += "qtdeclarative-dev"
