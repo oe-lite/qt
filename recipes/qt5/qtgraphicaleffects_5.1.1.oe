@@ -1,3 +1,9 @@
+## Recipe for building the qt5 module QtGraphicalEffects.
+##
+## The Qt Graphical Effects Module is an extension to QtQuick which provides
+## a ready-made set of shader effects to be used in QML. The module provides
+## graphical effects such as blurring, colorization, drop shadows, and more.
+
 inherit qt5module
 
 DEPENDS += "qtdeclarative-dev"
