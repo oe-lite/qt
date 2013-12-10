@@ -1,3 +1,7 @@
+## Recipe for building the qt5 module QtMultimedia.
+##
+## Provides usefull tools for qt applications involving multimedia.
+
 inherit qt5module 
 
 require qt5-${PV}.inc
