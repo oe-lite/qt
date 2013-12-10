@@ -1,6 +1,13 @@
 inherit sdk-image image-qa
 
+SRC_URI += "file://setup.sh"
+
 IMAGE_BASENAME = "oe-lite-qt-sdk-${HOST_ARCH}-${TARGET_ARCH}"
+
+do_rstage[postfuncs] += "do_rstage_setupsdk"
+do_rstage_setupsdk () {
+	cp ${SRCDIR}/setup.sh ${RSTAGE_DIR}
+}
 
 #gstreamer
 RDEPENDS += """
@@ -19,7 +26,7 @@ RDEPENDS += """
 """
 
 #Misc
-RDEPENDS += "target:libxml2-dev ${QT4_TOOLS}"
+RDEPENDS += "target:libxml2-dev ${QT5_TOOLS}"
 
-QT5_TOOLS="host:qmake host:glib host:qmake host:pkg-config"
+QT5_TOOLS="host:qmake5-utilities"
 QT5_TOOLS:HOST_OS_mingw32 = ""
