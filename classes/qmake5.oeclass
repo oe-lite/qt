@@ -7,7 +7,7 @@
 inherit qmake5_base
 
 QT5TOOLSDEPENDS ?= "native:qmake5"
-DEPENDS += "${QT5TOOLSDEPENDS} "
+CLASS_DEPENDS += "${QT5TOOLSDEPENDS} "
 
 addtask generateqtconfigfile after do_patch before do_configure
 
