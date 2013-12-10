@@ -1,3 +1,7 @@
+## Recipe for building the qt5 module QtJsbackend.
+##
+## Recipe for building the Qt Javascript engine backend.
+
 inherit qt5module
 
 require qt5-${PV}.inc
