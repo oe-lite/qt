@@ -1,3 +1,10 @@
+## Recipe for building the Qt5 module QtSvg
+##
+## Scalable Vector Graphics, or "SVG", is an XML-based format for storing
+## vector-based graphics. The Qt SVG Module provides APIs to render and save
+## files in the SVG format, and supports a subset of the SVG 1.2 Tiny
+## standard.
+
 inherit qt5module 
 
 require qt5-${PV}.inc
