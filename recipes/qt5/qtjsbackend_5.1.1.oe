@@ -2,6 +2,8 @@
 ##
 ## Recipe for building the Qt Javascript engine backend.
 
+LICENSE = "LGPL-2.1 & GPL-3.0"
+
 inherit qt5module
 
 require qt5-${PV}.inc
