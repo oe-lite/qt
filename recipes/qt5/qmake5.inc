@@ -60,7 +60,6 @@ EXTRA_OECONF = " \
     -no-rpath \
     -platform linux-oe-g++ \
 "
-
 # qtbase is exception, configure script is using our get(X)QEvalMakeConf and setBootstrapEvalVariable functions to read it from shell
 export OE_QMAKE_COMPILER
 export OE_QMAKE_CC
@@ -85,3 +84,8 @@ do_install() {
 }
 
 FILES_${PN} += " ${libdir}"
+
+PACKAGES =+ " ${PN}-utilities "
+FILES_${PN}-utilities = "${bindir}"
+DEPENDS_${PN} += "${PN}-utilities"
+RDEPENDS_${PN}-utilities = "librt libgcc libpthread libz libstdc++ libm"
