@@ -86,7 +86,7 @@ QT_CONFIG_FLAGS += " \
     \
     -no-pch -no-rpath -no-nis -no-cups \
     -no-sql-ibase -no-sql-mysql -no-sql-psql -no-sql-odbc -plugin-sql-sqlite \
-    -no-accessibility -no-sm -hostbindir ./hest \
+    -no-accessibility -no-sm -hostbindir \
     -system-libjpeg -system-libpng -system-zlib \
     -linuxfb \
     ${QT_WIDGETS} \
