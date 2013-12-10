@@ -1,3 +1,7 @@
+## Recipe for building the qt5 module QtQuick1.
+##
+## QtQuick Qt5 Module.
+
 inherit qt5module
 require qt5-${PV}.inc
 require qt5.inc
