@@ -1,3 +1,12 @@
+## Recipe for building the Qt5 module QtTools
+##
+## The Qt Tools Module provides APIs related to the specific tools provided
+## to make development with Qt easier. In particular there is the Qt UI Tools
+## Module which provides classes to handle the forms created in Qt Designer
+## and the Qt Help Module which can be used to integrate online documentation
+## in applications, similar to Qt Assistant.
+
+
 inherit qt5module 
 
 require qt5-${PV}.inc
