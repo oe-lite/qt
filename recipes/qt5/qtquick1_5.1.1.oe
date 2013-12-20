@@ -8,4 +8,7 @@ inherit qt5module
 require qt5-${PV}.inc
 require qt5.inc
 
-DEPENDS += "qtscript-dev qtsvg-dev qtxmlpatterns-dev"
+DEPENDS += "qtscript qtsvg qtxmlpatterns"
+DEPENDS_${PN} += "qtscript qtsvg qtxmlpatterns"
+RDEPENDS_${PN} += "qtscript qtsvg qtxmlpatterns"
+RDEPENDS_${PN}-dev += "qtscript-dev qtsvg-dev qtxmlpatterns-dev"
