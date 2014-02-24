@@ -83,3 +83,26 @@ OE_QMAKE_PATH_QT_SETTINGS = "${sysconfdir}/${QT_DIR_NAME}"
 OE_QMAKE_PATH_QT_EXAMPLES = "${datadir}/${QT_DIR_NAME}/examples"
 OE_QMAKE_PATH_QT_TESTS = "${datadir}/${QT_DIR_NAME}/tests"
 
+PRL_FILES ?= "${libdir}/*.prl"
+do_install[postfuncs] += "do_install_prl_fixup"
+do_install_prl_fixup[dirs] = "${D}"
+
+def do_install_prl_fixup(d):
+    installdir = d.get("D")
+    old_cwd = os.getcwd()
+    os.chdir(installdir)
+    prl_files = []
+    for pattern in d.get("PRL_FILES").split():
+        prl_files += glob.glob(pattern.lstrip("/"))
+    for filename in prl_files:
+        print "prl fixup of /%s"%(filename)
+        with open(filename, "r") as input_file:
+            prl_file = input_file.read()
+        prl_file = re.sub(r"QMAKE_PRL_BUILD_DIR.*",
+                                    r"", prl_file)
+        prl_file = re.sub(r"(QMAKE_PRL_LIBS = ).*",
+                                    r"\1", prl_file)
+        with open(filename, "w") as output_file:
+            output_file.write(prl_file)
+    os.chdir(old_cwd)
+
