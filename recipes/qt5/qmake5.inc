@@ -2,8 +2,8 @@ DESCRIPTION = "Native version of Qt/[X11|Mac|Embedded]"
 LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
 DEPENDS = "zlib"
 
-DEPENDS:>sdk = " libdl libpthread librt"
-RDEPENDS:>sdk = "libdl libphtread librt"
+DEPENDS:>sdk = " libdl libpthread librt libm"
+RDEPENDS_${PN}:>sdk = "libdl libphtread librt libm"
 HOMEPAGE = "http://qt-project.org"
 
 QT_MODULE = "qtbase"
