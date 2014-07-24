@@ -9,7 +9,6 @@ do_install () {
 }
 
 QT5_TOOLS="host:qmake5-utilities"
-QT5_TOOLS:HOST_OS_mingw32 = ""
 
 PACKAGES = "${PN}"
 RDEPENDS_${PN} += "${QT5_TOOLS}"
