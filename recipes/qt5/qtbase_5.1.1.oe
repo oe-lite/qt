@@ -2,3 +2,5 @@ require qt5-${PV}.inc
 require ${PN}.inc
 
 SRC_URI += "file://qeglfshooks_imx5.cpp"
+
+SRC_URI += "file://qt-everywhere-opensource-5.1.1-randr.patch"
