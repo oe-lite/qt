@@ -12,6 +12,9 @@ inherit c++ make
 
 require qmake5-5.1.1.inc
 
+#TBD: Bugs are seen with more more than 1 parallel maker
+PARALLEL_MAKE:sdk = ""
+
 SRC_URI += " \
     file://0001-Add-linux-oe-g-platform.patch \
     file://0002-qlibraryinfo-allow-to-set-qt.conf-from-the-outside-u.patch \
