@@ -5,7 +5,7 @@ DEPENDS = "zlib"
 EXTRA_DEPENDS_SDK = "libdl librt"
 EXTRA_DEPENDS_SDK:HOST_LIBC_mingw = ""
 DEPENDS:>sdk = " libpthread libm ${EXTRA_DEPENDS_SDK} native:qmake5"
-RDEPENDS_${PN}:>sdk = " libphtread libm ${EXTRA_DEPENDS_SDK}"
+RDEPENDS_${PN}:>sdk = " libpthread libm ${EXTRA_DEPENDS_SDK}"
 HOMEPAGE = "http://qt-project.org"
 
 QT_MODULE = "qtbase"
