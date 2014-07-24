@@ -30,6 +30,7 @@
 ##          specified in this useflag. Default set to -lOpenVG.
 ## @useflag qtopengl_hooks_file Set to a file to copy into the mkspecs dir.
 ##          Is not set by default.
+## @useflag qtmtdev Set if you want mtdev support. Is not set by default.
 
 LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
 
@@ -41,7 +42,9 @@ RECIPE_FLAGS += "qtx11 qtdirectfb qttslib qtgstreamer \
 	qtopengl_egl_flags qtopengl_flags \
 	qtopengl_qt_flags qtopengl_es1_flags \
 	qtopengl_es2_flags qtopengl_openvg_flags \
-	qtopengl_hooks_file"
+	qtopengl_hooks_file \
+	qtmtdev \
+	"
 
 require qt5.inc
 
@@ -61,6 +64,13 @@ SRC_URI += " \
     file://0018-QOpenGLPaintDevice-sub-area-support.patch \
     file://qtbug-32712.patch \
 "
+
+## MULTITOUCH SUPPORT
+SRC_URI:>USE_qtmtdev += " \
+    file://mtdev.patch \
+	 "
+DEPENDS:>USE_qtmtdev += " mtdev mtdev-dev"
+RDEPENDS_${PN}:>USE_qtmtdev += " mtdev"
 
 ##################################
 ### DEPENDS
