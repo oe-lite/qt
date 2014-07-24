@@ -1,0 +1,17 @@
+DESCRIPTION = "Setup script needed for the QT4 sdk"
+
+RECIPE_TYPES = "canadian-cross"
+
+SRC_URI += "file://setup.sh"
+
+do_rstage[postfuncs] += "do_rstage_setupsdk"
+do_rstage_setupsdk () {
+	cp ${SRCDIR}/setup.sh ${D}
+}
+
+QT4_TOOLS="host:qmake host:glib host:qmake host:pkg-config"
+QT4_TOOLS:HOST_OS_mingw32 = ""
+
+PACKAGES = "${PN}"
+RDEPENDS_${PN} += "${QT4_TOOLS}"
+FILES_${PN} = "/setup.sh"

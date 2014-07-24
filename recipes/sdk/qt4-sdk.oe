@@ -1,13 +1,6 @@
 inherit sdk-image image-qa
 
-SRC_URI += "file://setup.sh"
-
 IMAGE_BASENAME = "oe-lite-qt-sdk-${HOST_ARCH}-${TARGET_ARCH}"
-
-do_rstage[postfuncs] += "do_rstage_setupsdk"
-do_rstage_setupsdk () {
-	cp ${SRCDIR}/setup.sh ${RSTAGE_DIR}
-}
 
 #gstreamer
 RDEPENDS += """
@@ -21,6 +14,7 @@ target:gst-plugins-base
 
 #QT
 RDEPENDS += """
+ qt4-sdk-script
  target:qt
  target:qt-dev
  target:freetype
