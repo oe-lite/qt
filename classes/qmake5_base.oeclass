@@ -49,7 +49,9 @@ OE_QMAKE_LDFLAGS = "${LDFLAGS} -ldl"
 OE_QMAKE_AR = "${AR}"
 OE_QMAKE_STRIP = "echo"
 OE_QMAKE_WAYLAND_SCANNER = "${STAGE_DIR}/native/bin/wayland-scanner"
-QT_DIR_NAME ?= "qt5"
+CLASS_FLAGS += "qt5_dir_name"
+DEFAULT_USE_qt5_dir_name = "qt5"
+QT_DIR_NAME ?= "${USE_qt5_dir_name}"
 
 # this one needs to be exported, because qmake reads it from shell env
 export QT_CONF_PATH = "${SRCDIR}/qt.conf"
