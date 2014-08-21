@@ -17,25 +17,6 @@ require qmake5-${PV}.inc
 #TBD: Bugs are seen with more more than 1 parallel maker
 PARALLEL_MAKE = ""
 
-SRC_URI += " \
-    file://0001-Add-linux-oe-g-platform.patch \
-    file://0002-qlibraryinfo-allow-to-set-qt.conf-from-the-outside-u.patch \
-    file://0007-configureapp-Prefix-default-LIBDIRS-and-INCDIRS-with.patch \
-    file://fix_pkgconfig_and_prl_files_path.patch \
-    file://dont_export_system_variables.patch \
-    file://0013-Disable-mkv8snapshot.patch \
-    file://0014-enables-tslib-device-to-be-read-from-env-variable.patch \
-    file://allow_building_examples.patch \
-    file://always_build_uic.patch \
-"
-
-SRC_URI:>HOST_LIBC_mingw = "\
-    file://qtbug-33155-mingw-w64-compilation.patch\
-    file://mingw-spec.patch\
-    file://mingw-manually-enable-msys.patch \
-    file://mingw-disable-vars-from-shell.patch \
-"
-
 QT_CONF_PATH = "${B}/qt.conf"
 
 EXTRA_OECONF = " \
