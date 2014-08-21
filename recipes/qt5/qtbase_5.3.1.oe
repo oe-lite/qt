@@ -20,3 +20,5 @@ SRC_URI += "file://qeglfshooks_imx5.cpp"
 QT_MTDEV_CONFIG = "-no-mtdev"
 QT_MTDEV_CONFIG:USE_qtmtdev = "-mtdev"
 QT_CONFIG_FLAGS = " ${QT_MTDEV_CONFIG}"
+
+DEFAULT_PREFERENCE = "-1"
