@@ -50,20 +50,6 @@ require qt5.inc
 
 RECIPE_TYPES = "machine"
 
-SRC_URI += " \
-    file://0001-Add-linux-oe-g-platform.patch \
-    file://0002-qlibraryinfo-allow-to-set-qt.conf-from-the-outside-u.patch \
-    file://0005-qmake-is-already-built-in-qtbase-native.patch \
-    file://0006-Allow-building-a-separate-qmake-for-the-target.patch \
-    file://0007-configureapp-Prefix-default-LIBDIRS-and-INCDIRS-with.patch \
-    file://fix_pkgconfig_and_prl_files_path.patch \
-    file://dont_export_system_variables.patch \
-    file://0013-Disable-mkv8snapshot.patch \
-    file://0014-enables-tslib-device-to-be-read-from-env-variable.patch \
-    file://allow_building_examples.patch \
-    file://0018-QOpenGLPaintDevice-sub-area-support.patch \
-    file://qtbug-32712.patch \
-"
 
 ## MULTITOUCH SUPPORT
 SRC_URI:>USE_qtmtdev += " \
