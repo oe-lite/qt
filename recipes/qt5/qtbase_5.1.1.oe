@@ -31,3 +31,5 @@ QT_CONFIG_FLAGS += "${GSTREAMER_CONFIG}"
 DEPENDS:>USE_qtgstreamer += " gstreamer libgstbase"
 RDEPENDS_${PN}:>USE_qtgstreamer += " gstreamer libgstbase"
 RDEPENDS_${PN}-dev:>USE_qtgstreamer += " gstreamer libgstbase"
+
+QT_CONFIG_FLAGS += "-reduce-relocations"
