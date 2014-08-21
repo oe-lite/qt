@@ -24,3 +24,10 @@ SRC_URI += "file://qt-everywhere-opensource-5.1.1-randr.patch"
 SRC_URI:>USE_qtmtdev += " \
     file://mtdev.patch \
 	 "
+
+GSTREAMER_CONFIG = "-no-gstreamer"
+GSTREAMER_CONFIG:USE_qtgstreamer = ""
+QT_CONFIG_FLAGS += "${GSTREAMER_CONFIG}"
+DEPENDS:>USE_qtgstreamer += " gstreamer libgstbase"
+RDEPENDS_${PN}:>USE_qtgstreamer += " gstreamer libgstbase"
+RDEPENDS_${PN}-dev:>USE_qtgstreamer += " gstreamer libgstbase"
