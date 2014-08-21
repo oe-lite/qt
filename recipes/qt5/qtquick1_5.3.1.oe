@@ -12,3 +12,5 @@ DEPENDS += "qtscript-dev_${PV} qtsvg-dev_${PV} qtxmlpatterns_${PV}"
 DEPENDS_${PN} += "qtscript_${PV} qtsvg_${PV} qtxmlpatterns_${PV}"
 RDEPENDS_${PN} += "qtscript_${PV} qtsvg_${PV} qtxmlpatterns_${PV}"
 RDEPENDS_${PN}-dev += "qtscript-dev_${PV} qtsvg-dev_${PV} qtxmlpatterns-dev_${PV}"
+
+DEFAULT_PREFERENCE = "-1"
