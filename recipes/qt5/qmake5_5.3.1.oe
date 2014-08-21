@@ -25,3 +25,4 @@ SRC_URI:>HOST_LIBC_mingw = "\
     file://mingw-disable-vars-from-shell.patch \
 "
 
+DEFAULT_PREFERENCE = "-1"
