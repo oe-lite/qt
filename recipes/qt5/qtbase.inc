@@ -233,13 +233,6 @@ EOF
     fi
 }
 
-GSTREAMER_CONFIG = "-no-gstreamer"
-GSTREAMER_CONFIG:USE_qtgstreamer = ""
-QT_CONFIG_FLAGS += "${GSTREAMER_CONFIG}"
-DEPENDS:>USE_qtgstreamer += " gstreamer libgstbase"
-RDEPENDS_${PN}:>USE_qtgstreamer += " gstreamer libgstbase"
-RDEPENDS_${PN}-dev:>USE_qtgstreamer += " gstreamer libgstbase"
-
 DEPENDS:>USE_qtdirectfb = " directfb-dev libdirectfb"
 RDEPENDS_${PN}:>USE_qtdirectfb = " libdirectfb libdirect directfb-internal"
 
