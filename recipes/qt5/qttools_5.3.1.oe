@@ -15,3 +15,4 @@ require qt5.inc
 
 OE_QMAKE_LDFLAGS += " -L${STAGE_DIR}/machine/lib/"
 
+DEFAULT_PREFERENCE = "-1"
