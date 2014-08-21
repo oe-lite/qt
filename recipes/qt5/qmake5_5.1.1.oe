@@ -1,6 +1,0 @@
-## Recipe for building qmake for qt5.
-##
-## May be used to build both a native and a sdk version of qmake.
-
-require qt5-${PV}.inc
-require ${PN}.inc
