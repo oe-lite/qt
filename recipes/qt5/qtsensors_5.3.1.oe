@@ -1,0 +1,9 @@
+## Recipe for building the Qt5 module QtSensors
+##
+## Qt5 Module for building qtsensors.
+
+LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
+
+inherit qt5module
+require qt5-${PV}.inc
+require qt5.inc
