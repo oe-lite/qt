@@ -76,7 +76,7 @@ RDEPENDS_${PN}-dev += "libxml2-dev"
 ##################################
 
 QT_CONFIG_FLAGS += " \
-    -release -reduce-relocations \
+    -release \
     -shared -silent -glib -fontconfig -pkg-config \
     \
     -no-pch -no-rpath -no-nis -no-cups \
