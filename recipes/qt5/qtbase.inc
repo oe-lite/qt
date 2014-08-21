@@ -50,11 +50,6 @@ require qt5.inc
 
 RECIPE_TYPES = "machine"
 
-
-## MULTITOUCH SUPPORT
-SRC_URI:>USE_qtmtdev += " \
-    file://mtdev.patch \
-	 "
 DEPENDS:>USE_qtmtdev += " mtdev mtdev-dev"
 RDEPENDS_${PN}:>USE_qtmtdev += " mtdev"
 
