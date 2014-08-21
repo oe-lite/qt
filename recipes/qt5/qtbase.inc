@@ -76,7 +76,7 @@ RDEPENDS_${PN}:>USE_qtmtdev += " mtdev"
 ### DEPENDS
 ##################################
 
-DEPENDS += "native:qmake5 freetype jpeg libpng zlib openssl fontconfig \
+DEPENDS += "native:qmake5_${PV} freetype jpeg libpng zlib openssl fontconfig \
 	glib libpthread libm libdl librt libgcc libgio libglib libgthread \
 	libstdc++"
 
