@@ -1,6 +1,8 @@
 ## Recipe for building the qt5 module QtJsbackend.
 ##
 ## Recipe for building the Qt Javascript engine backend.
+## Note that post qt 5.2, this module is no longer used for
+## qtdeclarative, and no longer upgraded.
 
 LICENSE = "LGPL-2.1 & GPL-3.0"
 
