@@ -1,0 +1,13 @@
+--- qtbase-opensource-src-5.1.0/mkspecs/features/qt_example_installs.prf.old	2013-07-23 08:30:00.861534360 +0000
++++ qtbase-opensource-src-5.1.0/mkspecs/features/qt_example_installs.prf	2013-07-23 08:30:14.737797765 +0000
+@@ -93,10 +93,4 @@
+         !isEmpty(allfiles): warning("remaining files in $$_PRO_FILE_PWD_: $$allfiles")
+     }
+ 
+-    !equals(TEMPLATE, subdirs):!compile_examples {
+-        TEMPLATE = aux
+-        CONFIG -= have_target qt staticlib dll
+-        SOURCES =
+-        INSTALLS -= target
+-    }
+ }
