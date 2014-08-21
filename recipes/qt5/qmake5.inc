@@ -12,7 +12,7 @@ QT_MODULE = "qtbase"
 
 inherit c++ make
 
-require qmake5-5.1.1.inc
+require qmake5-${PV}.inc
 
 #TBD: Bugs are seen with more more than 1 parallel maker
 PARALLEL_MAKE = ""
@@ -144,8 +144,8 @@ do_install_mingw_fixup () {
 FILES_${PN} += " ${libdir}"
 
 PACKAGES =+ "${PN}-libs"
-DEPENDS_${PN} += "${PN}-libs"
-RDEPENDS_${PN} += "${PN}-libs"
+DEPENDS_${PN} += "${PN}-libs_${PV}"
+RDEPENDS_${PN} += "${PN}-libs_${PV}"
 # Make libs hold shared objects only - to be used in the SDK
 FILES_${PN}-libs = "${libdir}/*.so*"
 
@@ -153,18 +153,18 @@ PACKAGES =+ "${PN}-cmake"
 FILES_${PN}-cmake = "${libdir}/cmake"
 
 PACKAGES =+ "${PN}-plugins"
-DEPENDS_${PN} += "${PN}-plugins"
-RDEPENDS_${PN} += "${PN}-plugins"
+DEPENDS_${PN} += "${PN}-plugins_${PV}"
+RDEPENDS_${PN} += "${PN}-plugins_${PV}"
 FILES_${PN}-plugins = "${libdir}/qt5/plugins"
 
 PACKAGES =+ "${PN}-mkspecs"
-DEPENDS_${PN} += "${PN}-mkspecs"
-RDEPENDS_${PN} += "${PN}-mkspecs"
+DEPENDS_${PN} += "${PN}-mkspecs_${PV}"
+RDEPENDS_${PN} += "${PN}-mkspecs_${PV}"
 FILES_${PN}-mkspecs = "${libdir}/qt5/mkspecs"
 
 PACKAGES =+ " ${PN}-utilities "
 FILES_${PN}-utilities = "${bindir}"
-DEPENDS_${PN} += "${PN}-utilities"
+DEPENDS_${PN} += "${PN}-utilities_${PV}"
 EXTRA_RDEPENDS_UTILITIES = "librt libpthread"
 EXTRA_RDEPENDS_UTILITIES:HOST_LIBC_mingw = ""
 RDEPENDS_${PN}-utilities = "${EXTRA_RDEPENDS_UTILITIES} ${PN}-libs libgcc libpthread libz libstdc++ libm"
