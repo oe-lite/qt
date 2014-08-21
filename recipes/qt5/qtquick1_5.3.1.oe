@@ -1,0 +1,14 @@
+## Recipe for building the qt5 module QtQuick1.
+##
+## QtQuick Qt5 Module.
+
+LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
+
+inherit qt5module
+require qt5-${PV}.inc
+require qt5.inc
+
+DEPENDS += "qtscript-dev_${PV} qtsvg-dev_${PV} qtxmlpatterns_${PV}"
+DEPENDS_${PN} += "qtscript_${PV} qtsvg_${PV} qtxmlpatterns_${PV}"
+RDEPENDS_${PN} += "qtscript_${PV} qtsvg_${PV} qtxmlpatterns_${PV}"
+RDEPENDS_${PN}-dev += "qtscript-dev_${PV} qtsvg-dev_${PV} qtxmlpatterns-dev_${PV}"
