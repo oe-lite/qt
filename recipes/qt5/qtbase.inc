@@ -190,7 +190,7 @@ def parse_qt_opengl_config(d):
         d.set("QT_OPENGL_DEPENDS","libglesv1 libegl")
         d.set("QT_OPENGL_CONFIG_OPTION","-opengl es -egl")
     elif qtopengl == "glesv2":
-        d.set("QT_OPENGL_DEPENDS","libglesv2 libegl")
+        d.set("QT_OPENGL_DEPENDS","libglesv2 libegl libdrm")
         d.set("QT_OPENGL_CONFIG_OPTION","-opengl es2 -egl")
     elif qtopengl == "desktop":
         d.set("QT_OPENGL_DEPENDS","libgl")
@@ -207,6 +207,7 @@ QT_OPENGL_CONFIG_OPTION = ""
 DEPENDS += " ${QT_OPENGL_DEPENDS}"
 DEPENDS_${PN} += " ${QT_OPENGL_DEPENDS}"
 RDEPENDS_${PN} += " ${QT_OPENGL_DEPENDS}"
+RDEPENDS_${PN}-dev:>USE_qtopengl += " ${QT_OPENGL_DEPENDS}"
 QT_CONFIG_FLAGS += "${QT_OPENGL_CONFIG_OPTION}"
 DEFAULT_USE_qtopengl_egl_flags = "-lEGL"
 DEFAULT_USE_qtopengl_flags = "-lGLU -lGL"
@@ -216,7 +217,7 @@ DEFAULT_USE_qtopengl_es2_flags = "-lGLESv2 -lEGL"
 DEFAULT_USE_qtopengl_openvg_flags = "-lOpenVG"
 DEFAULT_USE_qtopengl_hooks_file = "none"
 QT_OPENGL_FIXUP_FUNCS = ""
-QT_OPENGL_FIXUP_FUNCS:USE_qtopengl = "do_configure_opengl_libs"
+QT_OPENGL_FIXUP_FUNCS:USE_qtopengl = "do_compile_opengl_libs"
 do_compile[prefuncs] =+ "${QT_OPENGL_FIXUP_FUNCS}"
 do_compile_opengl_libs () {
     sed -i 's!load(qt_config)!!' ${S}/mkspecs/linux-oe-g++/qmake.conf
