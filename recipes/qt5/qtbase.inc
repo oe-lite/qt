@@ -164,7 +164,7 @@ do_configure() {
         -xplatform linux-oe-g++ \
         ${QT_CONFIG_FLAGS}
 
-	qmake5_base_do_configure
+	do_configure_qmake5_base
 	echo "TARGET = \"realmoc\"" >> ${S}/src/tools/moc/moc.pro
 	echo "TARGET = \"realrcc\"" >> ${S}/src/tools/rcc/rcc.pro
 	echo "TARGET = \"realuic\"" >> ${S}/src/tools/uic/uic.pro
