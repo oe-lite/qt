@@ -223,9 +223,18 @@ QT_OPENGL_FIXUP_FUNCS:USE_qtopengl = "do_compile_opengl_libs"
 do_compile[prefuncs] =+ "${QT_OPENGL_FIXUP_FUNCS}"
 do_compile_opengl_libs () {
     sed -i 's!load(qt_config)!!' ${S}/mkspecs/linux-oe-g++/qmake.conf
-    cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
+    if [  "${USE_qtx11}" != "1" ]; then
+        cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
 EGLFS_PLATFORM_HOOKS_SOURCES = \$\$PWD/qeglfshooks.cpp
+IMX_CFLAGS             = -DLINUX=1  -DEGL_API_FB=1
+EOF
+    else
+        cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
 IMX_CFLAGS             = -DLINUX=1
+EOF
+    fi
+
+    cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
 QMAKE_LIBS_EGL         += ${USE_qtopengl_egl_flags}
 QMAKE_LIBS_OPENGL_ES1  += ${USE_qtopengl_es1_flags}
 QMAKE_LIBS_OPENGL_ES2  += ${USE_qtopengl_es2_flags}
