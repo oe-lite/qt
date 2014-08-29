@@ -108,7 +108,8 @@ QMAKE_MKSPEC_PATH = "${S}/mkspecs/"
 
 # another exception is that we need to run bin/qmake, because EffectivePaths
 # are relative to qmake location
-OE_QMAKE_QMAKE_ORIG = "${STAGE_DIR}/native/bin/qmake"
+OE_BUILD_BIN_DIR = "${BUILD_SYSROOT}${stage_bindir}"
+OE_QMAKE_QMAKE_ORIG = "${OE_BUILD_BIN_DIR}/qmake"
 OE_QMAKE_QMAKE = "bin/qmake"
 
 # qtbase is exception, configure script is using our get(X)QEvalMakeConf
