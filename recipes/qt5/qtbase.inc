@@ -92,6 +92,32 @@ QT_CONFIG_FLAGS += " \
     ${QT_TSLIB} \
     ${QT_QMLDEBUG} \
 "
+PROVIDES_${PN} += "\
+    libqt5core \
+    libqt5concurrent \
+    libqt5test \
+    libqt5sql \
+    libqt5xml \
+    libqt5network \
+    libqt5gui \
+    libqt5widgets \
+    libqt5printsupport \
+"
+PROVIDES_${PN}-dev:>USE_qtopengl += " libqt5opengl-dev"
+PROVIDES_${PN}-dev:>USE_qtdbus += " libqt5dbus-dev"
+PROVIDES_${PN}-dev += "\
+    libqt5core-dev \
+    libqt5concurrent-dev \
+    libqt5test-dev \
+    libqt5sql-dev \
+    libqt5xml-dev \
+    libqt5network-dev \
+    libqt5gui-dev \
+    libqt5widgets-dev \
+    libqt5printsupport-dev \
+"
+PROVIDES_${PN}-dev:>USE_qtopengl += " libqt5opengl"
+PROVIDES_${PN}-dev:>USE_qtdbus += " libqt5dbus"
 
 do_generateqtconfigfile[postfuncs] += "do_generateqtconfigfile_fixup"
 do_generateqtconfigfile_fixup() {
