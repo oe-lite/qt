@@ -9,13 +9,25 @@ SRC_URI += " \
     file://0003-webkit2-set-OUTPUT_DIR-value-if-empty.patch \
     file://0021-configure-make-qt4-native-work-with-long-building-pa.patch"
 
-DEPENDS:>sdk = "libz libgcc libm libpthread libdl librt"
+DEPENDS:>sdk = "native:qmake_${PV} libz libgcc libm libpthread libdl librt"
 RDEPENDS:>sdk = "libz libgcc libm libpthread libdl librt"
+
+
+SRC_URI:>sdk += " file://0004-configure-qmake-is-already-built-in-qt4-tools-native.patch"
 
 require qt4-common.inc
 
+TENDIAN="target-endian-not-set-error"
+TENDIAN:TARGET_ENDIAN_l = "-little-endian"
+TENDIAN:TARGET_ENDIAN_b = "-big-endian"
+BENDIAN="build-endian-not-set-error"
+BENDIAN:BUILD_ENDIAN_l = "-host-little-endian"
+BENDIAN:BUILD_ENDIAN_b = "-host-big-endian"
+
 QT_CONFIG_FLAGS = "\
     -prefix '${prefix}' \
+    -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
+    -arch ${QT_ARCH} -fast \
     -bindir ${bindir} \
     -libdir ${libdir} \
     -datadir ${datadir}/qt4 \
@@ -39,7 +51,20 @@ QT_CONFIG_FLAGS = "\
     -embedded -no-freetype -no-glib -no-iconv \
     -exceptions -xmlpatterns \
     -qt3support \
+    ${TENDIAN} \
+    ${BENDIAN} \
     -no-fast -silent -no-rpath"
+
+QMAKE_CONFIGURE_PREFUNCS = ""
+QMAKE_CONFIGURE_PREFUNCS:sdk = "do_configure_qmake_fixup"
+do_configure[prefuncs] += "${QMAKE_CONFIGURE_PREFUNCS}"
+
+#Qt expects a native qmake in ${SRC}/bin/
+do_configure_qmake_fixup() {
+    if [ ! -e bin/qmake ]; then
+        ln -sf ${BUILD_SYSROOT}/${stage_bindir}/qmake bin/qmake
+    fi
+}
 
 do_configure() {
     :
@@ -55,7 +80,7 @@ TOBUILD = "\
 do_compile() {
     (echo o; echo yes) | NO_CONF="yes" ./configure ${QT_CONFIG_FLAGS}
     for i in ${TOBUILD}; do
-        cd ${S}/$i && oe_runmake CC="${CC}" CXX="${CXX}"
+        cd ${S}/$i && oe_runmake CC="${CC}" CXX="${CXX}" LINK="${CXX}"
     done
 }
 
