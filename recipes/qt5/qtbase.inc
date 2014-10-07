@@ -269,6 +269,7 @@ QT_PHONON:USE_qtphonon = " -phonon"
 QT_DBUS = "-no-dbus"
 QT_DBUS:USE_qtdbus = " -dbus"
 DEPENDS:>USE_qtdbus = " libdbus-1"
+RDEPENDS_${PN}:>USE_qtdbus = " libdbus-1"
 
 DEFAULT_USE_qtexamples = "1"
 QT_EXAMPLES = "-nomake examples"
