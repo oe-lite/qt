@@ -274,6 +274,7 @@ RDEPENDS_${PN}:>USE_qtdbus = " libdbus-1"
 DEFAULT_USE_qtexamples = "1"
 QT_EXAMPLES = "-nomake examples"
 QT_EXAMPLES:USE_qtexamples = " -make examples"
+PACKAGES:<USE_qtexamples = "${PN}-examples-dbg ${PN}-examples "
 
 QT_QMLDEBUG = " -no-qml-debug"
 QT_QMLDEBUG:USE_qtqmldebug = " -qml-debug"
