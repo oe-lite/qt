@@ -12,7 +12,6 @@ SRC_URI += " \
 DEPENDS:>sdk = "native:qmake_${PV} libz libgcc libm libpthread libdl librt"
 RDEPENDS:>sdk = "libz libgcc libm libpthread libdl librt"
 
-
 SRC_URI:>sdk += " file://0004-configure-qmake-is-already-built-in-qt4-tools-native.patch"
 
 require qt4-common.inc
