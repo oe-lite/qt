@@ -1,6 +1,6 @@
 # Supported archs in src/corelib/arch/*
 
-SRC_URI =+ "http://download.qt-project.org/official_releases/qt/4.8/${PV}/qt-everywhere-opensource-src-${PV}.tar.gz"
+SRC_URI =+ "http://download.qt-project.org/archive/qt/4.8/${PV}/qt-everywhere-opensource-src-${PV}.tar.gz"
 S = "${SRCDIR}/qt-everywhere-opensource-src-${PV}"
 
 FILESPATHPKG =. "qt-${PV}:"
