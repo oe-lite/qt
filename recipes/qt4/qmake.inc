@@ -14,6 +14,13 @@ RDEPENDS:>sdk = "libz libgcc libm libpthread libdl librt"
 
 require qt4-common.inc
 
+TENDIAN="target-endian-not-set-error"
+TENDIAN:TARGET_ENDIAN_l = "-little-endian"
+TENDIAN:TARGET_ENDIAN_b = "-big-endian"
+BENDIAN="build-endian-not-set-error"
+BENDIAN:BUILD_ENDIAN_l = "-host-little-endian"
+BENDIAN:BUILD_ENDIAN_b = "-host-big-endian"
+
 QT_CONFIG_FLAGS = "\
     -prefix '${prefix}' \
     -bindir ${bindir} \
@@ -39,6 +46,8 @@ QT_CONFIG_FLAGS = "\
     -embedded -no-freetype -no-glib -no-iconv \
     -exceptions -xmlpatterns \
     -qt3support \
+    ${TENDIAN} \
+    ${BENDIAN} \
     -no-fast -silent -no-rpath"
 
 do_configure() {
