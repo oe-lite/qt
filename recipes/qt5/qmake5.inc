@@ -73,15 +73,32 @@ export OE_QMAKE_LDFLAGS
 export OE_QMAKE_AR
 export OE_QMAKE_STRIP
 
-CONFIGURE_MINGW_UTILS = ""
-CONFIGURE_MINGW_UTILS:HOST_LIBC_mingw = "do_configure_mingw"
-do_configure[prefuncs] += "${CONFIGURE_MINGW_UTILS}"
-do_configure_mingw () {
-#Use native tools to build instead of using the mingw tools
-    ln -sf ${STAGE_DIR}/native/bin/qmake ${S}/bin/qmake
-    ln -sf ${STAGE_DIR}/native/bin/moc ${S}/bin/moc.exe
-    ln -sf ${STAGE_DIR}/native/bin/rcc ${S}/bin/rcc.exe
-    ln -sf ${STAGE_DIR}/native/bin/uic ${S}/bin/uic.exe
+QTTOOLS_SUFFIX = ""
+QTTOOLS_SUFFIX:HOST_LIBC_mingw = ".exe"
+
+QTTOOLS_CONFIGURE_PREFUNCS = ""
+QTTOOLS_CONFIGURE_PREFUNCS:sdk = "do_configure_qtools_fixup"
+do_configure[prefuncs] += "${QTTOOLS_CONFIGURE_PREFUNCS}"
+
+#Qt expects a native qmake in ${SRC}/bin/
+do_configure_qtools_fixup() {
+    #Use native tools to build instead of using the mingw tools
+    ln -sf ${BUILD_SYSROOT}/${stage_bindir}/qmake bin/qmake
+    sed -i -e 's/\/bin\/qmake/\/bin\/realqmake/' ${S}/qmake/Makefile.*
+    ln -sf ${STAGE_DIR}/native/bin/moc ${S}/bin/moc${QTTOOLS_SUFFIX}
+    ln -sf ${STAGE_DIR}/native/bin/rcc ${S}/bin/rcc${QTTOOLS_SUFFIX}
+    ln -sf ${STAGE_DIR}/native/bin/uic ${S}/bin/uic${QTTOOLS_SUFFIX}
+}
+
+QTTOOLS_CONFIGURE_POSTFUNCS = ""
+QTTOOLS_CONFIGURE_POSTFUNCS:sdk = "do_configure_qtools_fixup_post"
+do_configure[postfuncs] += "${QTTOOLS_CONFIGURE_POSTFUNCS}"
+do_configure_qtools_fixup_post() {
+    #Set the build target to something else, so it does not overwrite
+    #the native tools
+    echo "TARGET = \"realmoc\"" >> ${S}/src/tools/moc/moc.pro
+    echo "TARGET = \"realrcc\"" >> ${S}/src/tools/rcc/rcc.pro
+    echo "TARGET = \"realuic\"" >> ${S}/src/tools/uic/uic.pro
 }
 
 USE_MINGW_SPEC = ""
@@ -93,33 +110,21 @@ do_configure_preqt() {
     bin/qmake ${USE_MINGW_SPEC} ${OE_QMAKE_DEBUG_OUTPUT} ${S} -o Makefile || die "Configuring qt with qmake failed. EXTRA_OECONF was ${EXTRA_OECONF}"
 }
 
-CONFIGURE_BUILD_MINGW_UTILS = ""
-CONFIGURE_BUILD_MINGW_UTILS:HOST_LIBC_mingw = "do_configure_mingw2"
-do_configure[postfuncs] += "${CONFIGURE_BUILD_MINGW_UTILS}"
-do_configure_mingw2 () {
-    #Set the build target to something else, so it does not overwrite
-    #the native tools
-    echo "TARGET = \"realmoc\"" >> ${S}/src/tools/moc/moc.pro
-    echo "TARGET = \"realrcc\"" >> ${S}/src/tools/rcc/rcc.pro
-    echo "TARGET = \"realuic\"" >> ${S}/src/tools/uic/uic.pro
-}
-
-
 do_install() {
     oe_runmake install INSTALL_ROOT=${D}
 
 }
 
-INSTALL_MINGW_UTILS = ""
-INSTALL_MINGW_UTILS:HOST_LIBC_mingw = "do_install_mingw_fixup"
-do_install[postfuncs] += "${INSTALL_MINGW_UTILS}"
-do_install_mingw_fixup () {
-    #Set the correct name of the build mingw utils
+INSTALL_QT_UTILS = ""
+INSTALL_QT_UTILS:sdk = "do_install_qt_utils_fixup"
+do_install[postfuncs] += "${INSTALL_QT_UTILS}"
+do_install_qt_utils_fixup () {
+    #Set the correct name of the build utils in sdk
     rm ${D}${bindir}/qmake
-    install ${S}/bin/qmake.exe ${D}${bindir}
-    mv ${D}${bindir}/realmoc.exe ${D}${bindir}/moc.exe
-    mv ${D}${bindir}/realuic.exe ${D}${bindir}/uic.exe
-    mv ${D}${bindir}/realrcc.exe ${D}${bindir}/rcc.exe
+    install ${S}/bin/realqmake${QTTOOLS_SUFFIX} ${D}${bindir}/qmake${QTTOOLS_SUFFIX}
+    mv ${D}${bindir}/realmoc${QTTOOLS_SUFFIX} ${D}${bindir}/moc${QTTOOLS_SUFFIX}
+    mv ${D}${bindir}/realuic${QTTOOLS_SUFFIX} ${D}${bindir}/uic${QTTOOLS_SUFFIX}
+    mv ${D}${bindir}/realrcc${QTTOOLS_SUFFIX} ${D}${bindir}/rcc${QTTOOLS_SUFFIX}
 }
 
 FILES_${PN} += " ${libdir}"
