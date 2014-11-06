@@ -23,3 +23,5 @@ do_install_ttffonts() {
     install -d -m 0755 ${D}/${fontdir}/ttf
     install -m 0644 lib/fonts/*.ttf ${D}/${fontdir}/ttf/
 }
+DEPENDS_${PN}-libqtgui += "libx11 libxext libxrandr"
+RDEPENDS_${PN}-libqtgui += "libx11 libxext libxrandr"
