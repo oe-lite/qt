@@ -11,7 +11,6 @@
 ## @useflag qtwebkit Enable webkit. Disabled by default.
 ## @useflag qtphonon Enable phonon. Disabled by default.
 ## @useflag qtdbus Enable dbus. Disabled by default.
-## @useflag qtexamples Build examples and demos. Disabled by default.
 ## @useflag qtqmldebug Enable qtqmldebug. Disabled by default.
 ## @useflag qtopengl Use qt opengl. The useflag is default set to -no-opengl,
 ##          which disables opengl. Other options are _only_ glesv1, glesv2, or
@@ -37,7 +36,7 @@ LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
 inherit c++ make pkgconfig
 
 RECIPE_FLAGS += "qtx11 qtdirectfb qttslib qtgstreamer \
-	qtwidgets qtwebkit qtphonon qtdbus qtexamples qtqmldebug \
+	qtwidgets qtwebkit qtphonon qtdbus qtqmldebug \
 	qtopengl \
 	qtopengl_egl_flags qtopengl_flags \
 	qtopengl_qt_flags qtopengl_es1_flags \
@@ -136,6 +135,10 @@ do_configure() {
         ln -sf ${STAGE_DIR}/native/bin/moc ${S}/bin/moc
         ln -sf ${STAGE_DIR}/native/bin/rcc ${S}/bin/rcc
         ln -sf ${STAGE_DIR}/native/bin/uic ${S}/bin/uic
+        if [ -n "$USE_qtdbus" ]; then
+                ln -sf ${STAGE_DIR}/native/bin/qdbuscpp2xml ${S}/bin/qdbuscpp2xml
+                ln -sf ${STAGE_DIR}/native/bin/qdbusxml2cpp ${S}/bin/qdbusxml2cpp
+        fi
     fi
 
     ${S}/configure -v \
@@ -165,6 +168,10 @@ do_configure() {
 	echo "TARGET = \"realmoc\"" >> ${S}/src/tools/moc/moc.pro
 	echo "TARGET = \"realrcc\"" >> ${S}/src/tools/rcc/rcc.pro
 	echo "TARGET = \"realuic\"" >> ${S}/src/tools/uic/uic.pro
+        if [ -n "$USE_qtdbus" ]; then
+                echo "TARGET = \"realqdbuscpp2xml\"" >> ${S}/src/tools/qdbuscpp2xml/qdbuscpp2xml.pro
+                echo "TARGET = \"realqdbusxml2cpp\"" >> ${S}/src/tools/qdbusxml2cpp/qdbusxml2cpp.pro
+        fi
 }
 
 ##################################
@@ -260,8 +267,9 @@ QT_PHONON:USE_qtphonon = " -phonon"
 
 QT_DBUS = "-no-dbus"
 QT_DBUS:USE_qtdbus = " -dbus"
+DEPENDS:>USE_qtdbus = " libdbus-1"
+RDEPENDS_${PN}:>USE_qtdbus = " libdbus-1"
 
-DEFAULT_USE_qtexamples = "1"
 QT_EXAMPLES = "-nomake examples"
 QT_EXAMPLES:USE_qtexamples = " -make examples"
 
