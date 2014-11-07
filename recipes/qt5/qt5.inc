@@ -1,6 +1,8 @@
 # Copyright (C) 2012 O.S. Systems Software LTDA.
 # Copyright (C) 2013 Martin Jansa <martin.jansa@gmail.com>
 
+## @useflag qtexamples Build examples and demos. Disabled by default.
+
 inherit qmake5
 
 QT_MODULE ?= "${PN}"
@@ -16,8 +18,13 @@ OE_QMAKE_PATH_SETTINGS = "${OE_QMAKE_PATH_QT_SETTINGS}"
 OE_QMAKE_PATH_EXAMPLES = "${OE_QMAKE_PATH_QT_EXAMPLES}"
 OE_QMAKE_PATH_TESTS = "${OE_QMAKE_PATH_QT_TESTS}"
 
-PACKAGES =. "${PN}-qmlplugins-dbg ${PN}-tools-dbg ${PN}-plugins-dbg ${PN}-qmlplugins ${PN}-tools ${PN}-plugins ${PN}-mkspecs ${PN}-examples-dev ${PN}-examples-staticdev ${PN}-examples-dbg ${PN}-examples "
-RDEPENDS_${PN} += "${PN}-plugins_${PV} ${PN}-qmlplugins_${PV} ${PN}-examples_${PV}"
+#Examples are present in all Qt modules
+RECIPE_FLAGS += "qtexamples"
+DEFAULT_USE_qtexamples = "1"
+PACKAGES:<USE_qtexamples = "${PN}-examples-dbg ${PN}-examples "
+
+PACKAGES =. "${PN}-qmlplugins-dbg ${PN}-tools-dbg ${PN}-plugins-dbg ${PN}-qmlplugins ${PN}-tools ${PN}-plugins ${PN}-mkspecs ${PN}-examples-dev ${PN}-examples-staticdev "
+RDEPENDS_${PN} += "${PN}-plugins_${PV} ${PN}-qmlplugins_${PV}"
 
 # extra -dbg packages
 FILES_${PN}-qmlplugins-dbg = " \
