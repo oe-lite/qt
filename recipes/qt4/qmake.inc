@@ -16,13 +16,6 @@ SRC_URI:>sdk += " file://0004-configure-qmake-is-already-built-in-qt4-tools-nati
 
 require qt4-common.inc
 
-TENDIAN="target-endian-not-set-error"
-TENDIAN:TARGET_ENDIAN_l = "-little-endian"
-TENDIAN:TARGET_ENDIAN_b = "-big-endian"
-BENDIAN="build-endian-not-set-error"
-BENDIAN:BUILD_ENDIAN_l = "-host-little-endian"
-BENDIAN:BUILD_ENDIAN_b = "-host-big-endian"
-
 QT_CONFIG_FLAGS = "\
     -prefix '${prefix}' \
     -xplatform ${TARGET_OS}-g++ -platform ${TARGET_OS}-g++ \
@@ -50,8 +43,6 @@ QT_CONFIG_FLAGS = "\
     -embedded -no-freetype -no-glib -no-iconv \
     -exceptions -xmlpatterns \
     -qt3support \
-    ${TENDIAN} \
-    ${BENDIAN} \
     -no-fast -silent -no-rpath"
 
 QMAKE_CONFIGURE_PREFUNCS = ""
@@ -77,7 +68,19 @@ TOBUILD = "\
 "
 
 do_compile() {
-    (echo o; echo yes) | NO_CONF="yes" ./configure ${QT_CONFIG_FLAGS}
+    if [ "${BUILD_ENDIAN}" = "l" ]; then
+        BENDIAN_CONFIG="-host-little-endian"
+    else
+        BENDIAN_CONFIG="-host-big-endian"
+    fi
+
+    if [ "${HOST_ENDIAN}" = "l" ]; then
+        HENDIAN_CONFIG="-little-endian"
+    else
+        HENDIAN_CONFIG="-big-endian"
+    fi
+    ENDIAN_CONFIG="$BENDIAN_CONFIG $HENDIAN_CONFIG"
+    (echo o; echo yes) | NO_CONF="yes" ./configure ${QT_CONFIG_FLAGS} $ENDIAN_CONFIG
     for i in ${TOBUILD}; do
         cd ${S}/$i && oe_runmake CC="${CC}" CXX="${CXX}" LINK="${CXX}"
     done
