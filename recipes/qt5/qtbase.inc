@@ -136,6 +136,10 @@ do_configure() {
         ln -sf ${STAGE_DIR}/native/bin/moc ${S}/bin/moc
         ln -sf ${STAGE_DIR}/native/bin/rcc ${S}/bin/rcc
         ln -sf ${STAGE_DIR}/native/bin/uic ${S}/bin/uic
+        if [ -n "$USE_qtdbus" ]; then
+                ln -sf ${STAGE_DIR}/native/bin/qdbuscpp2xml ${S}/bin/qdbuscpp2xml
+                ln -sf ${STAGE_DIR}/native/bin/qdbusxml2cpp ${S}/bin/qdbusxml2cpp
+        fi
     fi
 
     ${S}/configure -v \
@@ -165,6 +169,10 @@ do_configure() {
 	echo "TARGET = \"realmoc\"" >> ${S}/src/tools/moc/moc.pro
 	echo "TARGET = \"realrcc\"" >> ${S}/src/tools/rcc/rcc.pro
 	echo "TARGET = \"realuic\"" >> ${S}/src/tools/uic/uic.pro
+        if [ -n "$USE_qtdbus" ]; then
+                echo "TARGET = \"realqdbuscpp2xml\"" >> ${S}/src/tools/qdbuscpp2xml/qdbuscpp2xml.pro
+                echo "TARGET = \"realqdbusxml2cpp\"" >> ${S}/src/tools/qdbusxml2cpp/qdbusxml2cpp.pro
+        fi
 }
 
 ##################################
@@ -260,6 +268,8 @@ QT_PHONON:USE_qtphonon = " -phonon"
 
 QT_DBUS = "-no-dbus"
 QT_DBUS:USE_qtdbus = " -dbus"
+DEPENDS:>USE_qtdbus = " libdbus"
+RDEPENDS_${PN}:>USE_qtdbus = " libdbus"
 
 DEFAULT_USE_qtexamples = "1"
 QT_EXAMPLES = "-nomake examples"
