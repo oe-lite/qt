@@ -11,7 +11,6 @@
 ## @useflag qtwebkit Enable webkit. Disabled by default.
 ## @useflag qtphonon Enable phonon. Disabled by default.
 ## @useflag qtdbus Enable dbus. Disabled by default.
-## @useflag qtexamples Build examples and demos. Disabled by default.
 ## @useflag qtqmldebug Enable qtqmldebug. Disabled by default.
 ## @useflag qtopengl Use qt opengl. The useflag is default set to -no-opengl,
 ##          which disables opengl. Other options are _only_ glesv1, glesv2, or
@@ -37,7 +36,7 @@ LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
 inherit c++ make pkgconfig
 
 RECIPE_FLAGS += "qtx11 qtdirectfb qttslib qtgstreamer \
-	qtwidgets qtwebkit qtphonon qtdbus qtexamples qtqmldebug \
+	qtwidgets qtwebkit qtphonon qtdbus qtqmldebug \
 	qtopengl \
 	qtopengl_egl_flags qtopengl_flags \
 	qtopengl_qt_flags qtopengl_es1_flags \
@@ -271,7 +270,6 @@ QT_DBUS:USE_qtdbus = " -dbus"
 DEPENDS:>USE_qtdbus = " libdbus"
 RDEPENDS_${PN}:>USE_qtdbus = " libdbus"
 
-DEFAULT_USE_qtexamples = "1"
 QT_EXAMPLES = "-nomake examples"
 QT_EXAMPLES:USE_qtexamples = " -make examples"
 
