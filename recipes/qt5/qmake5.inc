@@ -10,7 +10,7 @@ HOMEPAGE = "http://qt-project.org"
 
 QT_MODULE = "qtbase"
 
-inherit c++ make
+inherit c++ make pkgconfig
 
 require qmake5-${PV}.inc
 
@@ -61,6 +61,9 @@ EXTRA_OECONF:>HOST_LIBC_mingw += " \
     -device-option CROSS_COMPILE=${HOST_PREFIX} \
     -qpa windows"
 
+RECIPE_FLAGS += "qtdbus"
+EXTRA_OECONF:>USE_qtdbus = "-dbus"
+DEPENDS:>USE_qtdbus = " libdbus"
 
 # qtbase is exception, configure script is using our get(X)QEvalMakeConf and setBootstrapEvalVariable functions to read it from shell
 export OE_QMAKE_COMPILER
