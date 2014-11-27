@@ -7,7 +7,7 @@
 #
 # QMake variables for Qt4
 #
-CLASS_DEPENDS += "native:qmake_${PV}"
+CLASS_DEPENDS += "native:qmake"
 export QMAKESPEC = "${TARGET_SYSROOT}${target_datadir}/${OE_QMAKE_LIBS_QT}/mkspecs/${BUILD_CXX}"
 QMAKESPEC:native = ""
 export OE_QMAKE_UIC = "uic"
