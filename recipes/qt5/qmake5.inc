@@ -14,8 +14,9 @@ inherit c++ make pkgconfig
 
 require qmake5-${PV}.inc
 
-#TBD: Bugs are seen with more more than 1 parallel maker
-PARALLEL_MAKE = ""
+# Ensure that changes to configure task or rdepends on that triggers new
+# do_unpack. Solves compile error on rebuild caused by do_configure change.
+do_configure[emit] += "do_unpack"
 
 QT_CONF_PATH = "${B}/qt.conf"
 
