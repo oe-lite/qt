@@ -133,12 +133,12 @@ do_configure() {
 		mkdir ${S}/bin
 	fi
         ln -sf ${OE_QMAKE_QMAKE_ORIG} ${S}/bin/qmake
-        ln -sf ${STAGE_DIR}/native/bin/moc ${S}/bin/moc
-        ln -sf ${STAGE_DIR}/native/bin/rcc ${S}/bin/rcc
-        ln -sf ${STAGE_DIR}/native/bin/uic ${S}/bin/uic
+        ln -sf ${OE_BUILD_BIN_DIR}/moc ${S}/bin/moc
+        ln -sf ${OE_BUILD_BIN_DIR}/rcc ${S}/bin/rcc
+        ln -sf ${OE_BUILD_BIN_DIR}/uic ${S}/bin/uic
         if [ -n "$USE_qtdbus" ]; then
-                ln -sf ${STAGE_DIR}/native/bin/qdbuscpp2xml ${S}/bin/qdbuscpp2xml
-                ln -sf ${STAGE_DIR}/native/bin/qdbusxml2cpp ${S}/bin/qdbusxml2cpp
+                ln -sf ${OE_BUILD_BIN_DIR}/qdbuscpp2xml ${S}/bin/qdbuscpp2xml
+                ln -sf ${OE_BUILD_BIN_DIR}/qdbusxml2cpp ${S}/bin/qdbusxml2cpp
         fi
     fi
 
