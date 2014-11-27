@@ -136,6 +136,7 @@ do_configure() {
         ln -sf ${OE_BUILD_BIN_DIR}/moc ${S}/bin/moc
         ln -sf ${OE_BUILD_BIN_DIR}/rcc ${S}/bin/rcc
         ln -sf ${OE_BUILD_BIN_DIR}/uic ${S}/bin/uic
+        ln -sf ${OE_BUILD_BIN_DIR}/qdoc ${S}/bin/qdoc
         if [ -n "$USE_qtdbus" ]; then
                 ln -sf ${OE_BUILD_BIN_DIR}/qdbuscpp2xml ${S}/bin/qdbuscpp2xml
                 ln -sf ${OE_BUILD_BIN_DIR}/qdbusxml2cpp ${S}/bin/qdbusxml2cpp
@@ -169,6 +170,7 @@ do_configure() {
 	echo "TARGET = \"realmoc\"" >> ${S}/src/tools/moc/moc.pro
 	echo "TARGET = \"realrcc\"" >> ${S}/src/tools/rcc/rcc.pro
 	echo "TARGET = \"realuic\"" >> ${S}/src/tools/uic/uic.pro
+	echo "TARGET = \"realqdoc\"" >> ${S}/src/tools/qdoc/qdoc.pro
         if [ -n "$USE_qtdbus" ]; then
                 echo "TARGET = \"realqdbuscpp2xml\"" >> ${S}/src/tools/qdbuscpp2xml/qdbuscpp2xml.pro
                 echo "TARGET = \"realqdbusxml2cpp\"" >> ${S}/src/tools/qdbusxml2cpp/qdbusxml2cpp.pro
