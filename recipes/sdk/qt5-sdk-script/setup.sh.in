@@ -1,14 +1,15 @@
 #!/bin/bash
 # Script used to setup the enviroment for Qmake
 # Preconditions:
-#  The following environemt settings are needed prior to invoking the script:
-#  * CROSS_COMPILE must be set, e.g.  CROSS_COMPILE=arm-cortexa9neont-linux-gnueabi-
+#  The following environemt setting is needed prior to invoking the script:
 #  * Host executeable must be in the path (<sdk_folder>/bin)
 #
 # Note: The script can be run on Windows too with MSYS installed
 # The script generates a qt.conf file which will be placed in <sdk_folder>
 
 CURRENT_OS=$(uname)
+
+export CROSS_COMPILE=__TARGET_PREFIX__
 
 echo "Script detected it is running on:"
 if [[ $CURRENT_OS == Linux* ]] ; then
