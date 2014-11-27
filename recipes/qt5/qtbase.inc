@@ -88,6 +88,7 @@ QT_CONFIG_FLAGS += " \
     ${QT_DBUS} \
     ${QT_XCB} \
     ${QT_EXAMPLES} \
+    ${QT_EGLFS} \
     ${QT_TSLIB} \
     ${QT_QMLDEBUG} \
 "
@@ -265,6 +266,9 @@ RDEPENDS_${PN}:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
 
 QT_XCB = " -no-xcb"
 QT_XCB:USE_qtx11 = " -qt-xcb"
+
+QT_EGLFS = "-eglfs"
+QT_EGLFS:USE_qtx11 = "-no-eglfs"
 
 DEPENDS:>USE_qttslib = " tslib"
 RDEPENDS:>USE_qttslib = " tslib tslib-calibrate tslib-tests"
