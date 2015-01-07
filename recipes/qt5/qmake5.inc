@@ -16,7 +16,7 @@ require qmake5-${PV}.inc
 
 # Ensure that changes to configure task or rdepends on that triggers new
 # do_unpack. Solves compile error on rebuild caused by do_configure change.
-do_configure[emit] += "do_unpack"
+do_unpack[emit] += "do_stage"
 
 QT_CONF_PATH = "${B}/qt.conf"
 
