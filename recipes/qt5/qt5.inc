@@ -18,10 +18,32 @@ OE_QMAKE_PATH_SETTINGS = "${OE_QMAKE_PATH_QT_SETTINGS}"
 OE_QMAKE_PATH_EXAMPLES = "${OE_QMAKE_PATH_QT_EXAMPLES}"
 OE_QMAKE_PATH_TESTS = "${OE_QMAKE_PATH_QT_TESTS}"
 
+# To avoid too much FILES hackery, since there are many
+# file types in the sources, we duplicate them so they can
+# both be built and included as source only.
+do_configure[prefuncs] =+ "do_configure_examples_source"
+do_configure_examples_source () {
+    if [ -d ${S}/examples ]; then
+	test -d ${S}/examples-sourceonly || mkdir ${S}/examples-sourceonly
+        cp -R ${S}/examples/* ${S}/examples-sourceonly/
+    fi
+}
+
+do_install[postfuncs] =+ "do_install_examples_source"
+do_install_examples_source () {
+    if [ -d ${S}/examples-sourceonly ]; then
+        test -d ${D}/examples || mkdir ${D}/examples
+        cp -R ${S}/examples-sourceonly/* ${D}/examples/
+    fi
+}
+
 #Examples are present in all Qt modules
 RECIPE_FLAGS += "qtexamples"
 DEFAULT_USE_qtexamples = "1"
-PACKAGES:<USE_qtexamples = "${PN}-examples-dbg ${PN}-examples "
+PACKAGES:<USE_qtexamples = "${PN}-examples-source ${PN}-examples-dbg ${PN}-examples "
+DEPENDS_${PN}-examples += "${PN}-examples-source"
+
+FILES_${PN}-examples-source = "/examples"
 
 PACKAGES =. "${PN}-qmlplugins-dbg ${PN}-tools-dbg ${PN}-plugins-dbg ${PN}-qmlplugins ${PN}-tools ${PN}-plugins ${PN}-mkspecs ${PN}-examples-dev ${PN}-examples-staticdev "
 RDEPENDS_${PN} += "${PN}-plugins_${PV} ${PN}-qmlplugins_${PV}"
@@ -130,3 +152,4 @@ FILES_${PN}-examples-staticdev = " \
     ${OE_QMAKE_PATH_EXAMPLES}/*/*/*/*/*.a \
     ${OE_QMAKE_PATH_EXAMPLES}/*/*/*/*/*/*.a \
 "
+
