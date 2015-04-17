@@ -13,6 +13,8 @@ SRC_URI += "\
     file://0010-Revert-Use-the-gcc-feature-in-simd.prf.patch \
     file://0011-QOpenGLPaintDevice-sub-area-support.patch \
     file://0011-qmake-don-t-build-it-in-configure-but-allow-to-build.patch \
+    file://0014-eglfs-fix-egl-error-for-platforms-only-supporting-on.patch \
+    file://0022-Force_egl_visual_ID_33.patch \
 "
 
 SRC_URI += "file://qeglfshooks_imx5.cpp"
