@@ -263,14 +263,12 @@ EOF
 
     cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
 QMAKE_LIBS_EGL         += ${USE_qtopengl_egl_flags}
-QMAKE_LIBS_OPENGL_ES1  += ${USE_qtopengl_es1_flags}
 QMAKE_LIBS_OPENGL_ES2  += ${USE_qtopengl_es2_flags}
 QMAKE_LIBS_OPENVG      += ${USE_qtopengl_openvg_flags}
 QMAKE_CFLAGS_RELEASE   += \$\$IMX_CFLAGS
 QMAKE_CXXFLAGS_RELEASE += \$\$IMX_CFLAGS
 QMAKE_CFLAGS_DEBUG   += \$\$IMX_CFLAGS
 QMAKE_CXXFLAGS_DEBUG += \$\$IMX_CFLAGS
-QMAKE_CFLAGS_EGL += \$\$IMX_CFLAGS
 load(qt_config)
 
 EOF
