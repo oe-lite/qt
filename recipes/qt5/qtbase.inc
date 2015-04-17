@@ -281,15 +281,21 @@ EOF
 DEPENDS:>USE_qtdirectfb = " directfb-dev libdirectfb"
 RDEPENDS_${PN}:>USE_qtdirectfb = " libdirectfb libdirect directfb-internal"
 
-X11_EXTRA_DEPENDS = "libx11 libxft libxcb libxext libxrender libxrandr \
+X11_EXTRA_DEPENDS = "libx11 libxft libxcb \
+	libx11-xcb libxcb libxcb-glx \
+	libxcb-randr libxcb-render libxcb-shape \
+	libxcb-shm libxcb-sync libxcb-xfixes \
+        libxcb-util libxcb-util-wm libxcb-util-renderutil libxcb-util-image libxcb-util-keysyms \
+	libxext libxrender libxrandr \
 	libxcursor freetype libxdamage libdl libxi \
-	libxcb xcb-proto libpcre xinput libxi libstdc++ "
+	xcb-proto libpcre xinput libxi libstdc++ "
+#libxcb-icccm libxcb-render-util libxcb-image libxcb-keysyms 
 DEPENDS:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
 DEPENDS_${PN}:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
 RDEPENDS_${PN}:>USE_qtx11 = " ${X11_EXTRA_DEPENDS}"
 
 QT_XCB = " -no-xcb"
-QT_XCB:USE_qtx11 = " -qt-xcb"
+QT_XCB:USE_qtx11 = " -xcb -xcb-xlib -system-xcb -xrender       "
 
 QT_EGLFS = "-eglfs"
 QT_EGLFS:USE_qtx11 = "-no-eglfs"
