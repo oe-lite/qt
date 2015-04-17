@@ -15,6 +15,8 @@ SRC_URI += "\
     file://0011-qmake-don-t-build-it-in-configure-but-allow-to-build.patch \
     file://0014-eglfs-fix-egl-error-for-platforms-only-supporting-on.patch \
     file://0022-Force_egl_visual_ID_33.patch \
+    file://0023-debug-x11-visual-selection.patch \
+    file://0024-debug-x11-visual-selection-use-syslog.patch \
 "
 
 SRC_URI += "file://qeglfshooks_imx5.cpp"
