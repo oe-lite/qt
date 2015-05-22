@@ -5,7 +5,6 @@
 ## needed variables for compilation.
 
 inherit qmake5_base
-inherit pkgconfig-install
 
 QT5TOOLSDEPENDS ?= "native:qmake5_${PV}"
 CLASS_DEPENDS += "${QT5TOOLSDEPENDS} "
