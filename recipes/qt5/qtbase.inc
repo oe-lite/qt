@@ -8,7 +8,6 @@
 ## @useflag qttslib Enable tslib as touch input. Disabled by default.
 ## @useflag qtgstreamer Enable gstreamer. Disabled by default.
 ## @useflag qtwidgets Enable qtwidgets. Enabled by default.
-## @useflag qtwebkit Enable webkit. Disabled by default.
 ## @useflag qtphonon Enable phonon. Disabled by default.
 ## @useflag qtdbus Enable dbus. Disabled by default.
 ## @useflag qtqmldebug Enable qtqmldebug. Disabled by default.
@@ -36,13 +35,14 @@ LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
 inherit c++ make pkgconfig
 
 RECIPE_FLAGS += "qtx11 qtdirectfb qttslib qtgstreamer \
-	qtwidgets qtwebkit qtphonon qtdbus qtqmldebug \
+	qtwidgets qtphonon qtdbus qtqmldebug \
 	qtopengl \
 	qtopengl_egl_flags qtopengl_flags \
 	qtopengl_qt_flags qtopengl_es1_flags \
 	qtopengl_es2_flags qtopengl_openvg_flags \
 	qtopengl_hooks_file \
 	qtmtdev \
+	qticu \
 	"
 
 require qt5.inc
@@ -60,6 +60,8 @@ DEPENDS += "native:qmake5_${PV} freetype jpeg libpng zlib openssl fontconfig \
 	glib libpthread libm libdl librt libgcc libgio libglib libgthread \
 	libstdc++"
 
+DEPENDS:>USE_qticu += " libicudata-dev libicui18n-dev libicuuc-dev"
+
 ##################################
 ### RDEPENDS
 ##################################
@@ -67,6 +69,8 @@ DEPENDS += "native:qmake5_${PV} freetype jpeg libpng zlib openssl fontconfig \
 RDEPENDS_${PN} += "freetype libjpeg libpng libz openssl glib fontconfig-utils \
 		libpthread libm libdl librt libgcc libgio libglib libgthread \
 		libstdc++"
+
+RDEPENDS_${PN}:>USE_qticu += " libicudata libicui18n libicuuc"
 
 RDEPENDS_${PN}-dev += "libxml2-dev"
 
