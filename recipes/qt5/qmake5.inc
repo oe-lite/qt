@@ -110,6 +110,7 @@ USE_MINGW_SPEC:HOST_LIBC_mingw = "-spec ${S}/mkspecs/win32-g++"
 
 do_configure[prefuncs] += "do_configure_preqt"
 do_configure_preqt() {
+    [ -e Makefile ] && oe_runmake -k clean || :
     (echo o; echo yes) | ${S}/configure ${EXTRA_OECONF} || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
     bin/qmake ${USE_MINGW_SPEC} ${OE_QMAKE_DEBUG_OUTPUT} ${S} -o Makefile || die "Configuring qt with qmake failed. EXTRA_OECONF was ${EXTRA_OECONF}"
 }
