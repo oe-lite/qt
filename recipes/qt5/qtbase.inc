@@ -116,8 +116,8 @@ PROVIDES_${PN}-dev += "\
     libqt5widgets-dev \
     libqt5printsupport-dev \
 "
-PROVIDES_${PN}-dev:>USE_qtopengl += " libqt5opengl"
-PROVIDES_${PN}-dev:>USE_qtdbus += " libqt5dbus"
+PROVIDES_${PN}:>USE_qtopengl += " libqt5opengl"
+PROVIDES_${PN}:>USE_qtdbus += " libqt5dbus"
 
 do_generateqtconfigfile[postfuncs] += "do_generateqtconfigfile_fixup"
 do_generateqtconfigfile_fixup() {
