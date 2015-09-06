@@ -342,5 +342,9 @@ do_install_rm_qmake() {
 ##################################
 ### Packaging
 ##################################
+PACKAGES =+ "${PN}-fonts-postscript "
+FILES_${PN}-fonts-postscript = "${datadir}/fonts/*.pfa \
+	${datadir}/fonts/*.qpf* ${datadir}/fonts/*.pfb \
+"
 
 FILES_${PN} += "${datadir}/fonts/"
