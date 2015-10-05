@@ -20,3 +20,7 @@ RDEPENDS += " libicudata libicui18n libicuuc"
 RDEPENDS += " libjpeg"
 RDEPENDS += " fontconfig"
 
+SRC_URI += "\
+	file://32bit_bigendian_offset_fix.patch \
+"
+
