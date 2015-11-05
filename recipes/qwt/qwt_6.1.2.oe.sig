@@ -1,0 +1,1 @@
+6af82b6ee4132f779d1c8c2db872f01463b0d61c  qwt-6.1.2.tar.bz2
