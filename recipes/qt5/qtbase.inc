@@ -248,9 +248,11 @@ DEFAULT_USE_qtopengl_hooks_file = "none"
 QT_OPENGL_FIXUP_FUNCS = ""
 QT_OPENGL_FIXUP_FUNCS:USE_qtopengl = "do_compile_opengl_libs"
 do_compile[prefuncs] =+ "${QT_OPENGL_FIXUP_FUNCS}"
+USE_X11 = "0"
+USE_X11:USE_qtx11 = "1"
 do_compile_opengl_libs () {
     sed -i 's!load(qt_config)!!' ${S}/mkspecs/linux-oe-g++/qmake.conf
-    if [  "${USE_qtx11}" != "1" ]; then
+    if [  "${USE_X11}" != "1" ]; then
         cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
 EGLFS_PLATFORM_HOOKS_SOURCES = \$\$PWD/qeglfshooks.cpp
 IMX_CFLAGS             = -DLINUX=1  -DEGL_API_FB=1
