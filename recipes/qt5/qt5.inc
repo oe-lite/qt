@@ -7,21 +7,14 @@ inherit qmake5
 
 QT_MODULE ?= "${PN}"
 
-# we don't want conflicts with qt4
-OE_QMAKE_PATH_HEADERS = "${OE_QMAKE_PATH_QT_HEADERS}"
-OE_QMAKE_PATH_ARCHDATA = "${OE_QMAKE_PATH_QT_ARCHDATA}"
-OE_QMAKE_PATH_DATA = "${OE_QMAKE_PATH_QT_DATA}"
-OE_QMAKE_PATH_BINS = "${OE_QMAKE_PATH_QT_BINS}"
-OE_QMAKE_PATH_TRANSLATIONS = "${OE_QMAKE_PATH_QT_TRANSLATIONS}"
-OE_QMAKE_PATH_DOCS = "${OE_QMAKE_PATH_QT_DOCS}"
-OE_QMAKE_PATH_SETTINGS = "${OE_QMAKE_PATH_QT_SETTINGS}"
-OE_QMAKE_PATH_EXAMPLES = "${OE_QMAKE_PATH_QT_EXAMPLES}"
-OE_QMAKE_PATH_TESTS = "${OE_QMAKE_PATH_QT_TESTS}"
-
 #Examples are present in all Qt modules
 RECIPE_FLAGS += "qtexamples"
 DEFAULT_USE_qtexamples = "1"
 PACKAGES:<USE_qtexamples = "${PN}-examples-dbg ${PN}-examples "
+
+RECIPE_FLAGS += "qtdbus"
+EXTRA_OECONF:>USE_qtdbus = "-dbus"
+DEPENDS:>USE_qtdbus = " libdbus"
 
 PACKAGES =. "${PN}-qmlplugins-dbg ${PN}-tools-dbg ${PN}-plugins-dbg ${PN}-qmlplugins ${PN}-tools ${PN}-plugins ${PN}-mkspecs ${PN}-examples-dev ${PN}-examples-staticdev "
 RDEPENDS_${PN} += "${PN}-plugins_${PV} ${PN}-qmlplugins_${PV}"
@@ -31,9 +24,11 @@ FILES_${PN}-qmlplugins-dbg = " \
     ${OE_QMAKE_PATH_QML}/*/.debug \
     ${OE_QMAKE_PATH_QML}/*/*/.debug \
     ${OE_QMAKE_PATH_QML}/*/*/*/.debug \
+    ${OE_QMAKE_PATH_QML}/*/*/*/*/.debug \
     ${OE_QMAKE_PATH_IMPORTS}/*/.debug \
     ${OE_QMAKE_PATH_IMPORTS}/*/*/.debug \
     ${OE_QMAKE_PATH_IMPORTS}/*/*/*/.debug \
+    ${OE_QMAKE_PATH_IMPORTS}/*/*/*/*/.debug \
 "
 FILES_${PN}-tools-dbg = " \
     ${OE_QMAKE_PATH_BINS}/.debug \
@@ -45,6 +40,7 @@ FILES_${PN}-plugins-dbg = " \
 # extra packages
 # qmlplugins 1-3 levels of subdirs qmldir + *{.so,*.qmltypes,*.qml,*js}
 FILES_${PN}-qmlplugins = " \
+    ${OE_QMAKE_PATH_QML}/*.qmltypes \
     ${OE_QMAKE_PATH_QML}/*/*${SOLIBSDEV} \
     ${OE_QMAKE_PATH_QML}/*/qmldir \
     ${OE_QMAKE_PATH_QML}/*/*.qmltypes \
@@ -60,6 +56,11 @@ FILES_${PN}-qmlplugins = " \
     ${OE_QMAKE_PATH_QML}/*/*/*/*.qmltypes \
     ${OE_QMAKE_PATH_QML}/*/*/*/*.qml \
     ${OE_QMAKE_PATH_QML}/*/*/*/*.js \
+    ${OE_QMAKE_PATH_QML}/*/*/*/*/*${SOLIBSDEV} \
+    ${OE_QMAKE_PATH_QML}/*/*/*/*/qmldir \
+    ${OE_QMAKE_PATH_QML}/*/*/*/*/*.qmltypes \
+    ${OE_QMAKE_PATH_QML}/*/*/*/*/*.qml \
+    ${OE_QMAKE_PATH_QML}/*/*/*/*/*.js \
     ${OE_QMAKE_PATH_IMPORTS}/*.qmltypes \
     ${OE_QMAKE_PATH_IMPORTS}/*/*${SOLIBSDEV} \
     ${OE_QMAKE_PATH_IMPORTS}/*/*.qmltypes \
@@ -70,6 +71,9 @@ FILES_${PN}-qmlplugins = " \
     ${OE_QMAKE_PATH_IMPORTS}/*/*/*/*${SOLIBSDEV} \
     ${OE_QMAKE_PATH_IMPORTS}/*/*/*/*.qmltypes \
     ${OE_QMAKE_PATH_IMPORTS}/*/*/*/qmldir \
+    ${OE_QMAKE_PATH_IMPORTS}/*/*/*/*/*${SOLIBSDEV} \
+    ${OE_QMAKE_PATH_IMPORTS}/*/*/*/*/*.qmltypes \
+    ${OE_QMAKE_PATH_IMPORTS}/*/*/*/*/qmldir \
     ${OE_QMAKE_PATH_QML}/*/*/images/ \
 "
 FILES_${PN}-tools = " \

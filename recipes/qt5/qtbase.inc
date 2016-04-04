@@ -80,7 +80,7 @@ QT_CONFIG_FLAGS += " \
     \
     -no-pch -no-rpath -no-nis -no-cups \
     -no-sql-ibase -no-sql-mysql -no-sql-psql -no-sql-odbc -plugin-sql-sqlite \
-    -no-accessibility -no-sm -hostbindir ${OE_QMAKE_PATH_HOST_BINS} \
+    -accessibility -no-sm  \
     -system-libjpeg -system-libpng -system-zlib \
     -linuxfb \
     ${QT_WIDGETS} \
@@ -171,10 +171,9 @@ do_configure() {
     fi
 
     ${S}/configure -v \
-        -dont-process \
         -opensource -confirm-license \
         -no-gcc-sysroot \
-        -prefix '...' \
+        -prefix '${prefix}' \
         -bindir ${OE_QMAKE_PATH_BINS} \
         -libdir ${OE_QMAKE_PATH_LIBS} \
         -datadir ${OE_QMAKE_PATH_DATA} \
@@ -189,7 +188,10 @@ do_configure() {
         -translationdir ${OE_QMAKE_PATH_TRANSLATIONS} \
         -testsdir ${OE_QMAKE_PATH_TESTS} \
         -examplesdir ${OE_QMAKE_PATH_EXAMPLES} \
-        -platform linux-oe-g++ \
+        -hostbindir ${OE_QMAKE_PATH_HOST_BINS} \
+        -external-hostbindir ${OE_QMAKE_PATH_EXTERNAL_HOST_BINS} \
+        -hostdatadir ${OE_QMAKE_PATH_HOST_DATA} \
+        -platform ${QMAKE_MKSPEC_PATH_NATIVE}/mkspecs/linux-oe-g++ \
         -xplatform linux-oe-g++ \
         ${QT_CONFIG_FLAGS}
 
@@ -197,7 +199,7 @@ do_configure() {
 	echo "TARGET = \"realmoc\"" >> ${S}/src/tools/moc/moc.pro
 	echo "TARGET = \"realrcc\"" >> ${S}/src/tools/rcc/rcc.pro
 	echo "TARGET = \"realuic\"" >> ${S}/src/tools/uic/uic.pro
-	echo "TARGET = \"realqdoc\"" >> ${S}/src/tools/qdoc/qdoc.pro
+	#echo "TARGET = \"realqdoc\"" >> ${S}/src/tools/qdoc/qdoc.pro
         if [ -n "$USE_qtdbus" ]; then
                 echo "TARGET = \"realqdbuscpp2xml\"" >> ${S}/src/tools/qdbuscpp2xml/qdbuscpp2xml.pro
                 echo "TARGET = \"realqdbusxml2cpp\"" >> ${S}/src/tools/qdbusxml2cpp/qdbusxml2cpp.pro
@@ -254,12 +256,17 @@ do_compile_opengl_libs () {
     sed -i 's!load(qt_config)!!' ${S}/mkspecs/linux-oe-g++/qmake.conf
     if [  "${USE_X11}" != "1" ]; then
         cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
-EGLFS_PLATFORM_HOOKS_SOURCES = \$\$PWD/qeglfshooks.cpp
 IMX_CFLAGS             = -DLINUX=1  -DEGL_API_FB=1
+DISTRO_OPTS += hard-float
+
+# Preferred eglfs backend
+EGLFS_DEVICE_INTEGRATION = eglfs_viv
 EOF
     else
         cat >> ${S}/mkspecs/linux-oe-g++/qmake.conf <<EOF
-IMX_CFLAGS             = -DLINUX=1
+IMX_CFLAGS             = -DLINUX=1 -DEGL_API_FB=1
+
+
 EOF
     fi
 
@@ -317,6 +324,7 @@ QT_PHONON:USE_qtphonon = " -phonon"
 QT_DBUS = "-no-dbus"
 QT_DBUS:USE_qtdbus = " -dbus"
 DEPENDS:>USE_qtdbus = " libdbus"
+DEPENDS_${PN}:>USE_qtdbus = " libdbus"
 RDEPENDS_${PN}:>USE_qtdbus = " libdbus"
 
 QT_EXAMPLES = "-nomake examples"
@@ -339,7 +347,9 @@ do_install_qtfonts() {
 
 do_install[postfuncs] += "do_install_rm_qmake"
 do_install_rm_qmake() {
-	rm ${D}${bindir}/qmake
+    if [ -e ${D}${bindir}/qmake ]; then
+        rm ${D}${bindir}/qmake
+    fi
 }
 ##################################
 ### Packaging

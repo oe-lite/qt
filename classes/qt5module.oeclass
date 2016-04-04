@@ -4,7 +4,6 @@
 
 inherit c++ make qmake5 pkgconfig
 
-OE_QMAKE_PATH_HOST_BINS = "${STAGE_DIR}/native/bin/"
 CLASS_DEPENDS += "\
 	qtbase-dev zlib-dev libpthread \
 	libdl libz librt libpng-dev libpng \

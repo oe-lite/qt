@@ -7,6 +7,10 @@
 inherit qmake5_base
 inherit pkgconfig-install
 
+OE_QMAKE_PATH_HOST_BINS = "${HOST_SYSROOT}/${OE_QMAKE_PATH_BINS}"
+OE_QMAKE_PATH_HOST_DATA = "${HOST_SYSROOT}/${OE_QMAKE_PATH_DATA}"
+OE_QMAKE_PATH_HOST_LIBS = "${HOST_SYSROOT}/${OE_QMAKE_PATH_LIBS}"
+
 QT5TOOLSDEPENDS ?= "native:qmake5"
 CLASS_DEPENDS += "${QT5TOOLSDEPENDS} "
 
@@ -32,8 +36,10 @@ Examples = ${OE_QMAKE_PATH_EXAMPLES}
 Tests = ${OE_QMAKE_PATH_TESTS}
 HostBinaries = ${OE_QMAKE_PATH_HOST_BINS}
 HostData = ${OE_QMAKE_PATH_HOST_DATA}
+HostLibraries = ${OE_QMAKE_PATH_HOST_LIBS}
 HostSpec = ${OE_QMAKESPEC}
 TartgetSpec = ${OE_XQMAKESPEC}
+ExternalHostBinaries = ${OE_QMAKE_PATH_EXTERNAL_HOST_BINS}
 Sysroot = ${STAGE_DIR}/machine/
 EOF
 }
@@ -44,8 +50,12 @@ do_configure_qmake5_base () {
 
 do_install_qmake5_base() {
    # Fix install paths for all
-    find -name "Makefile*" | xargs sed -i "s,(INSTALL_ROOT)${STAGE_DIR}/sysroot/,(INSTALL_ROOT),g"
-    find -name "Makefile*" | xargs sed -i "s,(INSTALL_ROOT)${STAGE_DIR}/machine/,(INSTALL_ROOT),g"
+    find -name "Makefile*" | xargs sed -i.oebak \
+      -e "s,(INSTALL_ROOT)${STAGE_DIR}/sysroot/,(INSTALL_ROOT),g" \
+      -e "s,(INSTALL_ROOT)${STAGE_DIR}/machine/,(INSTALL_ROOT),g" \
+      -e "s,(INSTALL_ROOT)${OE_QMAKE_PATH_HOST_DATA},(INSTALL_ROOT)${OE_QMAKE_PATH_DATA},g" \
+      -e "s,(INSTALL_ROOT)${OE_QMAKE_PATH_HOST_BINS},(INSTALL_ROOT)${OE_QMAKE_PATH_BINS},g" \
+      -e "s,(INSTALL_ROOT)${OE_QMAKE_PATH_HOST_LIBS},(INSTALL_ROOT)${OE_QMAKE_PATH_LIBS},g"
 
     oe_runmake install INSTALL_ROOT=${D}/
 }
