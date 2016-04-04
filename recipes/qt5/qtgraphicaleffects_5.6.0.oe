@@ -1,0 +1,13 @@
+LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
+
+inherit qt5module
+
+DEPENDS += "libstdc++ libqt5quick"
+
+DEPENDS_${PN}-dev = "libstdc++"
+DEPENDS_${PN} = "${PN}-dev_${PV} libstdc++"
+RDEPENDS_${PN} += "libstdc++ libqt5quick"
+
+PROVIDES_${PN} += ""
+require qt5-${PV}.inc
+require qt5.inc

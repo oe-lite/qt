@@ -1,0 +1,10 @@
+LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
+
+inherit qt5module
+DEPENDS += "libqt5quick"
+RDEPENDS_${PN} += "libqt5quick"
+
+require qt5-${PV}.inc
+require qt5.inc
+
+FILES_${PN}-qmlplugins += "${OE_QMAKE_PATH_QML}"
