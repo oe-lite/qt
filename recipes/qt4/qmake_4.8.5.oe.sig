@@ -1,1 +1,0 @@
-qt-embedded_4.8.5.oe.sig
