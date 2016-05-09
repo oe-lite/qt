@@ -10,6 +10,7 @@ SRC_URI += " \
     file://0021-configure-make-qt4-native-work-with-long-building-pa.patch"
 
 DEPENDS:>sdk = "native:qmake_${PV} libz libgcc libm libpthread libdl librt"
+DEPENDS:>native = "libz libgcc libm libpthread libdl librt"
 RDEPENDS:>sdk = "libz libgcc libm libpthread libdl librt"
 
 SRC_URI:>sdk += " file://0004-configure-qmake-is-already-built-in-qt4-tools-native.patch"
