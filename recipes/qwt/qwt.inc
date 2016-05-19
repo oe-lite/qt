@@ -35,8 +35,8 @@ do_install_qmake5_base() {
         done
     fi
     if [ -d ${D}${prefix}/plugins ]; then
-        install -d ${D}${libdir}/${QT_DIR_NAME}
-        mv ${D}${prefix}/plugins ${D}${libdir}/${QT_DIR_NAME}
+        install -d ${D}${libdir}
+        mv ${D}${prefix}/plugins ${D}${libdir}
     fi
 }
 
