@@ -3,8 +3,8 @@
 ## Is used by recipes which compiles qmake
 
 # This is useful for target recipes to reference native mkspecs
-QMAKE_MKSPEC_PATH_NATIVE = "${STAGE_DIR}/native/lib/${QT_DIR_NAME}"
-QMAKE_MKSPEC_PATH_TARGET = "${STAGE_DIR}/machine/usr/share/${QT_DIR_NAME}"
+QMAKE_MKSPEC_PATH_NATIVE = "${BUILD_SYSROOT}/lib"
+QMAKE_MKSPEC_PATH_TARGET = "${TARGET_SYSROOT}/usr/share"
 
 QMAKE_MKSPEC_PATH = "${QMAKE_MKSPEC_PATH_TARGET}"
 
@@ -34,6 +34,7 @@ EXTRA_OEMAKE = " \
     OE_QMAKE_AR='${OE_QMAKE_AR}' \
     OE_QMAKE_STRIP='${OE_QMAKE_STRIP}' \
     OE_QMAKE_WAYLAND_SCANNER='${OE_QMAKE_WAYLAND_SCANNER}' \
+    OE_QMAKE_INCDIR_QT='${HOST_SYSROOT}/${OE_QMAKE_PATH_HEADERS}' \
 "
 
 OE_QMAKESPEC = "${QMAKE_MKSPEC_PATH_NATIVE}/mkspecs/${OE_QMAKE_PLATFORM_NATIVE}"
@@ -49,41 +50,27 @@ OE_QMAKE_LDFLAGS = "${LDFLAGS} -ldl"
 OE_QMAKE_AR = "${AR}"
 OE_QMAKE_STRIP = "echo"
 OE_QMAKE_WAYLAND_SCANNER = "${STAGE_DIR}/native/bin/wayland-scanner"
-CLASS_FLAGS += "qt5_dir_name"
-DEFAULT_USE_qt5_dir_name = "qt5"
-QT_DIR_NAME ?= "${USE_qt5_dir_name}"
 
 # this one needs to be exported, because qmake reads it from shell env
 export QT_CONF_PATH = "${SRCDIR}/qt.conf"
 
 OE_QMAKE_PATH_PREFIX = "${prefix}"
-OE_QMAKE_PATH_HEADERS = "${includedir}/${QT_DIR_NAME}"
+OE_QMAKE_PATH_HEADERS = "${includedir}"
 OE_QMAKE_PATH_LIBS = "${libdir}"
 OE_QMAKE_PATH_ARCHDATA = "${libdir}"
 OE_QMAKE_PATH_DATA = "${datadir}"
 OE_QMAKE_PATH_BINS = "${bindir}"
-OE_QMAKE_PATH_LIBEXECS = "${libdir}/${QT_DIR_NAME}/libexec"
-OE_QMAKE_PATH_PLUGINS = "${libdir}/${QT_DIR_NAME}/plugins"
-OE_QMAKE_PATH_IMPORTS = "${libdir}/${QT_DIR_NAME}/imports"
-OE_QMAKE_PATH_QML = "${libdir}/${QT_DIR_NAME}/qml"
+OE_QMAKE_PATH_LIBEXECS = "${libdir}/libexec"
+OE_QMAKE_PATH_PLUGINS = "${libdir}/plugins"
+OE_QMAKE_PATH_IMPORTS = "${libdir}/imports"
+OE_QMAKE_PATH_QML = "${libdir}/qml"
 OE_QMAKE_PATH_TRANSLATIONS = "${datadir}/translations"
 OE_QMAKE_PATH_DOCS = "${docdir}"
 OE_QMAKE_PATH_SETTINGS = "${sysconfdir}"
 OE_QMAKE_PATH_EXAMPLES = "${datadir}/examples"
 OE_QMAKE_PATH_TESTS = "${datadir}/tests"
-OE_QMAKE_PATH_HOST_PREFIX = ""
-OE_QMAKE_PATH_HOST_BINS = "${bindir}"
-OE_QMAKE_PATH_HOST_DATA = "${QMAKE_MKSPEC_PATH_TARGET}"
-
-OE_QMAKE_PATH_QT_HEADERS = "${includedir}/${QT_DIR_NAME}"
-OE_QMAKE_PATH_QT_ARCHDATA = "${libdir}/${QT_DIR_NAME}"
-OE_QMAKE_PATH_QT_DATA = "${datadir}/${QT_DIR_NAME}"
-OE_QMAKE_PATH_QT_BINS = "${bindir}"
-OE_QMAKE_PATH_QT_TRANSLATIONS = "${datadir}/${QT_DIR_NAME}/translations"
-OE_QMAKE_PATH_QT_DOCS = "${docdir}/${QT_DIR_NAME}"
-OE_QMAKE_PATH_QT_SETTINGS = "${sysconfdir}/${QT_DIR_NAME}"
-OE_QMAKE_PATH_QT_EXAMPLES = "${datadir}/${QT_DIR_NAME}/examples"
-OE_QMAKE_PATH_QT_TESTS = "${datadir}/${QT_DIR_NAME}/tests"
+OE_QMAKE_PATH_HOST_PREFIX = "${prefix}"
+OE_QMAKE_PATH_EXTERNAL_HOST_BINS = "${BUILD_SYSROOT}/bin"
 
 PRL_FILES ?= "${libdir}/*.prl"
 do_install[postfuncs] += "do_install_prl_fixup"
@@ -107,4 +94,3 @@ def do_install_prl_fixup(d):
         with open(filename, "w") as output_file:
             output_file.write(prl_file)
     os.chdir(old_cwd)
-

@@ -1,0 +1,7 @@
+inherit qmake5_base
+
+RECIPE_TYPES = "native sdk"
+
+OE_QMAKE_PATH_HOST_BINS = "${BUILD_SYSROOT}/bin"
+OE_QMAKE_PATH_HOST_DATA = "${BUILD_SYSROOT}/lib"
+OE_QMAKE_PATH_HOST_LIBS = "${BUILD_SYSROOT}/lib"

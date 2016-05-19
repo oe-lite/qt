@@ -1,5 +1,5 @@
 DESCRIPTION = "Native version of Qt/[X11|Mac|Embedded]"
-LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
+LICENSE = "GFDL-1.3 & BSD & (LGPL-2.1 & The-Qt-Company-Qt-LGPL-Exception-1.1 | LGPL-3.0)"
 DEPENDS = "zlib"
 
 EXTRA_DEPENDS_SDK = "libdl librt"
@@ -14,15 +14,21 @@ inherit c++ make pkgconfig
 
 require qmake5-${PV}.inc
 
-#TBD: Bugs are seen with more more than 1 parallel maker
-PARALLEL_MAKE = ""
+# Ensure that changes to configure task or rdepends on that triggers new
+# do_unpack. Solves compile error on rebuild caused by do_configure change.
+do_unpack[emit] += "do_stage"
 
 QT_CONF_PATH = "${B}/qt.conf"
 
 EXTRA_OECONF = " \
-    -prefix '${prefix}/' \
-    -dont-process \
+    -prefix /${prefix} \
+    -hostprefix /${prefix} \
+    -hostdatadir ${OE_QMAKE_PATH_ARCHDATA} \
+    -hostlibdir ${OE_QMAKE_PATH_LIBS} \
+    -hostbindir ${OE_QMAKE_PATH_BINS} \
     -no-gcc-sysroot \
+    -confirm-license \
+    -opensource \
     -system-zlib \
     -no-libjpeg \
     -no-libpng \
@@ -37,6 +43,7 @@ EXTRA_OECONF = " \
     -no-opengl \
     -no-openssl \
     -no-xcb \
+    -no-icu \
     -verbose \
     -release \
     -bindir ${OE_QMAKE_PATH_BINS} \
@@ -51,19 +58,25 @@ EXTRA_OECONF = " \
     -silent \
     -nomake examples \
     -nomake tests \
+    -nomake libs \
+    -make tools \
     -no-rpath \
     -platform ${BUILD_PLATFORM} \
 "
+
+EXTRA_OECONF:>sdk += " -hostbindir ${OE_QMAKE_PATH_HOST_BINS} \
+    -hostdatadir ${OE_QMAKE_PATH_HOST_DATA} \
+    -external-hostbindir ${OE_QMAKE_PATH_EXTERNAL_HOST_BINS} \
+"
+
+EXTRA_OECONF:>native += " -confsysroot"
+
 BUILD_PLATFORM = "linux-oe-g++"
 BUILD_PLATFORM:HOST_LIBC_mingw = "win32-g++"
 EXTRA_OECONF:>HOST_LIBC_mingw += " \
     -xplatform win32-g++ \
     -device-option CROSS_COMPILE=${HOST_PREFIX} \
     -qpa windows"
-
-RECIPE_FLAGS += "qtdbus"
-EXTRA_OECONF:>USE_qtdbus = "-dbus"
-DEPENDS:>USE_qtdbus = " libdbus"
 
 # qtbase is exception, configure script is using our get(X)QEvalMakeConf and setBootstrapEvalVariable functions to read it from shell
 export OE_QMAKE_COMPILER
@@ -109,13 +122,31 @@ USE_MINGW_SPEC:HOST_LIBC_mingw = "-spec ${S}/mkspecs/win32-g++"
 
 do_configure[prefuncs] += "do_configure_preqt"
 do_configure_preqt() {
-    (echo o; echo yes) | ${S}/configure ${EXTRA_OECONF} || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
+    [ -e Makefile ] && oe_runmake -k clean || :
+    (echo o; echo yes) | bash -x ${S}/configure ${EXTRA_OECONF} || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
+    bin/qmake -query
     bin/qmake ${USE_MINGW_SPEC} ${OE_QMAKE_DEBUG_OUTPUT} ${S} -o Makefile || die "Configuring qt with qmake failed. EXTRA_OECONF was ${EXTRA_OECONF}"
 }
 
 do_install() {
-    oe_runmake install INSTALL_ROOT=${D}
+    # Fix install paths for all
+    find . -name "Makefile*" | xargs sed -i.oebak \
+      -e 's,(INSTALL_ROOT)${BUILD_SYSROOT}${BUILD_SYSROOT},(INSTALL_ROOT),g' \
+      -e 's,(INSTALL_ROOT)${BUILD_SYSROOT},(INSTALL_ROOT),g' \
+      -e 's,(INSTALL_ROOT)${D},(INSTALL_ROOT),g'
 
+    oe_runmake install INSTALL_ROOT=${D}
+    if [ -d ${D}${BUILD_SYSROOT} ] ; then
+        echo "Some files are installed in wrong directory ${D}${HOST_SYSROOT}"
+        cp -ra ${D}${BUILD_SYSROOT}/* ${D}
+        rm -rf ${D}${BUILD_SYSROOT}
+        # remove empty dirs
+        TMP=`dirname ${D}/${BUILD_SYSROOT}`
+        while test $TMP != ${D}${BUILD_SYSROOT}; do
+            rmdir $TMP || return 0
+            TMP=`dirname $TMP`;
+        done
+    fi
 }
 
 INSTALL_QT_UTILS = ""
@@ -130,12 +161,11 @@ do_install_qt_utils_fixup () {
     mv ${D}${bindir}/realrcc${QTTOOLS_SUFFIX} ${D}${bindir}/rcc${QTTOOLS_SUFFIX}
 }
 
-FILES_${PN} += " ${libdir}"
+FILES_${PN} += "${libdir}"
 
 PACKAGES =+ "${PN}-libs"
 DEPENDS_${PN} += "${PN}-libs_${PV}"
 RDEPENDS_${PN} += "${PN}-libs_${PV}"
-# Make libs hold shared objects only - to be used in the SDK
 FILES_${PN}-libs = "${libdir}/*.so*"
 
 PACKAGES =+ "${PN}-cmake"
@@ -144,12 +174,12 @@ FILES_${PN}-cmake = "${libdir}/cmake"
 PACKAGES =+ "${PN}-plugins"
 DEPENDS_${PN} += "${PN}-plugins_${PV}"
 RDEPENDS_${PN} += "${PN}-plugins_${PV}"
-FILES_${PN}-plugins = "${libdir}/qt5/plugins"
+FILES_${PN}-plugins = "${libdir}/plugins"
 
 PACKAGES =+ "${PN}-mkspecs"
 DEPENDS_${PN} += "${PN}-mkspecs_${PV}"
 RDEPENDS_${PN} += "${PN}-mkspecs_${PV}"
-FILES_${PN}-mkspecs = "${libdir}/qt5/mkspecs"
+FILES_${PN}-mkspecs = "${libdir}/mkspecs"
 
 PACKAGES =+ " ${PN}-utilities "
 FILES_${PN}-utilities = "${bindir}"

@@ -2,10 +2,18 @@ DESCRIPTION = "Setup script needed for the QT5 sdk"
 
 RECIPE_TYPES = "canadian-cross"
 
-SRC_URI += "file://setup.sh"
+SRC_URI += "file://setup.sh.in"
+S = "${SRCDIR}"
+#DEPENDS = "native:util/sed"
+CLASS_DEPENDS = ""
+
+do_compile () {
+	sed -e 's/__TARGET_PREFIX__/${TARGET_PREFIX}/' \
+		setup.sh.in > setup.sh
+}
 
 do_install () {
-	cp ${SRCDIR}/setup.sh ${D}
+	install -m 0775 ${SRCDIR}/setup.sh ${D}
 }
 
 QT5_TOOLS="host:qmake5-utilities"
