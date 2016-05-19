@@ -221,7 +221,7 @@ def parse_qt_opengl_config(d):
         d.set("QT_OPENGL_DEPENDS","libglesv1 libegl")
         d.set("QT_OPENGL_CONFIG_OPTION","-opengl es -egl")
     elif qtopengl == "glesv2":
-        d.set("QT_OPENGL_DEPENDS","libglesv2 libegl libdrm")
+        d.set("QT_OPENGL_DEPENDS","libglesv2 libegl")
         d.set("QT_OPENGL_CONFIG_OPTION","-opengl es2 -egl")
     elif qtopengl == "desktop":
         d.set("QT_OPENGL_DEPENDS","libgl")
