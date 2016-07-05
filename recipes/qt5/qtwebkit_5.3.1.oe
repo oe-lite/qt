@@ -1,0 +1,26 @@
+## Recipe for building the Qt5 module QtWebkit
+##
+## Qt5 Module for building qtwebkit.
+
+LICENSE = "GFDL-1.3 & LGPL-2.1 & GPL-3.0"
+
+inherit qt5module
+require qt5-${PV}.inc
+require qt5.inc
+
+DEPENDS += " qtquick1-dev"
+DEPENDS += " libsqlite3-dev"
+DEPENDS += " libicudata-dev libicui18n-dev libicuuc-dev"
+DEPENDS += " libjpeg-dev"
+DEPENDS += " fontconfig"
+
+RDEPENDS += " qtquick1"
+RDEPENDS += " sqlite3"
+RDEPENDS += " libicudata libicui18n libicuuc"
+RDEPENDS += " libjpeg"
+RDEPENDS += " fontconfig"
+
+SRC_URI += "\
+	file://32bit_bigendian_offset_fix.patch \
+"
+

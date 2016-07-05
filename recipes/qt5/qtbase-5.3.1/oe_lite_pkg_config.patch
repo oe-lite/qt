@@ -1,0 +1,30 @@
+* Qt was made for machine staging, not recipe staging, this showed in:
+
+  QtBase make a configuration fil qconfig.pri that hardcodes paths to
+  PKG_CONFIG_SYSROOT_DIR and PKD_CONFIG_LIBDIR to qtbase directories.
+  
+  When DEPENDS on qtbase other modules gets these paths and fails to
+  do a proper pkg-config. 
+  
+  Patch removes the hardcoding and enables the use of environment
+  variables for pkg-configs in Qt under OE-lite.
+
+--- a/configure	2015-04-10 23:58:35.234014208 +0200
++++ b/configure	2015-04-10 23:56:55.214012074 +0200
+@@ -6265,10 +6265,10 @@
+ fi
+ 
+-if [ -n "$PKG_CONFIG_SYSROOT_DIR" ] || [ -n "$PKG_CONFIG_LIBDIR" ]; then
+-    echo "# pkgconfig" >> "$QTCONFIG.tmp"
+-    echo "PKG_CONFIG_SYSROOT_DIR = $PKG_CONFIG_SYSROOT_DIR" >> "$QTCONFIG.tmp"
+-    echo "PKG_CONFIG_LIBDIR = $PKG_CONFIG_LIBDIR" >> "$QTCONFIG.tmp"
+-    echo >> "$QTCONFIG.tmp"
+-fi
++#if [ -n "$PKG_CONFIG_SYSROOT_DIR" ] || [ -n "$PKG_CONFIG_LIBDIR" ]; then
++#    echo "# pkgconfig" >> "$QTCONFIG.tmp"
++#    echo "PKG_CONFIG_SYSROOT_DIR = $PKG_CONFIG_SYSROOT_DIR" >> "$QTCONFIG.tmp"
++#    echo "PKG_CONFIG_LIBDIR = $PKG_CONFIG_LIBDIR" >> "$QTCONFIG.tmp"
++#    echo >> "$QTCONFIG.tmp"
++#fi
+ 
+ if [ -n "$CFG_SYSROOT" ] && [ "$CFG_GCC_SYSROOT" = "yes" ]; then

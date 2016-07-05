@@ -4,6 +4,17 @@
 
 inherit c++ make qmake5 pkgconfig
 
+# Necessary exports for qmake
+export OE_QMAKE_COMPILER
+export OE_QMAKE_CC
+export OE_QMAKE_CFLAGS
+export OE_QMAKE_CXX
+export OE_QMAKE_CXXFLAGS
+export OE_QMAKE_LINK
+export OE_QMAKE_LDFLAGS
+export OE_QMAKE_AR
+export OE_QMAKE_STRIP
+
 OE_QMAKE_PATH_HOST_BINS = "${STAGE_DIR}/native/bin/"
 CLASS_DEPENDS += "\
 	qtbase-dev_${PV} zlib-dev libpthread \

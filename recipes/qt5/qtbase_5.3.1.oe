@@ -13,6 +13,7 @@ SRC_URI += "\
     file://0010-Revert-Use-the-gcc-feature-in-simd.prf.patch \
     file://0011-QOpenGLPaintDevice-sub-area-support.patch \
     file://0011-qmake-don-t-build-it-in-configure-but-allow-to-build.patch \
+    file://oe_lite_pkg_config.patch \
 "
 
 SRC_URI += "file://qeglfshooks_imx5.cpp"
